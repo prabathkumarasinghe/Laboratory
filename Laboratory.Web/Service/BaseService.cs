@@ -1,6 +1,6 @@
 ﻿using Laboratory.Web.Models;
+using Laboratory.Web.Service.IService;
 using Newtonsoft.Json;
-using Pathology.Web.Service.IService;
 using System.Net;
 using System.Text;
 using static Laboratory.Web.Utility.SD;
@@ -11,7 +11,7 @@ namespace Laboratory.Web.Service
     public class BaseService : IBaseService
     {
         private readonly IHttpClientFactory _httpClientFactory;
-     //   private readonly ITokenProvider _tokenProvider;
+        private readonly ITokenProvider _tokenProvider;
 
         public BaseService(IHttpClientFactory httpClientFactory)
         {
@@ -23,14 +23,14 @@ namespace Laboratory.Web.Service
         {
             try
             {
-                HttpClient client = _httpClientFactory.CreateClient("PathologyAPI");
+                HttpClient client = _httpClientFactory.CreateClient("LaboratoryAPI");
                 HttpRequestMessage message = new();
                 message.Headers.Add("Accept", "application/json");
 
                 if (withBearer)
                 {
-             //       var token = _tokenProvider.GetToken();
-               //     message.Headers.Add("Authorization", $"Bearer {token}");
+             //      var token = _tokenProvider.GetToken();
+             //       message.Headers.Add("Authorization", $"Bearer {token}");
                 }
 
                 message.RequestUri = new Uri(requestDto.Url);

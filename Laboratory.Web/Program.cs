@@ -2,8 +2,8 @@ using Laboratory.Web.Service;
 using Laboratory.Web.Service.IService;
 using Laboratory.Web.Utility;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Pathology.Web.Service;
-using Pathology.Web.Service.IService;
+
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,18 +12,18 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddHttpClient();
 //builder.Services.AddHttpClient<IPatientService, PatientService>();
-//builder.Services.AddHttpClient<ITestService, TestService>();
-//builder.Services.AddHttpClient<IAuthService, AuthService>();
+builder.Services.AddHttpClient<ITestService, TestService>();
+builder.Services.AddHttpClient<IAuthService, AuthService>();
 
 
-SD.PatientAPIBase = builder.Configuration["ServiceUrls:PatientAPI"];
+//SD.PatientAPIBase = builder.Configuration["ServiceUrls:PatientAPI"];
 SD.AuthAPIBase = builder.Configuration["ServiceUrls:AuthAPI"];
 SD.TestAPIBase = builder.Configuration["ServiceUrls:TestAPI"];
 
 builder.Services.AddScoped<IBaseService, BaseService>();
-//builder.Services.AddScoped<ITokenProvider, TokenProvider>();
+builder.Services.AddScoped<ITokenProvider, TokenProvider>();
 //builder.Services.AddScoped<IPatientService, PatientService>();
-//builder.Services.AddScoped<ITestService, TestService>();
+builder.Services.AddScoped<ITestService, TestService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>

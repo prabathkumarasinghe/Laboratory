@@ -1,0 +1,6 @@
+@Laboratory.Services.PatientAPI_HostAddress = http://localhost:5288
+
+GET {{Laboratory.Services.PatientAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

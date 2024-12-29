@@ -1,8 +1,6 @@
-﻿
+﻿using Laboratory.Web.Models;
 
-using Laboratory.Web.Models;
-
-namespace Pathology.Web.Service.IService
+namespace Laboratory.Web.Service.IService
 {
     public interface IBaseService
     {

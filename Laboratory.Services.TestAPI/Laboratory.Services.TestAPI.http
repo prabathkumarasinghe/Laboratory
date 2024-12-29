@@ -1,0 +1,6 @@
+@Laboratory.Services.TestAPI_HostAddress = http://localhost:5190
+
+GET {{Laboratory.Services.TestAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

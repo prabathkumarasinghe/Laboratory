@@ -1,9 +1,9 @@
 ﻿using Laboratory.Web.Models;
+using Laboratory.Web.Service.IService;
 using Laboratory.Web.Utility;
-using Pathology.Web.Models;
 
 
-namespace Pathology.Web.Service
+namespace Laboratory.Web.Service
 {
     public class AuthService : IAuthService
     {
