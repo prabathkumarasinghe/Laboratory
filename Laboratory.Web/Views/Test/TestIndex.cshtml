@@ -4,7 +4,7 @@
 	<div class="card-header bg-secondary bg-gradient ml-0 py-3">
 		<div class="row">
 			<div class="col-12 text-center">
-				<h1 class="text-white">Tests List</h1>
+				<h1 class="text-white">Test List</h1>
 			</div>
 		</div>
 	</div>
@@ -46,10 +46,10 @@
 							@((item.Price).ToString("c"))
 						</td>
 						<td>
-							<a class="btn btn-success" asp-action="TestUpdate" asp-route-pestId="@item.TestId">
+							<a class="btn btn-success" asp-action="TestUpdate" asp-route-testId="@item.TestId">
 								<i class="bi bi-pencil-square"></i>
 							</a>
-							<a class="btn btn-danger" asp-action="TestDelete" asp-route-pestId="@item.TestId">
+							<a class="btn btn-danger" asp-action="TestDelete" asp-route-testId="@item.TestId">
 								<i class="bi bi-trash"></i>
 							</a>
 						</td>

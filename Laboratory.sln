@@ -7,13 +7,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FrontEnd", "FrontEnd", "{C3
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{AF93BC69-0069-40A6-8EA0-6DC0A1C3C425}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Laboratory.Services.AuthAPI", "Laboratory.Services.AuthAPI\Laboratory.Services.AuthAPI.csproj", "{A511F32B-231D-418A-9687-1CDCB23D7F28}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Laboratory.Services.AuthAPI", "Laboratory.Services.AuthAPI\Laboratory.Services.AuthAPI.csproj", "{A511F32B-231D-418A-9687-1CDCB23D7F28}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Laboratory.Web", "Laboratory.Web\Laboratory.Web.csproj", "{F92C6938-83D3-41E0-97B8-DC3AEAF24480}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Laboratory.Web", "Laboratory.Web\Laboratory.Web.csproj", "{F92C6938-83D3-41E0-97B8-DC3AEAF24480}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Laboratory.Services.PatientAPI", "Laboratory.Services.PatientAPI\Laboratory.Services.PatientAPI.csproj", "{530B62B4-81AF-4E15-AD6E-A758757A1C96}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Laboratory.Services.PatientAPI", "Laboratory.Services.PatientAPI\Laboratory.Services.PatientAPI.csproj", "{530B62B4-81AF-4E15-AD6E-A758757A1C96}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Laboratory.Services.TestAPI", "Laboratory.Services.TestAPI\Laboratory.Services.TestAPI.csproj", "{F2DFBF94-DFAD-44B4-90C3-F01B9A6672BB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Laboratory.Services.TestAPI", "Laboratory.Services.TestAPI\Laboratory.Services.TestAPI.csproj", "{F2DFBF94-DFAD-44B4-90C3-F01B9A6672BB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Laboratory.Services.TestCartAPI", "Laboratory.Services.TestCartAPI\Laboratory.Services.TestCartAPI.csproj", "{DAA09D08-6EEA-4E63-9ED2-C09685FCFFC7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,6 +39,10 @@ Global
 		{F2DFBF94-DFAD-44B4-90C3-F01B9A6672BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F2DFBF94-DFAD-44B4-90C3-F01B9A6672BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F2DFBF94-DFAD-44B4-90C3-F01B9A6672BB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DAA09D08-6EEA-4E63-9ED2-C09685FCFFC7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DAA09D08-6EEA-4E63-9ED2-C09685FCFFC7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DAA09D08-6EEA-4E63-9ED2-C09685FCFFC7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DAA09D08-6EEA-4E63-9ED2-C09685FCFFC7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -46,6 +52,7 @@ Global
 		{F92C6938-83D3-41E0-97B8-DC3AEAF24480} = {C3A5F14F-0BCC-42D9-846F-F9932C4F3E76}
 		{530B62B4-81AF-4E15-AD6E-A758757A1C96} = {AF93BC69-0069-40A6-8EA0-6DC0A1C3C425}
 		{F2DFBF94-DFAD-44B4-90C3-F01B9A6672BB} = {AF93BC69-0069-40A6-8EA0-6DC0A1C3C425}
+		{DAA09D08-6EEA-4E63-9ED2-C09685FCFFC7} = {AF93BC69-0069-40A6-8EA0-6DC0A1C3C425}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {240E22D5-0AB8-466F-9EFE-0B83F610AA6A}

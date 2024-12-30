@@ -1,0 +1,6 @@
+@Laboratory.Services.TestCartAPI_HostAddress = http://localhost:5140
+
+GET {{Laboratory.Services.TestCartAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
