@@ -1,3 +1,4 @@
+using IdentityModel;
 using Laboratory.Web.Models;
 using Laboratory.Web.Service.IService;
 using Microsoft.AspNetCore.Authorization;
@@ -9,11 +10,12 @@ namespace Laboratory.Web.Controllers
     public class HomeController : Controller
     {
         private readonly ITestService _testService;
-        // private readonly ICartService _cartService;
-        public HomeController(ITestService testService)
+        private readonly ICartService _cartService;
+        public HomeController(ITestService testService, ICartService cartService)
         {
             _testService = testService;
-            //    _cartService = cartService;
+            _cartService = cartService;
+          
         }
 
 
@@ -55,53 +57,53 @@ namespace Laboratory.Web.Controllers
         }
 
 
-        //[Authorize]
-        //[HttpPost]
-        //[ActionName("TestDetails")]
-        //public async Task<IActionResult> TestDetails(TestDto testDto)
-        //{
-        //    CartDto cartDto = new CartDto()
-        //    {
-        //        CartHeader = new CartHeaderDto
-        //        {
-        //            UserId = User.Claims.Where(u => u.Type == JwtClaimTypes.Subject)?.FirstOrDefault()?.Value
-        //        }
-        //    };
+        [Authorize]
+        [HttpPost]
+        [ActionName("TestDetails")]
+        public async Task<IActionResult> TestDetails(TestDto testDto)
+        {
+            CartDto cartDto = new CartDto()
+            {
+                CartHeader = new CartHeaderDto
+                {
+                    UserId = User.Claims.Where(u => u.Type == JwtClaimTypes.Subject)?.FirstOrDefault()?.Value
+                }
+            };
 
-        //    CartDetailsDto cartDetails = new CartDetailsDto()
-        //    {
-        //        Count = testDto.Count,
-        //        TestId = testDto.TestId,
-        //    };
+            CartDetailsDto cartDetails = new CartDetailsDto()
+            {
+                Count = testDto.Count,
+                TestId = testDto.TestId,
+            };
 
-        //    List<CartDetailsDto> cartDetailsDtos = new() { cartDetails };
-        //    cartDto.CartDetails = cartDetailsDtos;
+            List<CartDetailsDto> cartDetailsDtos = new() { cartDetails };
+            cartDto.CartDetails = cartDetailsDtos;
 
-        //    ResponseDto? response = await _cartService.UpsertCartAsync(cartDto);
+            ResponseDto? response = await _cartService.UpsertCartAsync(cartDto);
 
-        //    if (response != null && response.IsSuccess)
-        //    {
-        //        TempData["success"] = "Item has been added to the Shopping Cart";
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    else
-        //    {
-        //        TempData["error"] = response?.Message;
-        //    }
+            if (response != null && response.IsSuccess)
+            {
+                TempData["success"] = "Item has been added to the Shopping Cart";
+                return RedirectToAction(nameof(Index));
+            }
+            else
+            {
+                TempData["error"] = response?.Message;
+            }
 
-        //    return View(testDto);
-        //}
+            return View(testDto);
+        }
 
 
         //public IActionResult Privacy()
         //{
-        //	return View();
+        //    return View();
         //}
 
         //[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         //public IActionResult Error()
         //{
-        //	return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        //    return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         //}
     }
 }
