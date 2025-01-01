@@ -18,15 +18,15 @@ namespace Laboratory.Services.TestCartAPI.Controllers
         private ITestService _testService;
       //  private ICouponService _couponService;
       //  private IMessageBus _messageBus;
-        private IConfiguration _configuration;
+      //  private IConfiguration _configuration;
 
-        public TestCartAPIController(IMapper mapper, AppDbContext db, ITestService testService, IConfiguration configuration)
+        public TestCartAPIController(IMapper mapper, AppDbContext db, ITestService testService)
         {
             _mapper = mapper;
             this._response = new ResponseDto();
             _db = db;
          //   _messageBus = messageBus;
-            _configuration = configuration;
+         //   _configuration = configuration;
             _testService = testService;
          //   _couponService = couponService;
         }
@@ -43,12 +43,12 @@ namespace Laboratory.Services.TestCartAPI.Controllers
                 cart.CartDetails = _mapper.Map<IEnumerable<CartDetailsDto>>(_db.CartDetails
                     .Where(u => u.CartHeaderId == cart.CartHeader.CartHeaderId));
 
-                IEnumerable<TestDto> productDtos = await _testService.GetTests();
+                IEnumerable<TestDto> testDtos = await _testService.GetTests();
 
                 foreach (var item in cart.CartDetails)
                 {
-                    item.Product = productDtos.FirstOrDefault(u => u.ProductId == item.ProductId);
-                    cart.CartHeader.CartTotal += (item.Count * item.Product.Price);
+                    item.Test = testDtos.FirstOrDefault(u => u.TestId == item.TestId);
+                    cart.CartHeader.CartTotal += (item.Count * item.Test.Price);
                 }
 
                 //apply coupon if any
@@ -147,7 +147,7 @@ namespace Laboratory.Services.TestCartAPI.Controllers
                 else
                 {
                     var cartDetailsFromDb = await _db.CartDetails.AsNoTracking().FirstOrDefaultAsync(
-                       u => u.TestId == cartDto.CartDetails.First().ProductId &&
+                       u => u.TestId == cartDto.CartDetails.First().TestId &&
                        u.CartHeaderId == cartHeaderFromDb.CartHeaderId);
 
                     if (cartDetailsFromDb == null)
