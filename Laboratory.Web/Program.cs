@@ -15,11 +15,13 @@ builder.Services.AddHttpClient();
 builder.Services.AddHttpClient<ITestService, TestService>();
 builder.Services.AddHttpClient<IAuthService, AuthService>();
 builder.Services.AddHttpClient<ICartService, CartService>();
+builder.Services.AddHttpClient<IOrderService, OrderService>();
 
 
 //SD.PatientAPIBase = builder.Configuration["ServiceUrls:PatientAPI"];
 SD.AuthAPIBase = builder.Configuration["ServiceUrls:AuthAPI"];
 SD.TestAPIBase = builder.Configuration["ServiceUrls:TestAPI"];
+SD.OrderAPIBase = builder.Configuration["ServiceUrls:OrderAPI"];
 SD.TestCartAPIBase = builder.Configuration["ServiceUrls:TestCartAPI"];
 
 builder.Services.AddScoped<IBaseService, BaseService>();
@@ -28,6 +30,7 @@ builder.Services.AddScoped<ITokenProvider, TokenProvider>();
 builder.Services.AddScoped<ITestService, TestService>();
 builder.Services.AddScoped<ICartService, CartService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
