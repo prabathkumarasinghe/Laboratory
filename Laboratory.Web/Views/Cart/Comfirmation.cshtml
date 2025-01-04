@@ -3,21 +3,21 @@
 <form method="post">
     <input asp-for="CartHeader.UserId" hidden />
     <input asp-for="CartHeader.CartHeaderId" hidden />
-@*     <input asp-for="CartHeader.CouponCode" hidden />
+    @*     <input asp-for="CartHeader.CouponCode" hidden />
     <input asp-for="CartHeader.Discount" hidden /> *@
     <input asp-for="CartHeader.CartTotal" hidden />
 
     <div class="border mt-2 p-4 rounded">
         <div class="container row">
             <div class="col-md-7 col-12">
-                <span style="font-size:25px;" class="text-warning mb-2">Order Summary</span>
+                <span style="font-size:25px;" class="text-warning mb-2">Add Resut</span>
             </div>
             <div class="col-md-5 col-12">
                 <a asp-action="CartIndex" class="btn btn-outline-warning form-control">Back to Cart</a>
             </div>
             <br /><br /><br />
             <hr />
-            <div class="col-7">
+@*             <div class="col-7">
                 <div class="row pt-2">
                     <div class="col-12 py-2">
                         <input asp-for="CartHeader.Name" placeholder="full name..." class="form-control" />
@@ -36,8 +36,8 @@
                     </div>
 
                 </div>
-            </div>
-            <div class="col-5">
+            </div> *@
+            <div class="col-12">
                 <div class="card mt-2">
                     <div class="card-body">
                         <div class=" d-none d-lg-block">
@@ -45,23 +45,29 @@
                                 <div class="col-6">
                                     Product Details
                                 </div>
-
+                                <div class="col-lg-1">
+                                </div>
+@* 
                                 <div class="col-3">
                                     Price
                                 </div>
                                 <div class="col-3">
                                     Count
-                                </div>
+                                </div> *@
                             </div>
                         </div>
                         <hr />
                         @foreach (var cartObj in Model.CartDetails)
                         {
-                            <div class="row h-100">
-                                <div class="col-6">
+                           @*  <div class="row h-100">
+                                <div class="col-md-5 pt-md-4">
                                     <span style="font-size:20px">@cartObj.Test.Name</span>
+                                    <a asp-action="TestEdit" class="btn btn-success form-control">Edit </a>
                                 </div>
-
+                                <div class="col-2 col-lg-1 p-0 pt-lg-4 text-center">
+                                    <a asp-action="TestEdit" class="btn btn-success form-control">Edit </a>
+                                </button> 
+                                </div>
                                 <div class="col-3" style="font-size:11px;">
                                     <span style="font-size:17px;"> @cartObj.Test.Price.ToString("c")</span>
 
@@ -69,30 +75,28 @@
                                 <div class="col-3" style="font-size:11px;">
                                     <span style="font-size:17px;"> @cartObj.Count</span>
                                 </div>
-                            </div>
+                            </div> *@
                             <hr />
                         }
-                        <div class="row">
+               @*          <div class="row">
                             <div class="col-12 text-center pr-4 text-danger">
                                 Order Total :  @Model.CartHeader.CartTotal.ToString("c") <br />
-                              @*   @if (Model.CartHeader.Discount > 0)
+                                  @if (Model.CartHeader.Discount > 0)
                                 {
-                                    <span class="text-success"> Order Discount :  @Model.CartHeader.Discount.ToString("c")</span>
-                                } *@
+                                <span class="text-success"> Order Discount :  @Model.CartHeader.Discount.ToString("c")</span>
+                                }
                             </div>
-                        </div>
+                        </div> *@
 
                     </div>
                     <div class="card-footer">
                         <div class="row">
 
-                            <div class="col-12 ">
-                                <a asp-action="Comfirmation" class="btn btn-success form-control">Place Order </a>
-                               @*  <button type="submit" class="btn btn-success form-control ">
-                                    <span>Place Order</span>
-                                </button> *@
+                            <div class="col-2 pt-md-10">
+                                <button type="submit" class="btn btn-success form-control ">
+                                    <span>Save For Later</span>
+                                </button>
                             </div>
-                           
                         </div>
                     </div>
                 </div>

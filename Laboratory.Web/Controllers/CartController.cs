@@ -69,6 +69,17 @@ namespace Laboratory.Web.Controllers
                 return View(await LoadCartDtoBasedOnLoggedInUser());
         }
 
+        [Authorize]
+        public async Task<IActionResult> Comfirmation()
+        {
+            return View(await LoadCartDtoBasedOnLoggedInUser());
+        }
+        [Authorize]
+        public async Task<IActionResult> TestEdit()
+        {
+            return View(await LoadCartDtoBasedOnLoggedInUser());
+        }
+
         //public async Task<IActionResult> Confirmation(int orderId)
         //{
         //    ResponseDto? response = await _orderService.ValidateStripeSession(orderId);
