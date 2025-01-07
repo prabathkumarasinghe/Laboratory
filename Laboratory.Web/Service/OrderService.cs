@@ -25,7 +25,15 @@ namespace Laboratory.Web.Service
                 Url = SD.OrderAPIBase + "/api/order/CreateOrder" //"/api/order/CreateOrder"
             });
         }
-
+        public async Task<ResponseDto?> UpdateOrder(CartDto cartDto)
+        {
+            return await _baseService.SendAsync(new RequestDto()
+            {
+                ApiType = SD.ApiType.POST,
+                Data = cartDto,
+                Url = SD.OrderAPIBase + "/api/order/UpdateOrder" //"/api/order/CreateOrder"
+            });
+        }
         //public async Task<ResponseDto?> CreateStripeSession(StripeRequestDto stripeRequestDto)
         //{
         //    return await _baseService.SendAsync(new RequestDto()

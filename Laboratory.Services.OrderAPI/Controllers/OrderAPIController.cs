@@ -32,7 +32,7 @@ namespace Laboratory.Services.OrderAPI.Controllers
             _configuration = configuration;
         }
 
-        [Authorize]
+//        [Authorize]
         [HttpGet("GetOrders")]
         public ResponseDto? Get(string? userId = "")
         {
@@ -57,7 +57,7 @@ namespace Laboratory.Services.OrderAPI.Controllers
             return _response;
         }
 
-        [Authorize]
+     //   [Authorize]
         [HttpGet("GetOrder/{id:int}")]
         public ResponseDto? Get(int id)
         {
@@ -73,8 +73,6 @@ namespace Laboratory.Services.OrderAPI.Controllers
             }
             return _response;
         }
-
-
 
         //   [Authorize]
         [HttpPost("CreateOrder")]
@@ -100,6 +98,31 @@ namespace Laboratory.Services.OrderAPI.Controllers
             }
             return _response;
         }
+
+        [HttpPost("UpdateOrder")]
+        public async Task<ResponseDto> UpdateOrder([FromBody] CartDto cartDto)
+        {
+            try
+            {
+                OrderHeaderDto orderHeaderDto = _mapper.Map<OrderHeaderDto>(cartDto.CartHeader);
+                orderHeaderDto.OrderTime = DateTime.Now;
+                orderHeaderDto.Status = SD.Status_Pending;
+                orderHeaderDto.OrderDetails = _mapper.Map<IEnumerable<OrderDetailsDto>>(cartDto.CartDetails);
+                orderHeaderDto.OrderTotal = Math.Round(orderHeaderDto.OrderTotal, 2);
+                OrderHeader orderUpdated = _db.OrderHeaders.Add(_mapper.Map<OrderHeader>(orderHeaderDto)).Entity;
+                await _db.SaveChangesAsync();
+
+                orderHeaderDto.OrderHeaderId = orderUpdated.OrderHeaderId;
+                _response.Result = orderHeaderDto;
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message;
+            }
+            return _response;
+        }
+
 
 
         //   [Authorize]

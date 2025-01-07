@@ -86,11 +86,20 @@
                     <div class="card-footer">
                         <div class="row">
 
-                            <div class="col-12 ">
-                                <a asp-action="Comfirmation" class="btn btn-success form-control">Place Order </a>
-                               @*  <button type="submit" class="btn btn-success form-control ">
+                     @*        <div class="col-12 ">
+                                <a asp-action="Index" class="btn btn-success form-control">Place Order </a>
+                                <a asp-action="Index" asp-controller="Home" class="btn btn-success form-control">Place Order</a>
+                                <button type="submit" class="btn btn-success form-control ">
                                     <span>Place Order</span>
-                                </button> *@
+                                </button>
+
+                            </div> *@
+                            <div class="col-5">
+                                <input type="submit" value="Create" class="btn btn-success form-control" />
+
+                            </div>
+                            <div class="col-6 text-end">
+                                <a asp-action="Index" asp-controller="Home" class="btn btn-outline-warning mt-2 btn-sm">Continue Shopping</a>
                             </div>
                            
                         </div>

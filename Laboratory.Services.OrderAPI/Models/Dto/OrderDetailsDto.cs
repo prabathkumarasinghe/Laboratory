@@ -7,7 +7,7 @@
         public int TestId { get; set; }
         public TestDto? Test { get; set; }
         public int Count { get; set; }
-        public string TestName { get; set; }
+        public string TesttName { get; set; }
         public double Price { get; set; }
     }
 }
