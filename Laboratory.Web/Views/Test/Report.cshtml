@@ -1,0 +1,143 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lipid Profile Test Report</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .report-container {
+            width: 210mm;
+            height: 297mm; /* A4 size */
+            margin: 10mm auto;
+            padding: 20mm;
+            background: #fff;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+            box-sizing: border-box;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+            .header h1 {
+                margin: 0;
+                font-size: 24px;
+            }
+
+            .header p {
+                margin: 5px 0;
+                font-size: 14px;
+                color: #555;
+            }
+
+        .details, .results {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+            .details th, .details td, .results th, .results td {
+                border: 1px solid #ccc;
+                padding: 8px;
+                text-align: left;
+            }
+
+            .details th {
+                background-color: #f9f9f9;
+            }
+
+            .results th {
+                background-color: #e9ecef;
+            }
+
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 12px;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+    <div class="report-container">
+        <div class="header">
+            <h1>Lipid Profile Test Report</h1>
+            <p>Diagnostic Lab Name</p>
+            <p>Address, City, State, Zip Code</p>
+            <p>Contact: +1 234 567 890 | Email: info@lab.com</p>
+        </div>
+        <table class="details">
+            <tr>
+                <th>Patient Name</th>
+                <td>John Doe</td>
+                <th>Age</th>
+                <td>45</td>
+            </tr>
+            <tr>
+                <th>Gender</th>
+                <td>Male</td>
+                <th>Date of Test</th>
+                <td>14-Jan-2025</td>
+            </tr>
+            <tr>
+                <th>Referred By</th>
+                <td>Dr. Smith</td>
+                <th>Lab ID</th>
+                <td>#12345</td>
+            </tr>
+        </table>
+        <table class="results">
+            <thead>
+                <tr>
+                    <th>Test</th>
+                    <th>Result (mg/dL)</th>
+                    <th>Reference Range (mg/dL)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Total Cholesterol</td>
+                    <td>200</td>
+                    <td>125-200</td>
+                </tr>
+                <tr>
+                    <td>HDL Cholesterol</td>
+                    <td>50</td>
+                    <td>40-60</td>
+                </tr>
+                <tr>
+                    <td>LDL Cholesterol</td>
+                    <td>120</td>
+                    <td>100-129</td>
+                </tr>
+                <tr>
+                    <td>Triglycerides</td>
+                    <td>150</td>
+                    <td>50-150</td>
+                </tr>
+                <tr>
+                    <td>VLDL</td>
+                    <td>30</td>
+                    <td>5-40</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="footer">
+            <p>This is a computer-generated report and does not require a signature.</p>
+        </div>
+        <div class="col-5 offset-2">
+
+            <a asp-action="GeneratePdf" class="btn-primary btn form-control ">Download</a>
+        </div>
+    </div>
+</body>
+
+</html>

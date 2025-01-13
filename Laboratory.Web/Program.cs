@@ -17,6 +17,7 @@ builder.Services.AddHttpClient<ITestParameterService, TestParameterService>();
 builder.Services.AddHttpClient<IAuthService, AuthService>();
 builder.Services.AddHttpClient<ICartService, CartService>();
 builder.Services.AddHttpClient<IOrderService, OrderService>();
+//builder.Services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
 
 
 //SD.PatientAPIBase = builder.Configuration["ServiceUrls:PatientAPI"];
@@ -42,8 +43,23 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.AccessDeniedPath = "/Auth/AccessDenied";
     });
 
+// Register ViewRenderHelper
+builder.Services.AddScoped<ViewRenderHelper>();
+
+// Register PdfService
+builder.Services.AddScoped<PdfService>();
+
+// Register DinkToPdf converter
+//builder.Services.AddSingleton<IConverter, SynchronizedConverter>(sp =>
+//{
+//	return new SynchronizedConverter(new PdfTools());
+//});
 
 var app = builder.Build();
+
+
+
+
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

@@ -87,7 +87,8 @@
                                                 <small class="text-muted">Quantity : @detail.Count</small>
                                             </div>
                                             <div class="col-4 text-end">
-                                                <p class="text-success">@((detail.Count * detail.Price).ToString("c"))</p>
+                                               @*  <p class="text-success">@((detail.Count * detail.Price).ToString("c"))</p> *@
+                                                <a asp-action="TestEdit" class="btn btn-success form-control">Edit </a>
                                             </div>
                                         </div>
                                     </li>

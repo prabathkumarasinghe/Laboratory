@@ -1,0 +1,20 @@
+﻿@model MyViewModel
+
+<form asp-action="GeneratePdf" enctype="multipart/form-data">
+    <div class="col-10 pb-3">
+        @* <input asp-for="Name" class="form-control" /> *@
+        <span asp-validation-for="Name" class="text-danger"></span>
+        <input type="text" id="Name" name="Name" value="@Model.Name" />
+    </div>
+    <div>
+        <button type="submit">Generate PDF</button>
+    </div>
+    
+
+</form>
+
+@* <form asp-action="GeneratePdf" method="post">
+    <label for="Name">Name:</label>
+    <input type="text" id="Name" name="Name" value="@Model.Name" />
+    <button type="submit">Generate PDF</button>
+</form> *@

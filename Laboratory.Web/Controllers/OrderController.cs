@@ -1,4 +1,5 @@
 ﻿using Laboratory.Web.Models;
+using Laboratory.Web.Service;
 using Laboratory.Web.Service.IService;
 using Laboratory.Web.Utility;
 using Microsoft.AspNetCore.Authorization;
@@ -11,9 +12,13 @@ namespace Laboratory.Web.Controllers
     public class OrderController : Controller
     {
         private readonly IOrderService _orderService;
-        public OrderController(IOrderService orderService)
+		private readonly ViewRenderHelper _viewRenderHelper;
+		private readonly PdfService _pdfService;
+		public OrderController(IOrderService orderService,ViewRenderHelper viewRenderHelper, PdfService pdfService)
         {
             _orderService = orderService;
+            _viewRenderHelper = viewRenderHelper;
+            _pdfService = pdfService;
         }
 
         [Authorize]
@@ -40,14 +45,41 @@ namespace Laboratory.Web.Controllers
             return View(orderHeaderDto);
         }
 
-        [HttpPost("OrderReadyForPickup")]
+        [Authorize]
+        public IActionResult TestEdit()
+        {
+            return View();
+        }
+		
+
+		//[HttpPost]
+		//public async Task<IActionResult> TestEdit(OrderHeaderDto model)
+		//{
+		//    if (ModelState.IsValid)
+		//    {
+		//        ResponseDto? response = await _orderService.CreateOrder(model);
+
+		//        if (response != null && response.IsSuccess)
+		//        {
+		//            TempData["success"] = "Test created successfully";
+		//            return RedirectToAction(nameof(TestIndex));
+		//        }
+		//        else
+		//        {
+		//            TempData["error"] = response?.Message;
+		//        }
+		//    }
+		//    return View(model);
+		//}
+
+		[HttpPost("OrderReadyForPickup")]
         public async Task<IActionResult> OrderReadyForPickup(int orderId)
         {
             var response = await _orderService.UpdateOrderStatus(orderId, SD.Status_ReadyForPickup);
             if (response != null && response.IsSuccess)
             {
-                TempData["success"] = "Status updated successfully";
-                return RedirectToAction(nameof(OrderDetail), new { orderId = orderId });
+                //TempData["success"] = "Status updated successfully";
+                //return RedirectToAction(nameof(OrderDetail), new { orderId = orderId });
             }
             return View();
         }
@@ -58,8 +90,8 @@ namespace Laboratory.Web.Controllers
             var response = await _orderService.UpdateOrderStatus(orderId, SD.Status_Completed);
             if (response != null && response.IsSuccess)
             {
-                TempData["success"] = "Status updated successfully";
-                return RedirectToAction(nameof(OrderDetail), new { orderId = orderId });
+                //TempData["success"] = "Status updated successfully";
+                //return RedirectToAction(nameof(OrderDetail), new { orderId = orderId });
             }
             return View();
         }
@@ -70,8 +102,8 @@ namespace Laboratory.Web.Controllers
             var response = await _orderService.UpdateOrderStatus(orderId, SD.Status_Cancelled);
             if (response != null && response.IsSuccess)
             {
-                TempData["success"] = "Status updated successfully";
-                return RedirectToAction(nameof(OrderDetail), new { orderId = orderId });
+                //TempData["success"] = "Status updated successfully";
+                //return RedirectToAction(nameof(OrderDetail), new { orderId = orderId });
             }
             return View();
         }
@@ -111,6 +143,30 @@ namespace Laboratory.Web.Controllers
             }
             return Json(new { data = list.OrderByDescending(u => u.OrderHeaderId) });
         }
-    }
+
+        //public IActionResult SamplePdf()
+        //{
+        //    return View();
+        //}
+		//public async Task<IActionResult> SamplePdf()
+		//{
+		//	return View();
+		//}
+
+		//public async Task<IActionResult> GeneratePdf(MyViewModel model)
+		//{
+		//	//var model = new { Name = "John Doe", Date = DateTime.Now }; // Example model
+			
+
+		//	// Render the Razor view to an HTML string
+		//	var htmlContent = await _viewRenderHelper.RenderViewToStringAsync(this, "SamplePdf", model);
+
+		//	// Convert the HTML content to a PDF
+		//	var pdfBytes = _pdfService.GeneratePdfFromHtml(htmlContent);
+
+		//	// Return the PDF file to the user
+		//	return File(pdfBytes, "application/pdf", "GeneratedDocument.pdf");
+		//}
+	}
 
 }

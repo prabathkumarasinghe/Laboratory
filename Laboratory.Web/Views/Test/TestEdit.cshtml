@@ -1,0 +1,159 @@
+﻿@model MyViewModel
+
+<form asp-action="GeneratePdf" method="post">
+    <label for="Name">Name:</label>
+   @*  <input type="text" id="Name" name="Name" value="@Model.Name" /> *@
+    <div class="col-2">
+        <label class="control-label pt-2" style="font-size:20px;"> Name</label>
+    </div>
+    <div class="col-10 pb-3">
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    <button type="submit">Generate PDF</button>
+</form>
+
+@* <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Full Blood Count Test Report</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        form {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+            button:hover {
+                background-color: #0056b3;
+            }
+    </style>
+</head>
+<body>
+    <h1>Edit Full Blood Count Report</h1> *@
+   
+@* <form asp-action="P" enctype="multipart/form-data">
+  
+            <div class="col-2">
+                <label class="control-label pt-2" style="font-size:20px;"> Name</label>
+            </div>
+            <div class="col-10 pb-3">
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+    \       <div class="col-6 text-end">
+                <a asp-action="GeneratePdf" asp-controller="Test" class="btn btn-outline-warning mt-2 btn-sm">Download PDF</a>
+            </div>
+    <div class="col-5">
+        <input type="submit" value="Create" class="btn btn-success form-control" />
+
+    </div> *@
+
+    
+    
+    
+    @* <form action="/submit-report" method="POST">
+        <div>
+            <label for="Name">Name:</label>
+             <input type="text" id="Name" name="Name" e" />
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+            <button type="submit">Generate PDF</button>
+        </div>
+        <div class="col-6 text-end">
+            <a asp-action="GeneratePdf" asp-controller="Test" class="btn btn-outline-warning mt-2 btn-sm">Download PDF</a>
+        </div> *@
+        @* <div class="form-group">
+            <label for="patient-name">Patient Name:</label>
+            <input type="text" id="patient-name" name="patient_name" required>
+        </div>
+      *@
+       
+
+  @*       <div class="form-group">
+            <label for="patient-id">Patient ID:</label>
+            <input type="text" id="patient-id" name="patient_id" required>
+        </div>
+        <div class="form-group">
+            <label for="hemoglobin">Hemoglobin (g/dL):</label>
+            <input type="text" id="hemoglobin" name="hemoglobin" required>
+        </div>
+        <div class="form-group">
+            <label for="wbc">White Blood Cells (10^9/L):</label>
+            <input type="text" id="wbc" name="wbc" required>
+        </div>
+        <div class="form-group">
+            <label for="platelets">Platelets (10^9/L):</label>
+            <input type="text" id="platelets" name="platelets" required>
+        </div>
+        <div class="form-group">
+            <label for="rbc">Red Blood Cells (10^12/L):</label>
+            <input type="text" id="rbc" name="rbc" required>
+        </div>
+        <div class="form-group">
+            <label for="mcv">Mean Corpuscular Volume (MCV) (fL):</label>
+            <input type="text" id="mcv" name="mcv" required>
+        </div>
+        <div class="form-group">
+            <label for="mch">Mean Corpuscular Hemoglobin (MCH) (pg):</label>
+            <input type="text" id="mch" name="mch" required>
+        </div>
+        <div class="form-group">
+            <label for="comments">Additional Comments:</label>
+            <input type="text" id="comments" name="comments">
+        </div>
+        <button type="submit">Save Report</button>
+        <div class="col-md-5 col-12">
+            <a asp-action="Confirmation" class="btn btn-outline-warning form-control">Back to Result</a>
+        </div> *@
+@*  </form> *@
+@* </body>
+</html>
+ *@
+@* @section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+} *@

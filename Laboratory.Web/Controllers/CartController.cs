@@ -20,12 +20,18 @@ namespace Laboratory.Web.Controllers
             _testParameterService = testParameterService;
         }
 
+
         [Authorize]
         public async Task<IActionResult> CartIndex()
         {
             return View(await LoadCartDtoBasedOnLoggedInUser());
         }
         //  [Authorize]
+        [Authorize]
+        public async Task<IActionResult> OrderDetail()
+        {
+            return View(await LoadCartDtoBasedOnLoggedInUser());
+        }
         [Authorize]
         public async Task<IActionResult> Checkout()
         {
