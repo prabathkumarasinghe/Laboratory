@@ -3,6 +3,7 @@ using Laboratory.Web.Service;
 using Laboratory.Web.Service.IService;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System;
 
 namespace Laboratory.Web.Controllers
 {
@@ -112,18 +113,25 @@ namespace Laboratory.Web.Controllers
 		{
 			return View();
 		}
-        public async Task<IActionResult> Lipid()
+        [HttpGet]
+        public ActionResult Lipid()
         {
-            return View();
+            var people = new List<LipidProfile>
+            {
+            new LipidProfile { Id = 1, Name = "John Doe", Age = 30 },
+            new LipidProfile { Id = 2, Name = "Jane Smith", Age = 25 }
+        };
+
+            return View(people); // Pass the data to the view.
         }
 
-        public async Task<IActionResult> GeneratePdf()
+        public async Task<IActionResult> GeneratePdf(LipidProfile model)
 		{
 			//var model = new { Name = "John Doe", Date = DateTime.Now }; // Example model
 
 
 			// Render the Razor view to an HTML string
-			var htmlContent = await _viewRenderHelper.RenderViewToStringAsync(this, "Report", null);
+			var htmlContent = await _viewRenderHelper.RenderViewToStringAsync(this, "Lipid", model);
 
 			// Convert the HTML content to a PDF
 			var pdfBytes = _pdfService.GeneratePdfFromHtml(htmlContent);

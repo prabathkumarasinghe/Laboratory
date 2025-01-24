@@ -1,4 +1,6 @@
-﻿namespace Laboratory.Web.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Laboratory.Web.Models
 {
     public class OrderHeaderDto
     {
@@ -19,5 +21,11 @@
         //public string? PaymentIntentId { get; set; }
         //public string? StripeSessionId { get; set; }
         public IEnumerable<OrderDetailsDto> OrderDetails { get; set; }
+        public int? TotalCholesterol { get; set; }
+        public int? Triglycerides { get; set; }
+        public int? HDL { get; set; }
+        public int? LDL { get; set; }
+        public int? CholHDLRatio { get; set; }
+        public int? NonHDLChol { get; set; }
     }
 }

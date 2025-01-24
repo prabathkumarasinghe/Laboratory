@@ -4,6 +4,7 @@ using Laboratory.Services.OrderAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Laboratory.Services.OrderAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250124173822_AddTotalCholesterolToOrderHeader")]
+    partial class AddTotalCholesterolToOrderHeader
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -61,26 +64,14 @@ namespace Laboratory.Services.OrderAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderHeaderId"));
 
-                    b.Property<int?>("CholHDLRatio")
-                        .HasColumnType("int");
-
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("HDL")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("LDL")
-                        .HasColumnType("int");
 
                     b.Property<int?>("LabNumber")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("NonHDLChol")
-                        .HasColumnType("int");
 
                     b.Property<DateTime>("OrderTime")
                         .HasColumnType("datetime2");
@@ -98,9 +89,6 @@ namespace Laboratory.Services.OrderAPI.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("TotalCholesterol")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("Triglycerides")
                         .HasColumnType("int");
 
                     b.Property<string>("UserId")

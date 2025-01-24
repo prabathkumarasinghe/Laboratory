@@ -26,17 +26,92 @@ namespace Laboratory.Web.Controllers
         {
             return View(await LoadCartDtoBasedOnLoggedInUser());
         }
+        public async Task<IActionResult> CartEdit()
+        {
+			List<CartDto>? list = new();
+
+			ResponseDto? response = await _orderService.GetAllOrder(null);
+
+			if (response != null && response.IsSuccess)
+			{
+				list = JsonConvert.DeserializeObject<List<CartDto>>(Convert.ToString(response.Result));
+			}
+
+			return View(list);
+		}
         //  [Authorize]
         [Authorize]
         public async Task<IActionResult> OrderDetail()
         {
             return View(await LoadCartDtoBasedOnLoggedInUser());
         }
+
+        public async Task<IActionResult> OrderUpdate(int orderId)
+        {
+            ResponseDto? response = await _orderService.GetOrder(orderId);
+
+            if (response != null && response.IsSuccess)
+            {
+                CartHeaderDto? model = JsonConvert.DeserializeObject<CartHeaderDto>(Convert.ToString(response.Result));
+				
+                return View(model);
+            }
+
+            return NotFound();
+        }
+        [HttpPost]
+        public async Task<IActionResult> OrderUpdate(CartDto testDto)
+        {
+            ResponseDto? response = await _orderService.UpdateOrder(testDto);
+
+            if (response != null && response.IsSuccess)
+            {
+
+                //return RedirectToAction(nameof(TestIndex));
+            }
+
+            return View(testDto);
+        }
+
+        [Authorize]
+        public async Task<IActionResult> Result()
+        {
+            return View(await LoadCartDtoBasedOnLoggedInUser());
+        }
+
+        [HttpPost]
+        [ActionName("Checkout")]
+        public async Task<IActionResult> Result(CartDto cartDto)
+        {
+            CartDto cart = await LoadCartDtoBasedOnLoggedInUser();
+            cart.CartHeader.Phone = cartDto.CartHeader.Phone;
+            cart.CartHeader.Email = cartDto.CartHeader.Email;
+            cart.CartHeader.Name = cartDto.CartHeader.Name;
+            cart.CartHeader.RefNumber = cartDto.CartHeader.RefNumber;
+            cart.CartHeader.LabNumber = cartDto.CartHeader.LabNumber;
+
+            var response = await _orderService.CreateOrder(cart);
+            OrderHeaderDto orderHeaderDto = JsonConvert.DeserializeObject<OrderHeaderDto>(Convert.ToString(response.Result));
+
+            if (response != null && response.IsSuccess)
+            {
+                TempData["success"] = "Test created successfully";
+                //   return RedirectToAction(nameof(Index));
+            }
+            else
+            {
+                TempData["error"] = response?.Message;
+            }
+            return View(await LoadCartDtoBasedOnLoggedInUser());
+        }
+
         [Authorize]
         public async Task<IActionResult> Checkout()
         {
             return View(await LoadCartDtoBasedOnLoggedInUser());
         }
+
+
         [HttpPost]
         [ActionName("Checkout")]
         public async Task<IActionResult> Checkout(CartDto cartDto)

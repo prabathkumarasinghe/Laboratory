@@ -26,8 +26,23 @@ namespace Laboratory.Web.Controllers
         {
             return View();
         }
+		[Authorize]
+		public IActionResult OrderEdit()
+		{
+			return View();
+		}
+		[Authorize]
+		//public IActionResult Lipid()
+		//{
+		//	return View();
+		//}
+		[Authorize]
+		public IActionResult LFT()
+		{
+			return View();
+		}
 
-        [Authorize]
+		[Authorize]
         public async Task<IActionResult> OrderDetail(int orderId)
         {
             OrderHeaderDto orderHeaderDto = new OrderHeaderDto();
@@ -50,29 +65,52 @@ namespace Laboratory.Web.Controllers
         {
             return View();
         }
-		
+        public IActionResult Result()
+        {
+            return View();
+        }
+        public async Task<IActionResult> Lipid()
+        {
+            return View();
+        }
 
-		//[HttpPost]
-		//public async Task<IActionResult> TestEdit(OrderHeaderDto model)
-		//{
-		//    if (ModelState.IsValid)
-		//    {
-		//        ResponseDto? response = await _orderService.CreateOrder(model);
+        public async Task<IActionResult> GeneratePdf(OrderHeaderDto model)
+        {
+            //var model = new { Name = "John Doe", Date = DateTime.Now }; // Example model
 
-		//        if (response != null && response.IsSuccess)
-		//        {
-		//            TempData["success"] = "Test created successfully";
-		//            return RedirectToAction(nameof(TestIndex));
-		//        }
-		//        else
-		//        {
-		//            TempData["error"] = response?.Message;
-		//        }
-		//    }
-		//    return View(model);
-		//}
 
-		[HttpPost("OrderReadyForPickup")]
+            // Render the Razor view to an HTML string
+            var htmlContent = await _viewRenderHelper.RenderViewToStringAsync(this, "OrderDetail", model);
+
+            // Convert the HTML content to a PDF
+            var pdfBytes = _pdfService.GeneratePdfFromHtml(htmlContent);
+
+            // Return the PDF file to the user
+            return File(pdfBytes, "application/pdf", "GeneratedDocument.pdf");
+        }
+
+
+        //[HttpPost]
+        //public async Task<IActionResult> TestEdit(OrderHeaderDto model)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        ResponseDto? response = await _orderService.CreateOrder(model);
+
+        //        if (response != null && response.IsSuccess)
+        //        {
+        //            TempData["success"] = "Test created successfully";
+        //            return RedirectToAction(nameof(TestIndex));
+        //        }
+        //        else
+        //        {
+        //            TempData["error"] = response?.Message;
+        //        }
+        //    }
+        //    return View(model);
+        //}
+
+        [HttpPost("OrderReadyForPickup")]
         public async Task<IActionResult> OrderReadyForPickup(int orderId)
         {
             var response = await _orderService.UpdateOrderStatus(orderId, SD.Status_ReadyForPickup);
@@ -148,25 +186,28 @@ namespace Laboratory.Web.Controllers
         //{
         //    return View();
         //}
-		//public async Task<IActionResult> SamplePdf()
-		//{
-		//	return View();
-		//}
+        //public async Task<IActionResult> SamplePdf()
+        //{
+        //	return View();
+        //}
 
-		//public async Task<IActionResult> GeneratePdf(MyViewModel model)
-		//{
-		//	//var model = new { Name = "John Doe", Date = DateTime.Now }; // Example model
-			
+        //public async Task<IActionResult> GeneratePdf(MyViewModel model)
+        //{
+        //	//var model = new { Name = "John Doe", Date = DateTime.Now }; // Example model
 
-		//	// Render the Razor view to an HTML string
-		//	var htmlContent = await _viewRenderHelper.RenderViewToStringAsync(this, "SamplePdf", model);
 
-		//	// Convert the HTML content to a PDF
-		//	var pdfBytes = _pdfService.GeneratePdfFromHtml(htmlContent);
+        //	// Render the Razor view to an HTML string
+        //	var htmlContent = await _viewRenderHelper.RenderViewToStringAsync(this, "SamplePdf", model);
 
-		//	// Return the PDF file to the user
-		//	return File(pdfBytes, "application/pdf", "GeneratedDocument.pdf");
-		//}
-	}
+        //	// Convert the HTML content to a PDF
+        //	var pdfBytes = _pdfService.GeneratePdfFromHtml(htmlContent);
+
+        //	// Return the PDF file to the user
+        //	return File(pdfBytes, "application/pdf", "GeneratedDocument.pdf");
+        //}
+
+       
+
+    }
 
 }

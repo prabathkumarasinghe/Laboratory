@@ -1,4 +1,4 @@
-﻿@* <!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -141,80 +141,3 @@
 </body>
 
 </html>
- *@
-
-@{
-    ViewData["Title"] = "Pathology Test Entry";
-    var testTypes = new List<SelectListItem>
-    {
-        new SelectListItem { Text = "Blood Test", Value = "Blood" },
-        new SelectListItem { Text = "Urine Test", Value = "Urine" },
-        new SelectListItem { Text = "X-Ray", Value = "XRay" },
-    };
-}
-
-<h2>Enter Pathology Test Data</h2>
-
-<form asp-action="SaveTestData" method="post">
-    <div class="form-group">
-        <label for="testType">Test Type</label>
-        <select id="testType" name="TestType" class="form-control" onchange="showTestFields()">
-            <option value="">-- Select Test Type --</option>
-            @foreach (var testType in testTypes)
-            {
-                <option value="@testType.Value">@testType.Text</option>
-            }
-        </select>
-    </div>
-
-    <div id="dynamicFields">
-        <!-- Dynamic fields will appear here -->
-    </div>
-
-    <button type="submit" class="btn btn-primary">Submit</button>
-</form>
-
-@section Scripts {
-    <script>
-        function showTestFields() {
-            const testType = document.getElementById("testType").value;
-            const dynamicFields = document.getElementById("dynamicFields");
-            dynamicFields.innerHTML = ""; // Clear previous fields
-
-            if (testType === "Blood") {
-                dynamicFields.innerHTML = `
-                            <div class="form-group">
-                                <label for="hemoglobin">Hemoglobin Level</label>
-                                <input type="text" id="hemoglobin" name="Hemoglobin" class="form-control" />
-                            </div>
-                            <div class="form-group">
-                                <label for="rbc">RBC Count</label>
-                                <input type="text" id="rbc" name="RBCCount" class="form-control" />
-                            </div>
-                        `;
-            } else if (testType === "Urine") {
-                dynamicFields.innerHTML = `
-                            <div class="form-group">
-                                <label for="ph">pH Level</label>
-                                <input type="text" id="ph" name="pHLevel" class="form-control" />
-                            </div>
-                            <div class="form-group">
-                                <label for="protein">Protein Level</label>
-                                <input type="text" id="protein" name="ProteinLevel" class="form-control" />
-                            </div>
-                        `;
-            } else if (testType === "XRay") {
-                dynamicFields.innerHTML = `
-                            <div class="form-group">
-                                <label for="area">Body Area</label>
-                                <input type="text" id="area" name="BodyArea" class="form-control" />
-                            </div>
-                            <div class="form-group">
-                                <label for="comments">Comments</label>
-                                <textarea id="comments" name="Comments" class="form-control"></textarea>
-                            </div>
-                        `;
-            }
-        }
-    </script>
-}

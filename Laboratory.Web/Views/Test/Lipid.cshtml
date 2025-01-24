@@ -1,47 +1,37 @@
-﻿@model LipidProfile
+﻿@model List<LipidProfile>
 
 @{
-    ViewData["Title"] = "Enter Lipid Profile Data";
+    ViewBag.Title = "Data Entry Table";
 }
 
-<h2>@ViewData["Title"]</h2>
+<h2>Enter Data</h2>
 
-@if (TempData["Message"] != null)
-{
-    <div class="alert alert-success">
-        @TempData["Message"]
-    </div>
-}
-
-<form asp-action="GeneratePdf" method="post">
-    <div class="form-group">
-        <label asp-for="TotalCholesterol" class="control-label"></label>
-        <input asp-for="TotalCholesterol" class="form-control" />
-        <span asp-validation-for="TotalCholesterol" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="HDL" class="control-label"></label>
-        <input asp-for="HDL" class="form-control" />
-        <span asp-validation-for="HDL" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="LDL" class="control-label"></label>
-        <input asp-for="LDL" class="form-control" />
-        <span asp-validation-for="LDL" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="Triglycerides" class="control-label"></label>
-        <input asp-for="Triglycerides" class="form-control" />
-        <span asp-validation-for="Triglycerides" class="text-danger"></span>
-    </div>
-
+<form asp-action="CreateTable" method="post">
+    <table border="1" cellpadding="5" cellspacing="0">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Age</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.Count; i++)
+            {
+                <tr>
+                    <td>
+                        @Html.HiddenFor(m => Model[i].Id)
+                        @Model[i].Id
+                    </td>
+                    <td>
+                        @Html.TextBoxFor(m => Model[i].Name, new { @class = "form-control" })
+                    </td>
+                    <td>
+                        @Html.TextBoxFor(m => Model[i].Age, new { @class = "form-control" })
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
     <button type="submit" class="btn btn-primary">Submit</button>
-    <button type="submit">Generate PDF</button>
 </form>
-
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-}

@@ -14,6 +14,9 @@ namespace Laboratory.Services.OrdertAPI
                 config.CreateMap<OrderHeaderDto, CartHeaderDto>()
                 .ForMember(dest => dest.CartTotal, u => u.MapFrom(src => src.OrderTotal)).ReverseMap();
 
+                config.CreateMap<CartHeaderDto, OrderHeaderDto>()
+               .ForMember(dest => dest.OrderTotal, u => u.MapFrom(src => src.CartTotal)).ReverseMap();
+
                 config.CreateMap<CartDetailsDto, OrderDetailsDto>()
                 .ForMember(dest => dest.TesttName, u => u.MapFrom(src => src.Test.Name))
                 .ForMember(dest => dest.Price, u => u.MapFrom(src => src.Test.Price));
