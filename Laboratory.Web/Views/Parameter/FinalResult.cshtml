@@ -1,0 +1,455 @@
+﻿@model ParameterDto 
+
+@{
+    ViewData["Title"] = "Pathology Test Entry";
+    var testTypes = new List<SelectListItem>
+    {
+    new SelectListItem { Text = "Lipid Profile", Value = "Lipid" },
+    new SelectListItem { Text = "Urine Test", Value = "Urine" },
+    new SelectListItem { Text = "X-Ray", Value = "XRay" },
+    };
+}
+
+@using Laboratory.Web.Utility
+<form asp-action="GeneratePdf" method="post">
+@* <form method="post"> *@
+    <br />
+   @*  <input asp-for="OrderHeaderId" hidden /> *@
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .report-container {
+            width: 210mm;
+            height: 297mm; /* A4 size */
+            margin: 10mm auto;
+            padding: 20mm;
+            background: #fff;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+            box-sizing: border-box;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+            .header h1 {
+                margin: 0;
+                font-size: 14px;
+            }
+
+            .header p {
+                margin: 5px 0;
+                font-size: 14px;
+                color: #555;
+            }
+
+        .details, .results {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 14px;
+            font-size: 12px;
+        }
+
+            .details th, .details td, .results th, .results td {
+                border: 1px solid #ccc;
+                padding: 8px;
+                text-align: left;
+            }
+
+            .details th {
+                background-color: #f9f9f9;
+            }
+
+            .results th {
+                background-color: #e9ecef;
+            }
+
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 12px;
+            color: #777;
+        }
+    </style>
+
+  
+
+    <div class="report-container">
+        <div class="header">
+            <h1>Lipid Profile Test Report</h1>
+            <p>Diagnostic Lab Name</p>
+            <p>Address, City, State, Zip Code</p>
+            <p>Contact: +1 234 567 890 | Email: info@lab.com</p>
+        </div>
+        <table class="details">
+            <tr>
+                <th>Patient Name</th>
+                <td>@Model.PatientName</td>
+                <th>Age</th>
+                <td>45</td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>@Model.Email</td>
+                <th>Phone</th>
+                <td>@Model.Phone</td>
+            </tr>
+            <tr>
+                <th>Ref Number</th>
+                <td>@Model.RefNumber</td>
+                <th>Lab Number</th>
+                <td>@Model.LabNumber</td>
+            </tr>
+        </table>
+
+        <div class="form-group">
+            <div class="col-2">
+                <label class="control-label pt-2" style="font-size:20px;"> Test Type</label>
+            </div>
+            
+            <select id="testType" name="TestType" class="form-control" onchange="showTestFields()">
+                <option value="">-- Select Test Type --</option>
+               
+                
+                @foreach (var testType in testTypes)
+                {
+                    
+                    <option value="@testType.Value">@testType.Text</option>
+                }
+                     
+            </select>
+            <br />
+            <div id="dynamicFields">
+                <!-- Dynamic fields will appear here -->
+            </div>
+
+        </div>
+
+        
+        <div class="footer">
+            <p>This is a computer-generated report and does not require a signature.</p>
+        </div>
+        <div class="col-5 offset-2">
+            <button type="submit">Generate PDF</button>
+            <a asp-action="GeneratePdf" class="btn-primary btn form-control ">Download</a>
+        </div>
+    </div>
+    
+
+    <button type="submit">Generate PDF</button>
+
+   @*  <div class="container">
+        <div class="card">
+            <div class="card-header bg-dark text-light ml-0">
+                <div class="container row">
+                    <div class="col-12 d-none d-md-block col-md-6 pb-1 text-warning h3">
+                        Order Summary
+                    </div>
+                    <div class="col-12 col-md-4 offset-md-2 text-right mt-2">
+                        <a asp-action="OrderIndex" class="btn btn-warning form-control btn-sm">Back to Orders</a>
+                        <button type="submit">Generate PDF</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="container rounded p-2">
+                    <div class="row">
+                        <div class="col-12 col-lg-6 pb-4">
+                            <div class="row my-1">
+                                <div class="col-3">Patient Name</div>
+                                <div class="col-9">
+                                    <input asp-for="PatientName" readonly class="form-control" />
+                                </div>
+                            </div>
+
+                            <div class="row my-1">
+                                <div class="col-3">Phone</div>
+                                <div class="col-9">
+                                    <input asp-for="Phone" readonly class="form-control" />
+                                </div>
+                            </div>
+
+                            <div class="row my-1">
+                                <div class="col-3">Email</div>
+                                <div class="col-9">
+                                    <input asp-for="Email" readonly class="form-control" />
+                                </div>
+                            </div>
+
+                            <div class="row my-1">
+                                <div class="col-3">TotalCholesterol</div>
+                                <div class="col-9">
+                                    <input asp-for="TotalCholesterol" readonly class="form-control" />
+                                </div>
+                            </div>
+
+                             <div class="row my-1">
+                                <div class="col-3">LabNumber</div>
+                                <div class="col-9">
+                                    <input asp-for="LabNumber" readonly class="form-control" />
+                                </div>
+                            </div> *@
+
+                           @*  <div class="row my-1">
+                                <div class="col-3">Order Date</div>
+                                <div class="col-9">
+                                    <input value="@Model.OrderTime.ToShortDateString()" readonly class="form-control" />
+                                </div>
+                            </div> *@
+
+                           @*  @if (User.IsInRole(SD.RoleAdmin))
+                            {
+                                <div class="row my-1">
+                                    <div class="col-3">Session ID</div>
+                                    <div class="col-9">
+                                        <input asp-for="StripeSessionId" readonly class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="row my-1">
+                                    <div class="col-3">Payment Intent ID</div>
+                                    <div class="col-9">
+                                        <input asp-for="PaymentIntentId" readonly class="form-control" />
+                                    </div>
+                                </div>
+                            } *@
+                           @*  <div class="row my-1">
+                                <div class="col-3">Order Status</div>
+                                <div class="col-9">
+                                    <input asp-for="Status" readonly class="form-control" />
+                                </div>
+                            </div> *@
+
+                        </div>
+                       @*  <div class="col-12 col-lg-5 offset-lg-1">
+                            <h4 class="d-flex justify-content-between align-items-center mb-3">
+                                <span class="text-warning">Order Summary</span>
+                            </h4>
+                            <label class="bg-info text-dark text-center form-control my-2">Order Status - @Model.Status</label>
+
+                            <ul class="list-group mb-3">
+                                @foreach (var detail in Model.OrderDetails)
+                                {
+                                    <li class="list-group-item d-flex justify-content-between p-2">
+                                        <div class="row container">
+                                            <div class="col-8">
+
+                                                <h6 class="my-0 text-white-50">@detail.TesttName</h6>
+                                                <small class="text-muted">Price : @detail.Price.ToString("c")</small><br />
+                                                <small class="text-muted">Quantity : @detail.Count</small>
+                                            </div>
+                                            <div class="col-4 text-end">
+                                                <p class="text-success">@((detail.Count * detail.Price).ToString("c"))</p>
+                                                <a asp-action="Result" asp-controller="Cart" class="btn btn-success form-control">Edit </a>
+                                            </div>
+                                        </div>
+                                    </li>
+                                }
+                                <li class="list-group-item bg-primary">
+                                    <div class="row container">
+                                        <div class="col-6">
+                                            <h5 class="text-white">TOTAL </h5>
+                                        </div>
+                                        <div class="col-6 text-end">
+                                            <h5 class="text-white">@Model.OrderTotal.ToString("c")</h5>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                            <div class="form-group">
+                                <label asp-for="TotalCholesterol" class="control-label"></label>
+                                <input asp-for="TotalCholesterol" class="form-control" />
+                                <span asp-validation-for="TotalCholesterol" class="text-danger"></span>
+                            </div>
+
+                           
+                            @if (User.IsInRole(SD.RoleAdmin))
+                            {
+                                @if (Model.Status == SD.Status_Approved)
+                                {
+                                    <button asp-action="OrderReadyForPickup" asp-route-orderId="@Model.OrderHeaderId" type="submit" class="btn btn-success form-control my-1">Ready for Pickup</button>
+                                }
+                                @if (Model.Status == SD.Status_ReadyForPickup)
+                                {
+                                    <button asp-action="CompleteOrder" asp-route-orderId="@Model.OrderHeaderId" type="submit" class="btn btn-success form-control my-1">Complete Order</button>
+                                }
+
+                                if (Model.Status == SD.Status_Approved || Model.Status == SD.Status_ReadyForPickup)
+                                {
+                                    <button asp-action="CancelOrder" asp-route-orderId="@Model.OrderHeaderId" type="submit" class="btn btn-danger form-control my-1">Cancel Order</button>
+                                }
+                            }
+                            
+                        </div> *@
+                @*         <button type="submit">Generate PDF</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <button type="submit">Generate PDF</button> *@
+    @* <a asp-action="GeneratePdf" class="btn-primary btn form-control ">Download</a> *@
+</form>
+
+@section Scripts {
+    <script>
+        function showTestFields() {
+            const testType = document.getElementById("testType").value;
+            const dynamicFields = document.getElementById("dynamicFields");
+            dynamicFields.innerHTML = ""; // Clear previous fields
+
+            if (testType === "Lipid") {
+                dynamicFields.innerHTML = `
+
+                                       <table class="results">
+                    <thead>
+                        <tr>
+                            <th>Test</th>
+                            <th>Result (mg/dL)</th>
+                            <th>Reference Range (mg/dL)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Total Cholesterol</td>
+                            <td>@Model.TotalCholesterol</td>
+                            <td>125-200</td>
+                        </tr>
+                        <tr>
+                            <td>HDL Cholesterol</td>
+                            <td>@Model.HDL</td>
+                            <td>40-60</td>
+                        </tr>
+                        <tr>
+                            <td>LDL Cholesterol</td>
+                            <td>@Model.LDL</td>
+                            <td>100-129</td>
+                        </tr>
+                        <tr>
+                            <td>Triglycerides</td>
+                            <td>@Model.Triglycerides</td>
+                            <td>50-150</td>
+                        </tr>
+                        <tr>
+                            <td>VLDL</td>
+                            <td>30</td>
+                            <td>5-40</td>
+                        </tr>
+                    </tbody>
+                </table>
+                                        `;
+            } else if (testType === "Urine") {
+                dynamicFields.innerHTML = `
+
+                                              <table class="results">
+                            <thead>
+                                <tr>
+                                    <th>Test</th>
+                                    <th>Result (mg/dL)</th>
+                                    <th>Reference Range (mg/dL)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>WBC</td>
+                                            <td>@Model.WBC</td>
+                                    <td>4.0-10.0</td>
+                                </tr>
+                                <tr>
+                                    <td>Neutrophils</td>
+                                            <td>@Model.Neutrophils</td>
+                                    <td>40-80</td>
+                                </tr>
+                                <tr>
+                                    <td>Lymphocytes</td>
+                                            <td>@Model.Lymphocytes</td>
+                                    <td>20-40</td>
+                                </tr>
+                                <tr>
+                                    <td>Eosinophils</td>
+                                            <td>@Model.Eosinophils</td>
+                                    <td>1-6</td>
+                                </tr>
+                                <tr>
+                                    <td>RBC</td>
+                                                    <td>@Model.RBC</td>
+                                    <td>3.8-4.8</td>
+                                </tr>
+                                         <tr>
+                                            <td>HB</td>
+                                                            <td>@Model.RBC</td>
+                                            <td>3.8-4.8</td>
+                                        </tr>
+
+                                                 <tr>
+                                            <td>HCT</td>
+                                                            <td>@Model.Hb</td>
+                                            <td>3.8-4.8</td>
+                                        </tr>
+
+                                                 <tr>
+                                            <td>MCV</td>
+                                                            <td>@Model.HCT</td>
+                                            <td>3.8-4.8</td>
+                                        </tr>
+                                                 <tr>
+                                            <td>MCH</td>
+                                                            <td>@Model.MCV</td>
+                                            <td>3.8-4.8</td>
+                                        </tr>
+                                                 <tr>
+                                            <td>Platelet Count</td>
+                                                            <td>@Model.MCH</td>
+                                            <td>3.8-4.8</td>
+                                        </tr>
+                                                 <tr>
+                                                    <td>Platelet Count</td>
+                                                                    <td>@Model.PlateletCount</td>
+                                                    <td>3.8-4.8</td>
+                                                </tr>
+                                                 <tr>
+                                                    <td>Platelet Count</td>
+                                                                    <td>@Model.MPV</td>
+                                                    <td>3.8-4.8</td>
+                                                </tr>
+                            </tbody>
+                        </table>
+
+                                        `;
+            } else if (testType === "XRay") {
+                dynamicFields.innerHTML = `
+                                            <div class="form-group">
+                                                <label for="area">Body Area</label>
+                                                <input type="text" id="area" name="BodyArea" class="form-control" />
+                                            </div>
+
+
+                          <div style="display: flex;">
+                            <div style="flex: 1; padding-right: 10px;">
+                              <input type="text" placeholder="Input 1"><br>
+                              <input type="text" placeholder="Input 2"><br>
+                              <input type="text" placeholder="Input 3"><br>
+                              <input type="text" placeholder="Input 4"><br>
+                              <input type="text" placeholder="Input 5"><br>
+                            </div>
+                            <div style="flex: 1;">
+                              <input type="text" placeholder="Input 6"><br>
+                              <input type="text" placeholder="Input 7"><br>
+                              <input type="text" placeholder="Input 8"><br>
+                              <input type="text" placeholder="Input 9"><br>
+                              <input type="text" placeholder="Input 10"><br>
+                            </div>
+                          </div>
+
+
+                                        `;
+            }
+        }
+    </script>
+}

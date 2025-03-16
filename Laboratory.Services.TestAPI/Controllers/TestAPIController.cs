@@ -82,11 +82,11 @@ namespace Laboratory.Services.TestAPI.Controllers
 
         }
         [HttpPut]
-        public ResponseDto Update([FromBody] TestDto TestDto)
+        public ResponseDto Update([FromBody] TestDto testDto)
         {
             try
             {
-                Test obj = _mapper.Map<Test>(TestDto);
+                Test obj = _mapper.Map<Test>(testDto);
                 _db.tests.Update(obj);
                 _db.SaveChanges();
 

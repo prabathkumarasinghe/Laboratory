@@ -32,11 +32,11 @@ namespace Laboratory.Web.Controllers
 			return View();
 		}
 		[Authorize]
-		//public IActionResult Lipid()
-		//{
-		//	return View();
-		//}
-		[Authorize]
+        public IActionResult Lipid()
+        {
+            return View();
+        }
+        [Authorize]
 		public IActionResult LFT()
 		{
 			return View();
@@ -69,10 +69,10 @@ namespace Laboratory.Web.Controllers
         {
             return View();
         }
-        public async Task<IActionResult> Lipid()
-        {
-            return View();
-        }
+        //public async Task<IActionResult> Lipid()
+        //{
+        //    return View();
+        //}
 
         public async Task<IActionResult> GeneratePdf(OrderHeaderDto model)
         {
@@ -147,40 +147,40 @@ namespace Laboratory.Web.Controllers
         }
 
 
-        [HttpGet]
-        public IActionResult GetAll(string status)
-        {
-            IEnumerable<OrderHeaderDto> list;
-            string userId = "";
-            //if (!User.IsInRole(SD.RoleAdmin))
-            //{
-                userId = User.Claims.Where(u => u.Type == JwtRegisteredClaimNames.Sub)?.FirstOrDefault()?.Value;
-            //}
-            ResponseDto response = _orderService.GetAllOrder(userId).GetAwaiter().GetResult();
-            if (response != null && response.IsSuccess)
-            {
-                list = JsonConvert.DeserializeObject<List<OrderHeaderDto>>(Convert.ToString(response.Result));
-                switch (status)
-                {
-                    case "approved":
-                        list = list.Where(u => u.Status == SD.Status_Approved);
-                        break;
-                    case "readyforpickup":
-                        list = list.Where(u => u.Status == SD.Status_ReadyForPickup);
-                        break;
-                    case "cancelled":
-                        list = list.Where(u => u.Status == SD.Status_Cancelled || u.Status == SD.Status_Refunded);
-                        break;
-                    default:
-                        break;
-                }
-            }
-            else
-            {
-                list = new List<OrderHeaderDto>();
-            }
-            return Json(new { data = list.OrderByDescending(u => u.OrderHeaderId) });
-        }
+        //[HttpGet]
+        //public IActionResult GetAll(string status)
+        //{
+        //    IEnumerable<OrderHeaderDto> list;
+        //    string userId = "";
+        //    //if (!User.IsInRole(SD.RoleAdmin))
+        //    //{
+        //        userId = User.Claims.Where(u => u.Type == JwtRegisteredClaimNames.Sub)?.FirstOrDefault()?.Value;
+        //    //}
+        //    ResponseDto response = _orderService.GetAllOrder(userId).GetAwaiter().GetResult();
+        //    if (response != null && response.IsSuccess)
+        //    {
+        //        list = JsonConvert.DeserializeObject<List<OrderHeaderDto>>(Convert.ToString(response.Result));
+        //        switch (status)
+        //        {
+        //            case "approved":
+        //                list = list.Where(u => u.Status == SD.Status_Approved);
+        //                break;
+        //            case "readyforpickup":
+        //                list = list.Where(u => u.Status == SD.Status_ReadyForPickup);
+        //                break;
+        //            case "cancelled":
+        //                list = list.Where(u => u.Status == SD.Status_Cancelled || u.Status == SD.Status_Refunded);
+        //                break;
+        //            default:
+        //                break;
+        //        }
+        //    }
+        //    else
+        //    {
+        //        list = new List<OrderHeaderDto>();
+        //    }
+        //    return Json(new { data = list.OrderByDescending(u => u.OrderHeaderId) });
+        //}
 
         //public IActionResult SamplePdf()
         //{
@@ -191,22 +191,22 @@ namespace Laboratory.Web.Controllers
         //	return View();
         //}
 
-        //public async Task<IActionResult> GeneratePdf(MyViewModel model)
-        //{
-        //	//var model = new { Name = "John Doe", Date = DateTime.Now }; // Example model
+        public async Task<IActionResult> GeneratePdf()
+        {
+            //var model = new { Name = "John Doe", Date = DateTime.Now }; // Example model
 
 
-        //	// Render the Razor view to an HTML string
-        //	var htmlContent = await _viewRenderHelper.RenderViewToStringAsync(this, "SamplePdf", model);
+            // Render the Razor view to an HTML string
+            var htmlContent = await _viewRenderHelper.RenderViewToStringAsync(this, "Lipid", null);
 
-        //	// Convert the HTML content to a PDF
-        //	var pdfBytes = _pdfService.GeneratePdfFromHtml(htmlContent);
+            // Convert the HTML content to a PDF
+            var pdfBytes = _pdfService.GeneratePdfFromHtml(htmlContent);
 
-        //	// Return the PDF file to the user
-        //	return File(pdfBytes, "application/pdf", "GeneratedDocument.pdf");
-        //}
+            // Return the PDF file to the user
+            return File(pdfBytes, "application/pdf", "GeneratedDocument.pdf");
+        }
 
-       
+
 
     }
 

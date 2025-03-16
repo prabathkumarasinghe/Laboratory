@@ -4,7 +4,8 @@ using Laboratory.Services.TestParameterAPI.Models;
 using Laboratory.Services.TestParameterAPI.Models.Dto;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Laboratory.Services.ParameterParameterAPI.Controllers
+
+namespace Laboratory.Services.ParameterAPI.Controllers
 {
     [Route("api/parameter")]
     [ApiController]
@@ -47,7 +48,7 @@ namespace Laboratory.Services.ParameterParameterAPI.Controllers
         {
             try
             {
-                Parameter obj = _db.parameters.First(u => u.TestId == id);
+                Parameter obj = _db.parameters.First(u => u.Id == id);
                 _response.Result = _mapper.Map<ParameterDto>(obj);
             }
             catch (Exception e)
@@ -79,15 +80,33 @@ namespace Laboratory.Services.ParameterParameterAPI.Controllers
             return _response;
 
         }
+        //[HttpPut]
+        //public ResponseDto Update([FromBody] ParameterDto ParameterDto)
+        //{
+        //    try
+        //    {
+        //        Parameter obj = _mapper.Map<Parameter>(ParameterDto);
+        //        _db.parameters.Update(obj); 
+        //        _db.SaveChanges();
+
+        //        _response.Result = _mapper.Map<ParameterDto>(obj);
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        _response.IsSuccess = false;
+        //        _response.Message = e.Message;
+        //    }
+        //    return _response;
+        //}
+
         [HttpPut]
-        public ResponseDto Update([FromBody] ParameterDto ParameterDto)
+        public ResponseDto Update([FromBody] ParameterDto parameterDto)
         {
             try
             {
-                Parameter obj = _mapper.Map<Parameter>(ParameterDto);
+                Parameter obj = _mapper.Map<Parameter>(parameterDto);
                 _db.parameters.Update(obj);
                 _db.SaveChanges();
-
                 _response.Result = _mapper.Map<ParameterDto>(obj);
             }
             catch (Exception e)
@@ -98,26 +117,26 @@ namespace Laboratory.Services.ParameterParameterAPI.Controllers
             return _response;
 
         }
-        [HttpDelete]
-        [Route("{id:int}")]
-        public ResponseDto Delete(int id)
-        {
-            try
-            {
-                Parameter obj = _db.parameters.First(u => u.TestId == id);
-                _db.parameters.Remove(obj);
-                _db.SaveChanges();
+        //[HttpDelete]
+        //[Route("{id:int}")]
+        //public ResponseDto Delete(int id)
+        //{
+        //    try
+        //    {
+        //        Parameter obj = _db.parameters.First(u => u.ParameterId == id);
+        //        _db.parameters.Remove(obj);
+        //        _db.SaveChanges();
 
-                _response.Result = _mapper.Map<ParameterDto>(obj);
-            }
-            catch (Exception e)
-            {
-                _response.IsSuccess = false;
-                _response.Message = e.Message;
-            }
-            return _response;
+        //        _response.Result = _mapper.Map<ParameterDto>(obj);
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        _response.IsSuccess = false;
+        //        _response.Message = e.Message;
+        //    }
+        //    return _response;
 
-        }
+        //}
     }
 }
 

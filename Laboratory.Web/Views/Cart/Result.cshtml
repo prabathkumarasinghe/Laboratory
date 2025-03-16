@@ -60,12 +60,16 @@
             <input asp-for="CartHeader.LabNumber" placeholder="lab number..." class="form-control" />
             <span asp-validation-for="CartHeader.LabNumber" class="text-danger"></span>
         </div>
+       
 
     <div class="form-group">
-
-            <label class="control-label pt-2" style="font-size:20px;"> Test Type</label>
+            <div class="col-2">
+                <label class="control-label pt-2" style="font-size:20px;"> Test Type</label>
+            </div>
+            
        @*  <label for="testType">Test Type</label> *@
-        <select id="testType" name="TestType" class="form-control" onchange="showTestFields()">
+        
+       <select id="testType" name="TestType" class="form-control" onchange="showTestFields()">
             <option value="">-- Select Test Type --</option>
             @foreach (var testType in testTypes)
             {
@@ -82,9 +86,19 @@
     <div id="dynamicFields">
         <!-- Dynamic fields will appear here -->
     </div>
-    <button type="submit" class="btn btn-success form-control ">
+   @*  <button type="submit" class="btn btn-success form-control ">
         <span>Place Order</span>
-    </button>
+    </button> *@
+       @*  <div>
+            <a asp-action="Result" asp-controller="Cart" class="btn btn-success form-control">Place Order</a>
+        </div> *@
+        
+        <span offset-10>
+        <div class="col-2 alert-dark" >
+            <input type="submit" value="Create" class="btn btn-success form-control" />
+
+        </div>
+        </span>
   </div>
     
 </form>
@@ -98,135 +112,74 @@
 
             if (testType === "Lipid") {
                 dynamicFields.innerHTML = `
-                            <div class="form-group">
-                                <label for="hemoglobin">Hemoglobin Level</label>
-                                <input type="text" id="hemoglobin" name="Hemoglobin" class="form-control" />
-                            </div>
-                            <div class="form-group">
-                                <label for="rbc">RBC Count</label>
-                                <input type="text" id="rbc" name="RBCCount" class="form-control" />
-                            </div>
-                                    <div class="border mt-2 p-4 rounded">
-                <div class="container row">
-                    <div class="col-md-7 col-12">
-                        <span style="font-size:25px;" class="text-warning mb-2">Order Summary</span>
-                    </div>
-                    <div class="col-md-5 col-12">
-                        <a asp-action="CartIndex" class="btn btn-outline-warning form-control">Back to Cart</a>
-                    </div>
-                    <br /><br /><br />
-                    <hr />
-                    <div class="col-7">
+                           
+                <div class="border mt-4 p-4 rounded">
+                    <div class="container row">
+
+               
+                    <div class="col-14">
                         <div class="row pt-2">
-                            <div class="col-12 py-2">
-                                                <input asp-for="CartHeader.TotalCholesterol" placeholder="Total Cholesterol..." class="form-control" />
-                                        <span asp-validation-for="CartHeader.TotalCholesterol" class="text-danger"></span>
+
+                         <div style="display: flex;">
+                                 <div style="flex: 1; padding-right: 20px;">
+
+                            <div class="col-16 py-2">                                       
+                                   <label for="TotalCholesterol">Total Cholesterol</label>
+                                   <input type="text" id="CartHeader.TotalCholesterol" name="CartHeader.TotalCholesterol" class="form-control" />
                             </div>
-                            <div class="col-12 py-2">
-                                                <input placeholder="Triglycerides..." asp-for="CartHeader.Triglycerides" class="form-control" />
-                                        <span asp-validation-for="CartHeader.Triglycerides" class="text-danger"></span>
+                            
+                            <div class="col-16 py-2">
+                                   <label for="Triglycerides">Triglycerides</label>
+                                   <input type="text" id="CartHeader.Triglycerides" name="CartHeader.Triglycerides" class="form-control" />
                             </div>
+
                             <div class="col-12 py-2">
-                                                <input class="form-control" asp-for="CartHeader.HDL" placeholder="HDL..." />
-                                        <span asp-validation-for="CartHeader.HDL" class="text-danger"></span>
+                                   <label for="HDL">HDL</label>
+                                   <input type="text" id="CartHeader.HDL" name="CartHeader.HDL" class="form-control" />
                             </div>
-                                     <div class="col-12 py-2">
-                                                        <input class="form-control" asp-for="CartHeader.LDL" placeholder="LDL..." />
-                                                <span asp-validation-for="CartHeader.LDL" class="text-danger"></span>
                                     </div>
-                                    <div class="col-12 py-2">
-                                                        <input class="form-control" asp-for="CartHeader.CholHDLRatio" placeholder="CholHDLRatio..." />
-                                                <span asp-validation-for="CartHeader.CholHDLRatio" class="text-danger"></span>
-                                    </div>
-                                             <div class="col-12 py-2">
-                                                                                <input class="form-control" asp-for="CartHeader.NonHDLChol" placeholder="NonHDLChol..." />
-                                                                <span asp-validation-for="CartHeader.NonHDLChol" class="text-danger"></span>
-                                            </div>
-                            <div class="col-12 pt-2">
-                                <label class="col-form-label">Order will be ready in 30minutes after placing order. If you place order when restaurant is closed it will be ready next day.</label>
+                                            <div style="flex: 1;">
+                            <div class="col-12 py-2">
+                                   <label for="LDL">LDL</label>
+                                   <input type="text" id="CartHeader.LDL" name="CartHeader.LDL" class="form-control" />
                             </div>
+
+                            <div class="col-12 py-2">                                     
+                                   <label for="CholHDLRatio">CholHDLRatio</label>
+                                   <input type="text" id="CartHeader.CholHDLRatio" name="CartHeader.CholHDLRatio" class="form-control" />
+                            </div>
+                            
+                            <div class="col-12 py-2">
+                                   <label for="NonHDLChol">NonHDLChol</label>
+                                   <input type="text" id="CartHeader.NonHDLChol" name="CartHeader.NonHDLChol" class="form-control" />
+                            </div>
+                                    </div>
+          </div>
+
+                            
 
                         </div>
                     </div>
-                    <div class="col-5">
-                        <div class="card mt-2">
-                            <div class="card-body">
-                                <div class=" d-none d-lg-block">
-                                    <div class="row text-danger">
-                                        <div class="col-6">
-                                            Product Details
-                                        </div>
 
-                                        <div class="col-3">
-                                            Price
-                                        </div>
-                                        <div class="col-3">
-                                            Count
-                                        </div>
-                                    </div>
-                                </div>
-                                <hr />
-        @foreach (var cartObj in Model.CartDetails)
-        {
-                                        <div class="row h-100">
-                                            <div class="col-6">
-                                                <span style="font-size:20px">@cartObj.Test.Name</span>
-                                            </div>
-
-                                            <div class="col-3" style="font-size:11px;">
-                                                <span style="font-size:17px;"> @cartObj.Test.Price.ToString("c")</span>
-
-                                            </div>
-                                            <div class="col-3" style="font-size:11px;">
-                                                <span style="font-size:17px;"> @cartObj.Count</span>
-                                            </div>
-                                        </div>
-                                        <hr />
-        }
-                                <div class="row">
-                                    <div class="col-12 text-center pr-4 text-danger">
-                                        Order Total :  @Model.CartHeader.CartTotal.ToString("c") <br />
-        @*   @if (Model.CartHeader.Discount > 0)
-                                    {
-                                    <span class="text-success"> Order Discount :  @Model.CartHeader.Discount.ToString("c")</span>
-                                    } *@
-                                    </div>
-                                </div>
-
-                            </div>
-                            <div class="card-footer">
-                                <div class="row">
-
-        @*        <div class="col-12 ">
-                                <a asp-action="Index" class="btn btn-success form-control">Place Order </a>
-                                <a asp-action="Index" asp-controller="Home" class="btn btn-success form-control">Place Order</a>
-                                <button type="submit" class="btn btn-success form-control ">
-                                <span>Place Order</span>
-                                </button>
-
-                                </div> *@
-                                   
-                                    // <div class="col-6 text-end">
-                                    //     <a asp-action="Index" asp-controller="Home" class="btn btn-outline-warning mt-2 btn-sm">Continue Shopping</a>
-                                    // </div>
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+     
                 </div>
+                                
             </div>
                         `;
             } else if (testType === "Urine") {
                 dynamicFields.innerHTML = `
-                            <div class="form-group">
-                                <label for="ph">pH Level</label>
-                                <input type="text" id="ph" name="pHLevel" class="form-control" />
+
+                        <div class="container">
+                            <div class="input-column">
+                                <label for="LDL">LDL Level</label>
+                                <input type="text" id="CartHeader.LDL" name="CartHeader.LDL" class="form-control" />
                             </div>
-                            <div class="form-group">
+                                    <div class="input-column">
                                 <label for="protein">Protein Level</label>
                                 <input type="text" id="protein" name="ProteinLevel" class="form-control" />
                             </div>
+                        </div>
+
                         `;
             } else if (testType === "XRay") {
                 dynamicFields.innerHTML = `
@@ -234,10 +187,26 @@
                                 <label for="area">Body Area</label>
                                 <input type="text" id="area" name="BodyArea" class="form-control" />
                             </div>
-                            <div class="form-group">
-                                <label for="comments">Comments</label>
-                                <textarea id="comments" name="Comments" class="form-control"></textarea>
-                            </div>
+
+
+          <div style="display: flex;">
+            <div style="flex: 1; padding-right: 10px;">
+              <input type="text" placeholder="Input 1"><br>
+              <input type="text" placeholder="Input 2"><br>
+              <input type="text" placeholder="Input 3"><br>
+              <input type="text" placeholder="Input 4"><br>
+              <input type="text" placeholder="Input 5"><br>
+            </div>
+            <div style="flex: 1;">
+              <input type="text" placeholder="Input 6"><br>
+              <input type="text" placeholder="Input 7"><br>
+              <input type="text" placeholder="Input 8"><br>
+              <input type="text" placeholder="Input 9"><br>
+              <input type="text" placeholder="Input 10"><br>
+            </div>
+          </div>
+
+
                         `;
             }
         }

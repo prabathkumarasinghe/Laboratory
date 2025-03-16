@@ -1,4 +1,4 @@
-﻿@* ﻿@{
+﻿﻿@{
 
 	var status = Context.Request.Query["status"];
 	var approved = "";
@@ -54,8 +54,8 @@
 					<th>Email</th>
 					<th>Name</th>
 					<th>Phone</th>
-					<th>Status</th>
-					<th>Total</th>
+					@* <th>Status</th> *@
+					@* <th>Total</th> *@
 					<th></th>
 				</tr>
 			</thead>
@@ -64,5 +64,5 @@
 </div>
 
 @section Scripts {
-	<script src="~/js/order.js"></script>
-} *@
+	<script src="~/js/result.js"></script>
+}

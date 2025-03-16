@@ -10,5 +10,11 @@
         public string? Name { get; set; }
         public string? Phone { get; set; }
         public string? Email { get; set; }
+        public int? TotalCholesterol { get; set; }
+        public int? Triglycerides { get; set; }
+        public int? HDL { get; set; }
+        public int? LDL { get; set; }
+        public int? CholHDLRatio { get; set; }
+        public int? NonHDLChol { get; set; }
     }
 }

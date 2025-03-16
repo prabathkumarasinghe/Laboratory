@@ -80,7 +80,6 @@ namespace Laboratory.Web.Controllers
         }
 
         [HttpPost]
-        [ActionName("Checkout")]
         public async Task<IActionResult> Result(CartDto cartDto)
         {
             CartDto cart = await LoadCartDtoBasedOnLoggedInUser();
@@ -89,6 +88,12 @@ namespace Laboratory.Web.Controllers
             cart.CartHeader.Name = cartDto.CartHeader.Name;
             cart.CartHeader.RefNumber = cartDto.CartHeader.RefNumber;
             cart.CartHeader.LabNumber = cartDto.CartHeader.LabNumber;
+            cart.CartHeader.TotalCholesterol = cartDto.CartHeader.TotalCholesterol;
+            cart.CartHeader.Triglycerides = cartDto.CartHeader.Triglycerides;
+            cart.CartHeader.HDL = cartDto.CartHeader.HDL;
+            cart.CartHeader.LDL = cartDto.CartHeader.LDL;
+            cart.CartHeader.NonHDLChol = cartDto.CartHeader.NonHDLChol;
+            cart.CartHeader.CholHDLRatio = cartDto.CartHeader.CholHDLRatio;
 
             var response = await _orderService.CreateOrder(cart);
             OrderHeaderDto orderHeaderDto = JsonConvert.DeserializeObject<OrderHeaderDto>(Convert.ToString(response.Result));

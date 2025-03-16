@@ -4,7 +4,6 @@ using Laboratory.Services.OrderAPI.Models;
 using Laboratory.Services.OrderAPI.Models.Dto;
 using Laboratory.Services.OrderAPI.Service.IService;
 using Laboratory.Services.OrderAPI.Utility;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -64,10 +63,13 @@ namespace Laboratory.Services.OrderAPI.Controllers
             try
             {
                 OrderHeader orderHeader = _db.OrderHeaders.Include(u => u.OrderDetails).First(u => u.OrderHeaderId == id);
-                //_response.Result = _mapper.Map<OrderHeaderDto>(orderHeader);
+               // _response.Result = _mapper.Map<OrderHeaderDto>(orderHeader);
+               // CartHeaderDto cartHeaderDto = _mapper.Map<CartHeaderDto>(orderHeader);
+                _response.Result = _mapper.Map<CartDto>(orderHeader);
                // OrderHeaderDto orderHeaderDto = _mapper.Map<OrderHeaderDto>(cartDto.CartHeader);
-                CartHeaderDto cartHeaderDto = _mapper.Map<CartHeaderDto>(orderHeader);
-                _response.Result = cartHeaderDto;
+               // CartHeaderDto cartHeaderDto = _mapper.Map<CartHeaderDto>(orderHeader);
+               //_response.Result = cartHeaderDto;
+               
             }
             catch (Exception ex)
             {

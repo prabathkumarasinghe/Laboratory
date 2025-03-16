@@ -12,7 +12,7 @@ namespace Laboratory.Web.Service
             _baseService = baseService;
         }
 
-        public async Task<ResponseDto?> CreateTestParameterAsync(TestDto testDto)
+        public async Task<ResponseDto?> CreateTestParameterAsync(ParameterDto testDto)
         {
             return await _baseService.SendAsync(new RequestDto()
             {
@@ -22,8 +22,28 @@ namespace Laboratory.Web.Service
              //   ContentType = SD.ContentType.MultipartFormData
             });
         }
+		public async Task<ResponseDto?> UpdateTestParameterAsync(ParameterDto testDto)
+		{
+			return await _baseService.SendAsync(new RequestDto()
+			{
+				ApiType = SD.ApiType.PUT,
+				Data = testDto,
+				Url = SD.TestParameterAPIBase + "/api/parameter",
+				// ContentType = SD.ContentType.MultipartFormData
+			});
+		}
+		//public async Task<ResponseDto?> UpdateTestsAsync(TestDto testDto)
+		//{
+		//	return await _baseService.SendAsync(new RequestDto()
+		//	{
+		//		ApiType = SD.ApiType.PUT,
+		//		Data = testDto,
+		//		Url = SD.TestAPIBase + "/api/Test",
+		//		// ContentType = SD.ContentType.MultipartFormData
+		//	});
+		//}
 
-        public async Task<ResponseDto?> DeleteTestParameterAsync(int id)
+		public async Task<ResponseDto?> DeleteTestParameterAsync(int id)
         {
             return await _baseService.SendAsync(new RequestDto()
             {
@@ -59,15 +79,6 @@ namespace Laboratory.Web.Service
             });
         }
 
-        public async Task<ResponseDto?> UpdateTestParameterAsync(TestDto testDto)
-        {
-            return await _baseService.SendAsync(new RequestDto()
-            {
-                ApiType = SD.ApiType.PUT,
-                Data = testDto,
-                Url = SD.TestParameterAPIBase + "/api/parameter",
-               // ContentType = SD.ContentType.MultipartFormData
-            });
-        }
+       
     }
 }

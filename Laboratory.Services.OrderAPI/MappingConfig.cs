@@ -24,6 +24,10 @@ namespace Laboratory.Services.OrdertAPI
                 config.CreateMap<OrderDetailsDto, CartDetailsDto>();
 
                 config.CreateMap<OrderHeader, OrderHeaderDto>().ReverseMap();
+                config.CreateMap<OrderHeader, CartHeaderDto>().ReverseMap();
+                config.CreateMap<OrderHeader, CartDto>().ReverseMap();
+                config.CreateMap<OrderHeaderDto, CartDto>().ReverseMap();
+                config.CreateMap<CartHeaderDto, CartDto>().ReverseMap();
                 config.CreateMap<OrderDetailsDto, OrderDetalis>().ReverseMap();
 
             });

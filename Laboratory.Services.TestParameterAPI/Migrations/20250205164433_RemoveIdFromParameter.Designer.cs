@@ -4,6 +4,7 @@ using Laboratory.Services.TestParameterAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Laboratory.Services.TestParameterAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250205164433_RemoveIdFromParameter")]
+    partial class RemoveIdFromParameter
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -45,12 +48,6 @@ namespace Laboratory.Services.TestParameterAPI.Migrations
                     b.Property<int?>("CholHDLRatio")
                         .HasColumnType("int");
 
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("Eosinophils")
-                        .HasColumnType("int");
-
                     b.Property<int?>("GGT")
                         .HasColumnType("int");
 
@@ -60,13 +57,7 @@ namespace Laboratory.Services.TestParameterAPI.Migrations
                     b.Property<int?>("Glucose")
                         .HasColumnType("int");
 
-                    b.Property<int?>("HCT")
-                        .HasColumnType("int");
-
                     b.Property<int?>("HDL")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("Hb")
                         .HasColumnType("int");
 
                     b.Property<int?>("LD")
@@ -76,42 +67,21 @@ namespace Laboratory.Services.TestParameterAPI.Migrations
                         .HasColumnType("int");
 
                     b.Property<int?>("LabNumber")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("Lymphocytes")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("MCH")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("MCV")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("MPV")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("Neutrophils")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<int?>("NonHDLChol")
                         .HasColumnType("int");
 
                     b.Property<string>("PatientName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Phone")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("PlateletCount")
-                        .HasColumnType("int");
 
                     b.Property<int?>("Potassium")
                         .HasColumnType("int");
 
-                    b.Property<int?>("RBC")
-                        .HasColumnType("int");
-
                     b.Property<int?>("RefNumber")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<int?>("Sodium")
@@ -124,9 +94,6 @@ namespace Laboratory.Services.TestParameterAPI.Migrations
                         .HasColumnType("int");
 
                     b.Property<int?>("Triglycerides")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("WBC")
                         .HasColumnType("int");
 
                     b.HasKey("Id");

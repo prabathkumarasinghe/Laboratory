@@ -1,0 +1,240 @@
+﻿@model ParameterDto
+
+
+@{
+    ViewData["Title"] = "Pathology Test Entry";
+    var testTypes = new List<SelectListItem>
+    {
+        new SelectListItem { Text = "Lipid Profile", Value = "Lipid" },
+        new SelectListItem { Text = "Urine Test", Value = "Urine" },
+        new SelectListItem { Text = "X-Ray", Value = "XRay" },
+    };
+}
+
+<form method="post">
+    <br />
+    @* <input asp-for="CartHeader.UserId" hidden />
+    <input asp-for="CartHeader.CartHeaderId" hidden /> *@
+    @*  <input asp-for="CartHeader.CouponCode" hidden />
+    <input asp-for="CartHeader.Discount" hidden /> *@
+    @* <input asp-for="CartHeader.CartTotal" hidden /> *@
+    <hr />
+    <div class="row">
+        <div class="col-2">
+            <label class="control-label pt-2" style="font-size:20px;"> Name</label>
+        </div>
+        <div class="col-10 pb-3">
+            <input asp-for="PatientName" placeholder="full name..." class="form-control" />
+            <span asp-validation-for="PatientName" class="text-danger"></span>
+        </div>
+
+        <div class="col-2">
+            <label class="control-label pt-2" style="font-size:20px;"> Email</label>
+        </div>
+        <div class="col-10 pb-3">
+            <input asp-for="Email" placeholder="email..." class="form-control" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+
+
+        <div class="col-2">
+            <label class="control-label pt-2" style="font-size:20px;"> Phone</label>
+        </div>
+        <div class="col-10 pb-3">
+            <input asp-for="Phone" placeholder="phone..." class="form-control" />
+            <span asp-validation-for="Phone" class="text-danger"></span>
+        </div>
+
+        <div class="col-2">
+            <label class="control-label pt-2" style="font-size:20px;"> Ref Number</label>
+        </div>
+        <div class="col-10 pb-3">
+            <input asp-for="RefNumber" placeholder="reference number..." class="form-control" />
+            <span asp-validation-for="RefNumber" class="text-danger"></span>
+        </div>
+
+        <div class="col-2">
+            <label class="control-label pt-2" style="font-size:20px;"> Lab Number</label>
+        </div>
+        <div class="col-10 pb-3">
+            <input asp-for="LabNumber" placeholder="lab number..." class="form-control" />
+            <span asp-validation-for="LabNumber" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-2">
+        <label class="control-label pt-2" style="font-size:20px;"> Test Type</label>
+    </div>
+    <div class="col-10 pb-3">
+        <select  class="form-select">
+            <option disabled selected>--Select Test--</option>
+            <option>FBS</option>
+            <option>PPBS</option>
+            <option>OGTT-2 Sample</option>
+            <option>OGTT-3 Sample</option>
+            <option>BSS</option>
+            <option>OGCT 1 Hr After 50g Glucode</option>
+            <option>OGCT 2 Hr After 75g Glucode</option>
+            <option>HB</option>
+            <option>FBC</option>
+            <option>WBC DC</option>
+            <option>ESR</option>
+            <option>UFR</option>
+            <option>Creatinine (GFR)</option>
+            <option>Blood Urea</option>
+            <option>S.Electrolyte</option>
+            <option>CGOT (ALT)</option>
+            <option>CGOT (ALT)</option>
+        </select>
+        <span  class="text-danger"></span>
+    </div>
+
+        <div class="form-group">
+            <div class="col-2">
+                <label class="control-label pt-2" style="font-size:20px;"> Test Type</label>
+            </div>
+
+            @*  <label for="testType">Test Type</label> *@
+
+            <select id="testType" name="TestType" class="form-control" onchange="showTestFields()">
+                <option value="">-- Select Test Type --</option>
+                @foreach (var testType in testTypes)
+                {
+                    <option value="@testType.Value">@testType.Text</option>
+                }
+            </select>
+
+
+            @*         <div class="col-5">
+            <input type="submit" value="Create" class="btn btn-success form-control" />
+
+            </div> *@
+        </div>
+        <div id="dynamicFields">
+            <!-- Dynamic fields will appear here -->
+        </div>
+        @*  <button type="submit" class="btn btn-success form-control ">
+        <span>Place Order</span>
+        </button> *@
+        @*  <div>
+        <a asp-action="Result" asp-controller="Cart" class="btn btn-success form-control">Place Order</a>
+        </div> *@
+
+        <span offset-10>
+            <div class="col-2 alert-dark">
+                <input type="submit" value="Create" class="btn btn-success form-control" />
+
+            </div>
+        </span>
+    </div>
+
+</form>
+
+@section Scripts {
+    <script>
+        function showTestFields() {
+            const testType = document.getElementById("testType").value;
+            const dynamicFields = document.getElementById("dynamicFields");
+            dynamicFields.innerHTML = ""; // Clear previous fields
+
+            if (testType === "Lipid") {
+                dynamicFields.innerHTML = `
+
+                        <div class="border mt-4 p-4 rounded">
+                            <div class="container row">
+
+
+                            <div class="col-14">
+                                <div class="row pt-2">
+
+                                 <div style="display: flex;">
+                                         <div style="flex: 1; padding-right: 20px;">
+
+                                    <div class="col-16 py-2">
+                                           <label for="TotalCholesterol">Total Cholesterol</label>
+                                           <input type="text" id="TotalCholesterol" name="TotalCholesterol" class="form-control" />
+                                    </div>
+
+                                    <div class="col-16 py-2">
+                                           <label for="Triglycerides">Triglycerides</label>
+                                           <input type="text" id="Triglycerides" name="Triglycerides" class="form-control" />
+                                    </div>
+
+                                    <div class="col-12 py-2">
+                                           <label for="HDL">HDL</label>
+                                           <input type="text" id="HDL" name="HDL" class="form-control" />
+                                    </div>
+                                            </div>
+                                                    <div style="flex: 1;">
+                                    <div class="col-12 py-2">
+                                           <label for="LDL">LDL</label>
+                                           <input type="text" id="LDL" name="LDL" class="form-control" />
+                                    </div>
+
+                                    <div class="col-12 py-2">
+                                           <label for="CholHDLRatio">CholHDLRatio</label>
+                                           <input type="text" id="CholHDLRatio" name="CholHDLRatio" class="form-control" />
+                                    </div>
+
+                                    <div class="col-12 py-2">
+                                           <label for="NonHDLChol">NonHDLChol</label>
+                                           <input type="text" id="NonHDLChol" name="NonHDLChol" class="form-control" />
+                                    </div>
+                                            </div>
+                  </div>
+
+
+
+                                </div>
+                            </div>
+
+
+                        </div>
+
+                    </div>
+                                `;
+            } else if (testType === "Urine") {
+                dynamicFields.innerHTML = `
+
+                                <div class="container">
+                                    <div class="input-column">
+                                        <label for="LDL">LDL Level</label>
+                                        <input type="text" id="LDL" name="LDL" class="form-control" />
+                                    </div>
+                                            <div class="input-column">
+                                        <label for="protein">Protein Level</label>
+                                        <input type="text" id="protein" name="ProteinLevel" class="form-control" />
+                                    </div>
+                                </div>
+
+                                `;
+            } else if (testType === "XRay") {
+                dynamicFields.innerHTML = `
+                                    <div class="form-group">
+                                        <label for="area">Body Area</label>
+                                        <input type="text" id="area" name="BodyArea" class="form-control" />
+                                    </div>
+
+
+                  <div style="display: flex;">
+                    <div style="flex: 1; padding-right: 10px;">
+                      <input type="text" placeholder="Input 1"><br>
+                      <input type="text" placeholder="Input 2"><br>
+                      <input type="text" placeholder="Input 3"><br>
+                      <input type="text" placeholder="Input 4"><br>
+                      <input type="text" placeholder="Input 5"><br>
+                    </div>
+                    <div style="flex: 1;">
+                      <input type="text" placeholder="Input 6"><br>
+                      <input type="text" placeholder="Input 7"><br>
+                      <input type="text" placeholder="Input 8"><br>
+                      <input type="text" placeholder="Input 9"><br>
+                      <input type="text" placeholder="Input 10"><br>
+                    </div>
+                  </div>
+
+
+                                `;
+            }
+        }
+    </script>
+}

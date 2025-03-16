@@ -1,6 +1,7 @@
 ﻿//using Laboratory.Web.Models;
 //using Laboratory.Web.Service.IService;
 //using Microsoft.AspNetCore.Mvc;
+//using Newtonsoft.Json;
 
 //namespace Laboratory.Web.Controllers
 //{
@@ -15,41 +16,73 @@
 
 //        //public async Task<IActionResult> TestIndex()
 //        //{
-//        //    List<TestDto>? list = new();
-
-//        //    ResponseDto? response = await _testService.GetAllTestsAsync();
-
-//        //    if (response != null && response.IsSuccess)
-//        //    {
-//        //        list = JsonConvert.DeserializeObject<List<TestDto>>(Convert.ToString(response.Result));
-//        //    }
-
-//        //    return View(list);
+//        //    return View();
 //        //}
 
-//        public async Task<IActionResult> TestEdit()
+//        public async Task<IActionResult> ParameterIndex()
 //        {
-//            return View();
-//        }
+//            List<ParameterDto>? list = new();
 
-//        [HttpPost]
-//        public async Task<IActionResult> TestEdit(ParameterDto model)
-//        {
-//            if (ModelState.IsValid)
+//            ResponseDto? response = await _testParameterService.GetAllTestParameterAsync();
+
+//            if (response != null && response.IsSuccess)
 //            {
-//                ResponseDto? response = await _testParameterService.CreateTestParameterAsync(model);
-
-//                if (response != null && response.IsSuccess)
-//                {
-//                    TempData["success"] = "Test created successfully";
-//                 //   return RedirectToAction(nameof(TestIndex));
-//                }
-//                else
-//                {
-//                    TempData["error"] = response?.Message;
-//                }
+//                list = JsonConvert.DeserializeObject<List<ParameterDto>>(Convert.ToString(response.Result));
 //            }
-//            return View(model);
+
+//            return View(list);
 //        }
-//    }
+
+//		public async Task<IActionResult> TestEdit()
+//		{
+//			return View();
+//		}
+
+//		[HttpPost]
+//		public async Task<IActionResult> TestEdit(ParameterDto model)
+//		{
+//			if (ModelState.IsValid)
+//			{
+//				ResponseDto? response = await _testParameterService.CreateTestParameterAsync(model);
+
+//				if (response != null && response.IsSuccess)
+//				{
+//					TempData["success"] = "Test created successfully";
+//					return RedirectToAction(nameof(ParameterIndex));
+//				}
+//				else
+//				{
+//					TempData["error"] = response?.Message;
+//				}
+//			}
+//			return View(model);
+//		}
+
+//		public async Task<IActionResult>  ResultUpdate(int Id)
+//		{
+//			ResponseDto? response = await _testParameterService.GetTestParameterByIdAsync(Id);
+
+//			if (response != null && response.IsSuccess)
+//			{
+//				ParameterDto? model = JsonConvert.DeserializeObject<ParameterDto>(Convert.ToString(response.Result));
+//				return View(model);
+//			}
+
+//			return NotFound();
+//		}
+//		//[HttpPost]
+//		//public async Task<IActionResult> ResultUpdate(ParameterDto testDto)
+//		//{
+//		//	ResponseDto? response = await _testParameterService.UpdateTestParameterAsync(testDto);
+
+//		//	if (response != null && response.IsSuccess)
+//		//	{
+
+//		//		return RedirectToAction(nameof(ParameterIndex));
+//		//	}
+
+//		//	return View(testDto);
+//		//}
+
+//	}
 //}
