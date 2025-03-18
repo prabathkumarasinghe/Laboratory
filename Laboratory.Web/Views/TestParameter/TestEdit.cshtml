@@ -169,16 +169,79 @@
             } else if (testType === "Urine") {
                 dynamicFields.innerHTML = `
 
-                                <div class="container">
-                                    <div class="input-column">
-                                        <label for="LDL">LDL Level</label>
-                                        <input type="text" id="LDL" name="LDL" class="form-control" />
-                                    </div>
-                                            <div class="input-column">
-                                        <label for="protein">Protein Level</label>
-                                        <input type="text" id="protein" name="ProteinLevel" class="form-control" />
-                                    </div>
-                                </div>
+                                        <table class="results">
+                                    <thead>
+                                        <tr>
+                                            <th>Test</th>
+                                            <th>Result (mg/dL)</th>
+                                            <th>Reference Range (mg/dL)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>WBC</td>
+                                                    <td>@Model.WBC</td>
+                                            <td>4.0-10.0</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Neutrophils</td>
+                                                    <td>@Model.Neutrophils</td>
+                                            <td>40-80</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Lymphocytes</td>
+                                                    <td>@Model.Lymphocytes</td>
+                                            <td>20-40</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Eosinophils</td>
+                                                    <td>@Model.Eosinophils</td>
+                                            <td>1-6</td>
+                                        </tr>
+                                        <tr>
+                                            <td>RBC</td>
+                                                            <td>@Model.RBC</td>
+                                            <td>3.8-4.8</td>
+                                        </tr>
+                                                 <tr>
+                                                    <td>HB</td>
+                                                                    <td>@Model.RBC</td>
+                                                    <td>3.8-4.8</td>
+                                                </tr>
+
+                                                         <tr>
+                                                    <td>HCT</td>
+                                                                    <td>@Model.Hb</td>
+                                                    <td>3.8-4.8</td>
+                                                </tr>
+
+                                                         <tr>
+                                                    <td>MCV</td>
+                                                                    <td>@Model.HCT</td>
+                                                    <td>3.8-4.8</td>
+                                                </tr>
+                                                         <tr>
+                                                    <td>MCH</td>
+                                                                    <td>@Model.MCV</td>
+                                                    <td>3.8-4.8</td>
+                                                </tr>
+                                                         <tr>
+                                                    <td>Platelet Count</td>
+                                                                    <td>@Model.MCH</td>
+                                                    <td>3.8-4.8</td>
+                                                </tr>
+                                                         <tr>
+                                                            <td>Platelet Count</td>
+                                                                            <td>@Model.PlateletCount</td>
+                                                            <td>3.8-4.8</td>
+                                                        </tr>
+                                                         <tr>
+                                                            <td>Platelet Count</td>
+                                                                            <td>@Model.MPV</td>
+                                                            <td>3.8-4.8</td>
+                                                        </tr>
+                                    </tbody>
+                                </table>
 
                                 `;
             } else if (testType === "XRay") {
