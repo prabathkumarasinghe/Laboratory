@@ -1,18 +1,373 @@
 ﻿@model ParameterDto
 
+<style>
+
+    .form-container {
+        display: flex;
+        gap: 30px; /* spacing between columns */
+    }
+
+    .form-column {
+        flex: 1; /* makes both columns equal width */
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 5px;
+        white-space: nowrap;
+    }
+
+    input {
+        width: 100%;
+        padding: 8px;
+    }
+
+    .topic-select-container {
+        display: flex;
+        align-items: center; /* Vertically center */
+        gap: 105px; /* Space between topic and select */
+        width: 1000px;
+        /*         height: 100px;
+            font-size: 18px;
+            padding: 10px;
+            border-radius: 20px; */ */
+    }
+
+    .topic-title {
+        font-weight: bold;
+        font-size: 20px;
+        /*  height: 100px; */
+        /*   display: inline-block;
+            vertical-align: middle;
+            margin-right: 10px; */
+        white-space: nowrap;
+        align-items: center;
+        margin-block-start: 10px;
+    }
+</style>
 
 @{
     ViewData["Title"] = "Pathology Test Entry";
     var testTypes = new List<SelectListItem>
     {
         new SelectListItem { Text = "Lipid Profile", Value = "Lipid" },
-        new SelectListItem { Text = "Urine Test", Value = "Urine" },
-        new SelectListItem { Text = "X-Ray", Value = "XRay" },
+        new SelectListItem { Text = "UFR", Value = "UFR" },
+        new SelectListItem { Text = "LFT", Value = "LFT" },
+        new SelectListItem { Text = "FBC", Value = "FBC" },
+        new SelectListItem { Text = "Rheumatoid Factor", Value = "RheumatoidFactor" },
+        new SelectListItem { Text = "C Reactive Protein", Value = "CReactiveProtein" },
+        new SelectListItem { Text = "ESR(westergren)1st hour ", Value = "ESR" },
+        new SelectListItem { Text = "S CREATININE ", Value = "SCREATININE " },
+        new SelectListItem { Text = "S.G.O.T.(A.S.T)", Value = "S.G.O.T.(A.S.T)" },
+        new SelectListItem { Text = "S.G.P.T.(A.L.T)", Value = "S.G.P.T.(A.L.T)" },
+        new SelectListItem { Text = "BLOOD GLUCOSE - Random ", Value = "BloodGlucoseR" },
+        new SelectListItem { Text = "WIDAL(SAT)  Test", Value = "WIDAL(SAT)" },
+        new SelectListItem { Text = "Haemoglobin  ", Value = "Haemoglobin" },
+        new SelectListItem { Text = "Rhematoid Factor  ", Value = "RhematoidFactor" },
+        new SelectListItem { Text = "BLOOD GLUCOSE - Fasting ", Value = "BloodGlucoseF" },
+        new SelectListItem { Text = "BLOOD GLUCOSE - Breakfast ", Value = "BloodGlucoseB" },
+        new SelectListItem { Text = "BLOOD GLUCOSE - Lunch ", Value = "BloodGlucoseL" },
+        new SelectListItem { Text = "BLOOD GLUCOSE - Dinner ", Value = "BloodGlucoseD" },
     };
 }
 
+
 <form asp-action="ResultUpdate" enctype="multipart/form-data">
     <br />
+    <div class="container border p-3">
+        <h1 class="text-white text-center">Update Product</h1>
+        <input hidden asp-for="Id" />
+        <hr />
+        <div class="form-container">
+            <div class="form-column">
+                <div class="form-group">
+                    <div>
+                        <label class="control-label pt-2" style="font-size:20px;"> Name</label>
+                    </div>
+                    <div>
+                        <input asp-for="PatientName" placeholder="full name..." class="form-control" />
+                        <span asp-validation-for="PatientName" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div>
+                        <label class="control-label pt-2" style="font-size:20px;"> Age</label>
+                    </div>
+                    <div>
+                        <input asp-for="Age" placeholder="age..." class="form-control" />
+                        <span asp-validation-for="Age" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div>
+                        <label class="control-label pt-2" style="font-size:20px;"> Sex</label>
+                    </div>
+                    <div>
+                        <input asp-for="Sex" placeholder="sex..." class="form-control" />
+                        <span asp-validation-for="Sex" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div>
+                        <label class="control-label pt-2" style="font-size:20px;"> Ref Number</label>
+                    </div>
+                    <div>
+                        <input asp-for="RefNumber" placeholder="reference number..." class="form-control" />
+                        <span asp-validation-for="RefNumber" class="text-danger"></span>
+                    </div>
+                </div>
+                <div>
+                    <div>
+                        <label class="control-label pt-2" style="font-size:20px;"> Lab Number</label>
+                    </div>
+                    <div>
+                        <input asp-for="LabNumber" placeholder="lab number..." class="form-control" />
+                        <span asp-validation-for="LabNumber" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-column">
+                <div>
+                    <label class="control-label pt-2" style="font-size:20px"> Collected Date</label>
+                </div>
+                <div>
+                    <input asp-for="CollectedDate" placeholder="collected..." class="form-control" />
+                    <span asp-validation-for="CollectedDate" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+
+                    <div class="form-group">
+                        <div>
+                            <label class="control-label pt-2" style="font-size:20px;margin-bottom: 20px"> Reported Date</label>
+                        </div>
+                        <div>
+                            <input asp-for="ReportedDate" placeholder="reported date..." class="form-control" />
+                            <span asp-validation-for="ReportedDate" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div>
+                        <label class="control-label pt-2" style="font-size:20px;"> Date Of Birth</label>
+                    </div>
+                    <div>
+                        <input asp-for="DOB" placeholder="Date of birth..." class="form-control" />
+                        <span asp-validation-for="DOB" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div>
+                        <label class="control-label pt-2" style="font-size:20px;"> Phone</label>
+                    </div>
+                    <div>
+                        <input asp-for="Phone" placeholder="phone..." class="form-control" />
+                        <span asp-validation-for="Phone" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div>
+                        <label class="control-label pt-2" style="font-size:20px;">Email</label>
+                    </div>
+                    <div>
+                        <input asp-for="Email" class="form-control" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+
+        <br />
+        <div class="topic-select-container">
+            <div class="topic-title">Test Type</div>
+            <select id="testType" name="TestType" class="form-control" onchange="showTestFields()">
+                <option value="">-- Select Test Type --</option>
+                @foreach (var testType in testTypes)
+                {
+                    <option value="@testType.Value">@testType.Text</option>
+                }
+            </select>
+        </div>
+        </div>
+    <br />
+
+    <div id="dynamicFields">
+        <!-- Dynamic fields will appear here -->
+    </div>
+    <br />
+    @* <div style="display: flex; justify-content: center; align-items: center;">
+        <span offset-10>
+            <div class=" col-4" style="width: 150px; height: 50px;">
+                <input type="submit" value="Update" class="btn btn-success form-control" />
+            </div>
+
+        </span>
+    </div> *@
+    <div class="row">
+        <div class="col-6 offset-6; row-cols-1">
+
+            <a asp-action="ParameterIndex" class="btn-primary btn form-control ">Back to List</a>
+        </div>
+
+        <div class="col-6">
+        <input type="submit" value="Update" class="btn btn-success form-control" />
+        </div>
+
+        
+    </div>
+    @*    </div>
+    </div> *@
+    </div>
+
+</form>
+
+
+
+
+
+@* <form asp-action="ResultUpdate" enctype="multipart/form-data">
+
+
+     <br />
+     <div>
+        <input hidden asp-for="Id" /> *@
+   
+    @* <input asp-for="CartHeader.UserId" hidden />
+    <input asp-for="CartHeader.CartHeaderId" hidden /> *@
+    @*  <input asp-for="CartHeader.CouponCode" hidden />
+    <input asp-for="CartHeader.Discount" hidden /> *@
+    @* <input asp-for="CartHeader.CartTotal" hidden /> *@
+    @* <div class="card-header bg-secondary bg-gradient ml-0 py-3">
+        <div class="row">
+            <div class="col-12 text-center">
+                <h1 class="text-white">Patient Detalis</h1>
+                
+            </div>
+        </div>
+    </div> *@
+    @* <hr /> *@
+   @*  <div class="border mt-4 p-4 rounded">
+        <div class="container row">
+
+
+            <div class="col-14">
+                <div class="row pt-2">
+
+                    <div style="display: flex;">
+                        <div style="flex: 1; padding-right: 20px;">
+
+    <div class="form-container">
+        <div class="form-column">
+            <div class="form-group">
+                <div >
+                    <label class="control-label pt-2" style="font-size:20px;"> Name</label>
+                </div>
+                <div >
+                    <input asp-for="PatientName" placeholder="full name..." class="form-control" />
+                    <span asp-validation-for="PatientName" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <div >
+                    <label class="control-label pt-2" style="font-size:20px;"> Age</label>
+                </div>
+                <div >
+                    <input asp-for="Age" placeholder="age..." class="form-control" />
+                    <span asp-validation-for="Age" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <div >
+                    <label class="control-label pt-2" style="font-size:20px;"> Sex</label>
+                </div>
+                <div >
+                    <input asp-for="Sex" placeholder="sex..." class="form-control" />
+                    <span asp-validation-for="Sex" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <div >
+                    <label class="control-label pt-2" style="font-size:20px;"> Ref Number</label>
+                </div>
+                <div>
+                    <input asp-for="RefNumber" placeholder="reference number..." class="form-control" />
+                    <span asp-validation-for="RefNumber" class="text-danger"></span>
+                </div>
+            </div>
+            <div >
+                <div >
+                    <label class="control-label pt-2" style="font-size:20px;"> Lab Number</label>
+                </div>
+                <div >
+                    <input asp-for="LabNumber" placeholder="lab number..." class="form-control" />
+                    <span asp-validation-for="LabNumber" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-column">
+            <div >
+                <label class="control-label pt-2" style="font-size:20px"> Collected Date</label>
+            </div>
+            <div >
+                <input asp-for="CollectedDate" placeholder="collected..." class="form-control" />
+                <span asp-validation-for="CollectedDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                
+                <div class="form-group">
+                    <div>
+                        <label class="control-label pt-2" style="font-size:20px;margin-bottom: 20px"> Reported Date</label>
+                    </div>
+                    <div>
+                        <input asp-for="ReportedDate" placeholder="reported date..." class="form-control" />
+                        <span asp-validation-for="ReportedDate" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div >
+                    <label class="control-label pt-2" style="font-size:20px;"> Date Of Birth</label>
+                </div>
+                <div >
+                    <input asp-for="DOB" placeholder="Date of birth..." class="form-control" />
+                    <span asp-validation-for="DOB" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <div >
+                    <label class="control-label pt-2" style="font-size:20px;"> Phone</label>
+                </div>
+                <div>
+                    <input asp-for="Phone" placeholder="phone..." class="form-control" />
+                    <span asp-validation-for="Phone" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <div >
+                    <label class="control-label pt-2" style="font-size:20px;">Email</label>
+                </div>
+                <div>
+                    <input asp-for="Email" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> *@
+@*     <br />
     <div class="container border p-3">
         <h1 class="text-white text-center">Update Result</h1>
         <input hidden asp-for="Id" />
@@ -55,7 +410,7 @@
                     <div class="col-10 pb-3">
                         <input asp-for="LabNumber" class="form-control" />
                         <span asp-validation-for="LabNumber" class="text-danger"></span>
-                    </div>
+                    </div> *@
 
                    @*  <div class="col-2">
                         <label class="control-label pt-2" style="font-size:20px;">ImageUrl</label>
@@ -67,48 +422,71 @@
                         <span asp-validation-for="Image" class="text-danger"></span>
                     </div> *@
 
-                    <div class="col-5 offset-2">
+                    @* <div class="col-5 offset-2">
 
                         <a asp-action="ParameterIndex" class="btn-primary btn form-control ">Back to List</a>
-                    </div>
-                  
+                    </div> *@
 
+  @* 
                     <div class="form-group">
-                        <div class="col-2">
+
+        <br />
+        <div class="topic-select-container">
+            <div class="topic-title">Test Type</div>
+            <select id="testType" name="TestType" class="form-control" onchange="showTestFields()">
+                <option value="">-- Select Test Type --</option>
+                @foreach (var testType in testTypes)
+                {
+                    <option value="@testType.Value">@testType.Text</option>
+                }
+            </select>
+        </div> *@
+
+
+                       @*  <div class="col-2">
                             <label class="control-label pt-2" style="font-size:20px;"> Test Type</label>
-                        </div>
+                        </div> *@
 
                         @*  <label for="testType">Test Type</label> *@
 
-                        <select id="testType" name="TestType" class="form-control" onchange="showTestFields()">
+                        @* <select id="testType" name="TestType" class="form-control" onchange="showTestFields()">
                             <option value="">-- Select Test Type --</option>
                             @foreach (var testType in testTypes)
                             {
                                 <option value="@testType.Value">@testType.Text</option>
                             }
-                        </select>
+                        </select> *@
+
+
 
 
                         @*         <div class="col-5">
                         <input type="submit" value="Create" class="btn btn-success form-control" />
 
                         </div> *@
-                    </div>
-                    <div id="dynamicFields">
+                    @* </div>
+                    <div id="dynamicFields"> *@
                         <!-- Dynamic fields will appear here -->
-                    </div>
+                   @*  </div> *@
 
-                </div>
-            </div>
+             @*    </div>
+            </div> *@
            @*  <div class="col-2">
                 <img src="@Model.ImageUrl" class="w-100" alt="" />
             </div> *@
-            <div class="col-5">
+  @*   <br />
+    <div style="display: flex; justify-content: center; align-items: center;">
+        <span offset-10>
+            <div class=" col-4" style="width: 150px; height: 50px;">
                 <input type="submit" value="Update" class="btn btn-success form-control" />
             </div>
-        </div>
-    </div>
-</form>
+    
+    </span>
+    </div> *@
+     @*    </div>
+    </div> *@
+@*     </div>
+</form> *@
 
 
 @section Scripts {
@@ -174,7 +552,352 @@
 
                                     </div>
                                                 `;
-            } else if (testType === "Urine") {
+            } else if (testType === "FBC") {
+                dynamicFields.innerHTML = `
+
+                                                                <div class="border mt-4 p-4 rounded">
+                                                                    <div class="container row">
+
+
+                                                                    <div class="col-14">
+                                                                        <div class="row pt-2">
+
+                                                                         <div style="display: flex;">
+                                                                                 <div style="flex: 1; padding-right: 20px;">
+                                                        <div class="form-container">
+                                                              <div class="form-column">
+                                                                  <div class="form-group">
+
+                                                                            <div class="col-16 py-2">
+                                                                                           <label for="WBC">WBC</label>
+                                                                                                   <input type="text" id="WBC" name="WBC" class="form-control" />
+                                                                            </div>
+                                                                  </div>
+                                                                  <div class="form-group">
+
+                                                                            <div class="col-16 py-2">
+                                                                                                   <label for="Neutrophils">Neutrophils</label>
+                                                                                                   <input type="text" id="Neutrophils" name="Neutrophils" class="form-control" />
+                                                                            </div>
+                                                                  </div>
+                                                                  <div class="form-group">
+
+                                                                            <div class="col-12 py-2">
+                                                                                                   <label for="Lymphocytes">Lymphocytes</label>
+                                                                                                   <input type="text" id="Lymphocytes" name="Lymphocytes" class="form-control" />
+                                                                            </div>
+                                                                  </div>
+                                                                  <div class="form-group">
+                                                                            <div class="col-12 py-2">
+                                                                                                   <label for="Eosinophils">Eosinophils</label>
+                                                                                                   <input type="text" id="Eosinophils" name="Eosinophils" class="form-control" />
+                                                                            </div>
+                                                                  </div>
+                                                                  <div class="form-group">
+                                                                            <div class="col-12 py-2">
+                                                                                                   <label for="RBC">RBC</label>
+                                                                                                   <input type="text" id="RBC" name="RBC" class="form-control" />
+                                                                            </div>
+                                                                  </div>
+                                                              </div>
+                                                               <div class="form-column">
+                                                                       <div class="form-group">
+                                                                            <div class="col-12 py-2">
+                                                                                                   <label for="Hb">Hb</label>
+                                                                                                   <input type="text" id="Hb" name="Hb" class="form-control" />
+                                                                            </div>
+                                                                      </div>
+                                                                      <div class="form-group">
+                                                                                    <div class="col-12 py-2">
+                                                                                                                           <label for="MCV">MCV</label>
+                                                                                                                           <input type="text" id="MCV" name="MCV" class="form-control" />
+                                                                                    </div>
+                                                                     </div>
+                                                                     <div class="form-group">
+                                                                                    <div class="col-12 py-2">
+                                                                                                                                           <label for="MCH">MCH</label>
+                                                                                                                                           <input type="text" id="MCH" name="MCH" class="form-control" />
+                                                                                    </div>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                                    <div class="col-12 py-2">
+                                                                                                                           <label for="PlateletCount">PlateletCount</label>
+                                                                                                                           <input type="text" id="PlateletCount" name="PlateletCount" class="form-control" />
+                                                                                    </div>
+                                                                    </div>
+                                                                    <div class="form-group">
+
+                                                                                    <div class="col-12 py-2">
+                                                                                                                                                   <label for="MPV">MPV</label>
+                                                                                                                                                   <input type="text" id="MPV" name="MPV" class="form-control" />
+                                                                                    </div>
+                                                                    </div>
+                                                              </div>
+                                                       </div>
+
+
+                                                                        </div>
+                                                                    </div>
+
+
+                                                                </div>
+
+                                                            </div>
+
+                                                `;
+            } else if (testType === "LFT") {
+                dynamicFields.innerHTML = `
+
+                                                      <div class="border mt-4 p-4 rounded">
+                                            <div class="container row">
+
+
+                                            <div class="col-14">
+                                                <div class="row pt-2">
+
+                                                 <div style="display: flex;">
+                                                         <div style="flex: 1; padding-right: 20px;">
+
+                                   <div class="form-container">
+                                        <div class="form-column">
+                                           <div class="form-group">
+                                                    <div class="col-12 py-2">
+                                                                   <label for="ALP ">ALP </label>
+                                                                   <input type="text" id="ALP " name="ALP" class="form-control" />
+                                                    </div>
+                                            </div>
+
+                                           <div class="form-group">
+
+                                                    <div class="col-12 py-2">
+                                                                    <label for="GGT ">GGT </label>
+                                                                    <input type="text" id="GGT " name="GGT" class="form-control" />
+                                                    </div>
+                                           </div>
+                                          <div class="form-group">
+                                                    <div class="col-12 py-2">
+                                                                    <label for="LD ">LD </label>
+                                                                    <input type="text" id="LD " name="LD " class="form-control" />
+                                                    </div>
+                                          </div>
+
+                                          <div class="form-group">
+                                                            <div class="col-12 py-2">
+                                                                    <label for="AST ">AST </label>
+                                                                    <input type="text" id="AST " name="AST" class="form-control" />
+                                                    </div>
+                                          </div>
+                                          <div class="form-group">
+                                                    <div class="col-12 py-2">
+                                                                    <label for="ALT ">ALT </label>
+                                                                    <input type="text" id="ALT " name="ALT" class="form-control" />
+                                                    </div>
+                                          </div>
+                                   </div>
+                                   <div class="form-column">
+                                          <div class="form-group">
+                                                    <div class="col-12 py-2">
+                                                                    <label for="TotalProtein ">TotalProtein </label>
+                                                                    <input type="text" id="TotalProtein " name="TotalProtein" class="form-control" />
+                                                    </div>
+                                         </div>
+                                         <div class="form-group">
+                                                    <div class="col-12 py-2">
+                                                                    <label for="Albumin ">Albumin </label>
+                                                                    <input type="text" id="Albumin " name="Albumin" class="form-control" />
+                                                    </div>
+                                         </div>
+                                         <div class="form-group">
+
+                                                            <div class="col-12 py-2">
+                                                                                    <label for="Globulin ">Globulin </label>
+                                                                                            <input type="text" id="Globulin " name="Globulin" class="form-control" />
+                                                            </div>
+                                                   </div>
+                                         <div class="form-group">
+
+                                                            <div class="col-12 py-2">
+                                                                                                   <label for="Sodium  ">Sodium  </label>
+                                                                                                   <input type="text" id="Sodium  " name="Sodium  " class="form-control" />
+                                                            </div>
+                                         </div>
+                                         <div class="form-group">
+                                                                    <div class="col-12 py-2">
+                                                                                                                           <label for="Potassium   ">Potassium   </label>
+                                                                                                                           <input type="text" id="Potassium   " name="Potassium   " class="form-control" />
+                                                                    </div>
+                                                            </div>
+                                         </div>
+                                      </div>
+
+                                  </div>
+
+
+
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+
+                                    </div>
+                                                `;
+            } else if (testType === "UFR") {
+                dynamicFields.innerHTML = `
+
+                                                               <div class="border mt-4 p-4 rounded">
+                                                    <div class="container row">
+
+
+                                                    <div class="col-14">
+                                                        <div class="row pt-2">
+
+                                                         <div style="display: flex;">
+                                                                 <div style="flex: 1; padding-right: 20px;">
+
+                                        <div class="form-container">
+                                                 <div class="form-column">
+                                                       <div class="form-group">
+
+                                                             <div class="col-12 py-2">
+                                                                                                                    <label for="Color  ">Color  </label>
+                                                                                                                    <input type="text" id="Color  " name="Color" class="form-control" />
+                                                                    </div>
+                                                       </div>
+
+                                                       <div class="form-group">
+                                                                     <div class="col-12 py-2">
+                                                                                                                    <label for="SpecificGravity  ">SpecificGravity  </label>
+                                                                                                                    <input type="text" id="SpecificGravity  " name="SpecificGravity" class="form-control" />
+                                                                    </div>
+
+                                                       </div>
+                                                       <div class="form-group">
+                                                                     <div class="col-12 py-2">
+                                                                                                                    <label for="Appearance  ">Appearance  </label>
+                                                                                                                    <input type="text" id="Appearance  " name="Appearance" class="form-control" />
+                                                                    </div>
+                                                       </div>
+                                                       <div class="form-group">
+                                                                     <div class="col-12 py-2">
+                                                                                                                    <label for="PH  ">PH  </label>
+                                                                                                                    <input type="text" id="PH  " name="PH" class="form-control" />
+                                                                    </div>
+                                                       </div>
+                                             </div>
+                                                  <div class="form-column">
+                                                       <div class="form-group">
+
+                                                             <div class="col-12 py-2">
+                                                                                                                    <label for="Protien  ">Protien  </label>
+                                                                                                                    <input type="text" id="Protien  " name="Protien" class="form-control" />
+                                                                    </div>
+                                                       </div>
+                                                       <div class="form-group">
+
+                                                             <div class="col-12 py-2">
+                                                                                                                    <label for="Urobilinogen  ">Urobilinogen  </label>
+                                                                                                                    <input type="text" id="Urobilinogen  " name="Urobilinogen" class="form-control" />
+                                                                    </div>
+                                                      </div>
+                                                      <div class="form-group">
+
+                                                             <div class="col-12 py-2">
+                                                                                                                    <label for="Ketones  ">Ketones  </label>
+                                                                                                                    <input type="text" id="Ketones  " name="Ketones" class="form-control" />
+                                                                    </div>
+                                                      </div>
+                                                      <div class="form-group">
+
+                                                             <div class="col-12 py-2">
+                                                                                                                    <label for="BileSalt  ">BileSalt  </label>
+                                                                                                                    <input type="text" id="BileSalt  " name="BileSalt" class="form-control" />
+                                                                    </div>
+                                                      </div>
+
+                                                </div>
+                                      <div class="form-column">
+
+
+                                                              <div class="form-group">
+                                                                     <div class="col-12 py-2">
+                                                                                                                    <label for="Bilirubin  ">Bilirubin  </label>
+                                                                                                                    <input type="text" id="Bilirubin  " name="Bilirubin" class="form-control" />
+                                                                    </div>
+                                                              </div>
+
+                                                              <div class="form-group">
+                                                                     <div class="col-12 py-2">
+                                                                                                                    <label for="Nitrite  ">Nitrite  </label>
+                                                                                                                    <input type="text" id="Nitrite  " name="Nitrite" class="form-control" />
+                                                                      </div>
+                                                              </div>
+                                                              <div class="form-group">
+                                                                 <div class="col-12 py-2">
+                                                                                                                    <label for="PusCells  ">PusCells  </label>
+                                                                                                                    <input type="text" id="PusCells  " name="PusCells" class="form-control" />
+                                                                    </div>
+                                                              </div>
+                                                              <div class="form-group">
+                                                                    <div class="col-12 py-2">
+                                                                                                                    <label for="RedBloodCells  ">RedBloodCells  </label>
+                                                                                                                    <input type="text" id="RedBloodCells  " name="RedBloodCells" class="form-control" />
+                                                                    </div>
+                                                              </div>
+                                               </div>
+                                             <div class="form-column">
+                                                              <div class="form-group">
+                                                                     <div class="col-12 py-2">
+                                                                                                                    <label for="EpithelialCells  ">EpithelialCells  </label>
+                                                                                                                    <input type="text" id="EpithelialCells  " name="EpithelialCells" class="form-control" />
+                                                                    </div>
+                                                              </div>
+                                                              <div class="form-group">
+                                                                       <div class="col-12 py-2">
+                                                                                                                    <label for="Casts  ">Casts  </label>
+                                                                                                                    <input type="text" id="Casts  " name="Casts" class="form-control" />
+                                                                    </div>
+                                                              </div>
+                                                                       <div class="form-group">
+                                                                            <div class="col-12 py-2">
+                                                                                                                                    <label for="Crystals  ">Crystals  </label>
+                                                                                                                            <input type="text" id="Crystals  " name="Crystals" class="form-control" />
+                                                                            </div>
+                                                                      </div>
+
+                                                                      <div class="form-group">
+                                                                            <div class="col-12 py-2">
+                                                                                                                                    <label for="Bacteria  ">Bacteria  </label>
+                                                                                                    <input type="text" id="Bacteria  " name="Bacteria" class="form-control" />
+                                                                            </div>
+                                                                      </div>
+                                                                      </div>
+                                                                      </div>
+
+
+
+
+
+
+
+
+
+
+
+                                                                    </div>
+                                          </div>
+
+
+
+                                                        </div>
+                                                    </div>
+
+
+                                                </div>
+
+                                            </div>
+                                                        `;
+            } else if (testType === "RheumatoidFactor") {
                 dynamicFields.innerHTML = `
 
                                                         <div class="border mt-4 p-4 rounded">
@@ -187,94 +910,372 @@
                                                                  <div style="display: flex;">
                                                                          <div style="flex: 1; padding-right: 20px;">
 
-                                                                    <div class="col-16 py-2">
-                                                                                   <label for="WBC">WBC</label>
-                                                                                           <input type="text" id="WBC" name="WBC" class="form-control" />
-                                                                    </div>
+                                                                         <div class="col-12 py-2">
 
-                                                                    <div class="col-16 py-2">
-                                                                                           <label for="Neutrophils">Neutrophils</label>
-                                                                                           <input type="text" id="Neutrophils" name="Neutrophils" class="form-control" />
-                                                                    </div>
+                                                                                           <label for="RheumatoidFactor ">RheumatoidFactor </label>
+                                                                                           <input type="text" id="RheumatoidFactor " name="RheumatoidFactor" class="form-control" />
 
-                                                                    <div class="col-12 py-2">
-                                                                                           <label for="Lymphocytes">Lymphocytes</label>
-                                                                                           <input type="text" id="Lymphocytes" name="Lymphocytes" class="form-control" />
-                                                                    </div>
-                                                                            </div>
-                                                                                    <div style="flex: 1;">
-                                                                    <div class="col-12 py-2">
-                                                                                           <label for="Eosinophils">Eosinophils</label>
-                                                                                           <input type="text" id="Eosinophils" name="Eosinophils" class="form-control" />
-                                                                    </div>
-
-                                                                    <div class="col-12 py-2">
-                                                                                           <label for="RBC">RBC</label>
-                                                                                           <input type="text" id="RBC" name="RBC" class="form-control" />
-                                                                    </div>
-
-                                                                    <div class="col-12 py-2">
-                                                                                           <label for="Hb">Hb</label>
-                                                                                           <input type="text" id="Hb" name="Hb" class="form-control" />
-                                                                    </div>
-                                                                            </div>
-                                                  </div>
-                                                           <div class="col-12 py-2">
-                                                                                                                   <label for="MCV">MCV</label>
-                                                                                                                   <input type="text" id="MCV" name="MCV" class="form-control" />
-                                                                            </div>
-                                                                                     <div class="col-12 py-2">
-                                                                                                                                   <label for="MCH">MCH</label>
-                                                                                                                                   <input type="text" id="MCH" name="MCH" class="form-control" />
-                                                                            </div>
-                                                                                     <div class="col-12 py-2">
-                                                                                                                   <label for="PlateletCount">PlateletCount</label>
-                                                                                                                   <input type="text" id="PlateletCount" name="PlateletCount" class="form-control" />
-                                                                            </div>
-
-                                                                                     </div>
-                                                                                             <div class="col-12 py-2">
-                                                                                                                                           <label for="MPV">MPV</label>
-                                                                                                                                           <input type="text" id="MPV" name="MPV" class="form-control" />
-                                                                                    </div>
-
-
-                                                                </div>
-                                                            </div>
-
-
-                                                        </div>
-
+                                                                         </div>
                                                     </div>
-
-                                                `;
-            } else if (testType === "XRay") {
+                                                    </div>
+                                                    </div>
+                                                    </div>
+                                                    </div>
+                                                    </div>
+                                                                `;
+            } else if (testType === "CReactiveProtein") {
                 dynamicFields.innerHTML = `
-                                                    <div class="form-group">
-                                                        <label for="area">Body Area</label>
-                                                        <input type="text" id="area" name="BodyArea" class="form-control" />
-                                                    </div>
+
+                                                                <div class="border mt-4 p-4 rounded">
+                                                                    <div class="container row">
 
 
-                                  <div style="display: flex;">
-                                    <div style="flex: 1; padding-right: 10px;">
-                                      <input type="text" placeholder="Input 1"><br>
-                                      <input type="text" placeholder="Input 2"><br>
-                                      <input type="text" placeholder="Input 3"><br>
-                                      <input type="text" placeholder="Input 4"><br>
-                                      <input type="text" placeholder="Input 5"><br>
-                                    </div>
-                                    <div style="flex: 1;">
-                                      <input type="text" placeholder="Input 6"><br>
-                                      <input type="text" placeholder="Input 7"><br>
-                                      <input type="text" placeholder="Input 8"><br>
-                                      <input type="text" placeholder="Input 9"><br>
-                                      <input type="text" placeholder="Input 10"><br>
-                                    </div>
-                                  </div>
+                                                                    <div class="col-14">
+                                                                        <div class="row pt-2">
+
+                                                                         <div style="display: flex;">
+                                                                                 <div style="flex: 1; padding-right: 20px;">
+
+                                                                                 <div class="col-12 py-2">
+
+                                                                                                                   <label for="CReactiveProtein ">CReactiveProtein </label>
+                                                                                                                   <input type="text" id="CReactiveProtein " name="CReactiveProtein" class="form-control" />
+
+                                                                                 </div>
+                                                            </div>
+                                                            </div>
+                                                            </div>
+                                                            </div>
+                                                            </div>
+                                                            </div>
+                                                                        `;
+            } else if (testType === "CSR") {
+                dynamicFields.innerHTML = `
+
+                                                                        <div class="border mt-4 p-4 rounded">
+                                                                            <div class="container row">
 
 
-                                                `;
+                                                                            <div class="col-14">
+                                                                                <div class="row pt-2">
+
+                                                                                 <div style="display: flex;">
+                                                                                         <div style="flex: 1; padding-right: 20px;">
+
+                                                                                         <div class="col-12 py-2">
+
+                                                                                                          <label for="Esr1stHour ">Esr1stHour </label>
+                                                                                                          <input type="text" id="Esr1stHour " name="Esr1stHour" class="form-control" />
+
+                                                                                         </div>
+                                                                    </div>
+                                                                    </div>
+                                                                    </div>
+                                                                    </div>
+                                                                    </div>
+                                                                    </div>
+                                                                                `;
+
+            } else if (testType === "ESR") {
+                dynamicFields.innerHTML = `
+
+                                                                                <div class="border mt-4 p-4 rounded">
+                                                                                    <div class="container row">
+
+
+                                                                                    <div class="col-14">
+                                                                                        <div class="row pt-2">
+
+                                                                                         <div style="display: flex;">
+                                                                                                 <div style="flex: 1; padding-right: 20px;">
+
+                                                                                                 <div class="col-12 py-2">
+
+                                                                                                                  <label for="Esr1stHour ">Esr1stHour </label>
+                                                                                                                  <input type="text" id="Esr1stHour " name="Esr1stHour" class="form-control" />
+
+                                                                                                 </div>
+                                                                            </div>
+                                                                            </div>
+                                                                            </div>
+                                                                            </div>
+                                                                            </div>
+                                                                            </div>
+                                                                                        `;
+            } else if (testType === "SCREATININE") {
+                dynamicFields.innerHTML = `
+
+                                                                                        <div class="border mt-4 p-4 rounded">
+                                                                                            <div class="container row">
+
+
+                                                                                            <div class="col-14">
+                                                                                                <div class="row pt-2">
+
+                                                                                                 <div style="display: flex;">
+                                                                                                         <div style="flex: 1; padding-right: 20px;">
+
+                                                                                                         <div class="col-12 py-2">
+
+                                                                                                                                          <label for="EstimateGfr ">EstimateGfr </label>
+                                                                                                                                          <input type="text" id="EstimateGfr " name="EstimateGfr" class="form-control" />
+
+                                                                                                         </div>
+                                                                                    </div>
+                                                                                    </div>
+                                                                                    </div>
+                                                                                    </div>
+                                                                                    </div>
+                                                                                    </div>
+                                                                                                `;
+            } else if (testType === "S.G.O.T.(A.S.T)") {
+                dynamicFields.innerHTML = `
+
+                                                                                                <div class="border mt-4 p-4 rounded">
+                                                                                                    <div class="container row">
+
+
+                                                                                                    <div class="col-14">
+                                                                                                        <div class="row pt-2">
+
+                                                                                                         <div style="display: flex;">
+                                                                                                                 <div style="flex: 1; padding-right: 20px;">
+
+                                                                                                                 <div class="col-12 py-2">
+
+                                                                                                                                                                  <label for="SgotAST ">SgotAST </label>
+                                                                                                                                                                  <input type="text" id="SgotAST " name="SgotAST" class="form-control" />
+
+                                                                                                                 </div>
+                                                                                            </div>
+                                                                                            </div>
+                                                                                            </div>
+                                                                                            </div>
+                                                                                            </div>
+                                                                                            </div>
+                                                                                                        `;
+            } else if (testType === "S.G.P.T.(A.L.T)") {
+                dynamicFields.innerHTML = `
+
+                                                                                                        <div class="border mt-4 p-4 rounded">
+                                                                                                            <div class="container row">
+
+
+                                                                                                            <div class="col-14">
+                                                                                                                <div class="row pt-2">
+
+                                                                                                                 <div style="display: flex;">
+                                                                                                                         <div style="flex: 1; padding-right: 20px;">
+
+                                                                                                                         <div class="col-12 py-2">
+
+                                                                                                                                                                                          <label for="SgptALT ">SgptALT </label>
+                                                                                                                                                                                          <input type="text" id="SgptALT " name="SgptALT" class="form-control" />
+
+                                                                                                                         </div>
+                                                                                                    </div>
+                                                                                                    </div>
+                                                                                                    </div>
+                                                                                                    </div>
+                                                                                                    </div>
+                                                                                                    </div>
+                                                                                                             `;
+            } else if (testType === "BloodGlucoseR") {
+                dynamicFields.innerHTML = `
+
+                                                                                                        <div class="border mt-4 p-4 rounded">
+                                                                                                            <div class="container row">
+
+
+                                                                                                            <div class="col-14">
+                                                                                                                <div class="row pt-2">
+
+                                                                                                                 <div style="display: flex;">
+                                                                                                                         <div style="flex: 1; padding-right: 20px;">
+
+
+                                                                                                                         <div class="col-12 py-2">
+
+                                                                                                                                                <label for="RandomBloodSugar ">RandomBloodSugar </label>
+                                                                                                                                                <input type="text" id="RandomBloodSugar " name="RandomBloodSugar" class="form-control" />
+
+                                                                                                                         </div>
+                                                                                                    </div>
+                                                                                                    </div>
+                                                                                                    </div>
+                                                                                                    </div>
+                                                                                                    </div>
+                                                                                                    </div>
+                                                                                                                `;
+
+            } else if (testType === "WIDAL(SAT)") {
+                dynamicFields.innerHTML = `
+
+                                                                                                                <div class="border mt-4 p-4 rounded">
+                                                                                                                    <div class="container row">
+
+
+                                                                                                                    <div class="col-14">
+                                                                                                                        <div class="row pt-2">
+
+                                                                                                                         <div style="display: flex;">
+                                                                                                                                 <div style="flex: 1; padding-right: 20px;">
+
+
+
+                                                                                                                                 <div class="col-12 py-2">
+
+                                                                                                                                                                        <label for="SalmonellaParaTyphy ">SalmonellaParaTyphy </label>
+                                                                                                                                                                        <input type="text" id="SalmonellaParaTyphy " name="SalmonellaParaTyphy" class="form-control" />
+
+                                                                                                                                 </div>
+
+
+                                                                                                                               <div class="col-12 py-2">
+
+                                                                                                                                                                        <label for="SalmonellaTyphlH ">SalmonellaTyphlH </label>
+                                                                                                                                                                        <input type="text" id="SalmonellaTyphlH " name="SalmonellaTyphlH" class="form-control" />
+
+                                                                                                                               </div>
+
+
+                                                                                                                                  <div class="col-12 py-2">
+
+                                                                                                                                                                <label for="SalmonellaTyphlI ">SalmonellaTyphlI </label>
+                                                                                                                                                                <input type="text" id="SalmonellaTyphlI " name="SalmonellaTyphlI" class="form-control" />
+
+                                                                                                                                  </div>
+                                                                                                            </div>
+                                                                                                            </div>
+                                                                                                            </div>
+                                                                                                            </div>
+                                                                                                            </div>
+                                                                                                            </div>
+
+                                                                                                            `;
+            } else if (testType === "Haemoglobin") {
+                dynamicFields.innerHTML = `
+
+                                                                                                                        <div class="border mt-4 p-4 rounded">
+                                                                                                                            <div class="container row">
+
+
+                                                                                                                            <div class="col-14">
+                                                                                                                                <div class="row pt-2">
+
+                                                                                                                                 <div style="display: flex;">
+                                                                                                                                         <div style="flex: 1; padding-right: 20px;">
+
+
+
+                                                                                                                                          <div class="col-12 py-2">
+
+                                                                                                                                                                                        <label for="Haemoglobin ">Haemoglobin </label>
+                                                                                                                                                                                        <input type="text" id="Haemoglobin " name="Haemoglobin" class="form-control" />
+
+                                                                                                                                          </div>
+
+
+
+                                                                                                                    </div>
+                                                                                                                    </div>
+                                                                                                                    </div>
+                                                                                                                    </div>
+                                                                                                                    </div>
+                                                                                                                    </div>
+                                                                                                                                `;
+            } else if (testType === "RhematoidFactor") {
+                dynamicFields.innerHTML = `
+
+                                                                                                                                <div class="border mt-4 p-4 rounded">
+                                                                                                                                    <div class="container row">
+
+
+                                                                                                                                    <div class="col-14">
+                                                                                                                                        <div class="row pt-2">
+
+                                                                                                                                         <div style="display: flex;">
+                                                                                                                                                 <div style="flex: 1; padding-right: 20px;">
+
+
+
+                                                                                                                                          <div class="col-12 py-2">
+
+                                                                                                                                                                                        <label for="RhematoidFactor ">RhematoidFactor </label>
+                                                                                                                                                                                        <input type="text" id="RhematoidFactor " name="RhematoidFactor" class="form-control" />
+
+                                                                                                                                          </div>
+
+
+
+                                                                                                                            </div>
+                                                                                                                            </div>
+                                                                                                                            </div>
+                                                                                                                            </div>
+                                                                                                                            </div>
+                                                                                                                            </div>
+                                                                                                                                        `;
+
+            } else if (testType === "BloodGlucoseF") {
+                dynamicFields.innerHTML = `
+
+                                                                                                                                        <div class="border mt-4 p-4 rounded">
+                                                                                                                                            <div class="container row">
+
+
+                                                                                                                                            <div class="col-14">
+                                                                                                                                                <div class="row pt-2">
+
+                                                                                                                                                 <div style="display: flex;">
+                                                                                                                                                         <div style="flex: 1; padding-right: 20px;">
+
+
+
+                                                                                                                                          <div class="col-12 py-2">
+
+                                                                                                                                                                  <label for="BloodGlucose ">BloodGlucose </label>
+                                                                                                                                                                  <input type="text" id="BloodGlucose " name="BloodGlucose" class="form-control" />
+
+                                                                                                                                          </div>
+
+
+
+
+
+
+
+                                                                                                                                          <div class="col-12 py-2">
+
+                                                                                                                                                                                        <label for="BreakfastBloodGlucose ">BreakfastBloodGlucose </label>
+                                                                                                                                                                                        <input type="text" id="BreakfastBloodGlucose " name="BreakfastBloodGlucose" class="form-control" />
+
+                                                                                                                                          </div>
+
+
+                                                                                                                                          <div class="col-12 py-2">
+
+                                                                                                                                                                                        <label for="LunchBloodGlucose ">LunchBloodGlucose </label>
+                                                                                                                                                                                        <input type="text" id="LunchBloodGlucose " name="LunchBloodGlucose" class="form-control" />
+
+                                                                                                                                          </div>
+
+
+                                                                                                                                          <div class="col-12 py-2">
+
+                                                                                                                                                                                        <label for="DinnerBloodGlucose ">DinnerBloodGlucose </label>
+                                                                                                                                                                                        <input type="text" id="DinnerBloodGlucose " name="DinnerBloodGlucose" class="form-control" />
+
+                                                                                                                                          </div>
+
+
+
+                                                                                                                                    </div>
+                                                                                                                                    </div>
+                                                                                                                                    </div>
+                                                                                                                                    </div>
+                                                                                                                                    </div>
+                                                                                                                                    </div>
+                                                                                                                                                `;
             }
         }
     </script>

@@ -4,6 +4,7 @@ using Laboratory.Services.TestParameterAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Laboratory.Services.TestParameterAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250417163915_AddDoubleValueToDataBase")]
+    partial class AddDoubleValueToDataBase
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -69,8 +72,8 @@ namespace Laboratory.Services.TestParameterAPI.Migrations
                     b.Property<double?>("CholHDLRatio")
                         .HasColumnType("float");
 
-                    b.Property<DateOnly?>("CollectedDate")
-                        .HasColumnType("date");
+                    b.Property<DateTime?>("CollectedDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Color")
                         .HasColumnType("nvarchar(max)");
@@ -78,8 +81,8 @@ namespace Laboratory.Services.TestParameterAPI.Migrations
                     b.Property<string>("Crystals")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateOnly?>("DOB")
-                        .HasColumnType("date");
+                    b.Property<DateTime?>("DOB")
+                        .HasColumnType("datetime2");
 
                     b.Property<double?>("DinnerSample")
                         .HasColumnType("float");
@@ -189,8 +192,8 @@ namespace Laboratory.Services.TestParameterAPI.Migrations
                     b.Property<double?>("RandomBloodSugar")
                         .HasColumnType("float");
 
-                    b.Property<DateOnly?>("ReceivedDate")
-                        .HasColumnType("date");
+                    b.Property<DateTime?>("ReceivedDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("RedBloodCells")
                         .HasColumnType("nvarchar(max)");
@@ -198,8 +201,8 @@ namespace Laboratory.Services.TestParameterAPI.Migrations
                     b.Property<int?>("RefNumber")
                         .HasColumnType("int");
 
-                    b.Property<DateOnly?>("ReportedDate")
-                        .HasColumnType("date");
+                    b.Property<DateTime?>("ReportedDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("RhematoidFactor")
                         .HasColumnType("nvarchar(max)");
@@ -236,9 +239,6 @@ namespace Laboratory.Services.TestParameterAPI.Migrations
 
                     b.Property<double?>("SpecificGravity")
                         .HasColumnType("float");
-
-                    b.Property<string>("TestType")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<double?>("TotalCholesterol")
                         .HasColumnType("float");
