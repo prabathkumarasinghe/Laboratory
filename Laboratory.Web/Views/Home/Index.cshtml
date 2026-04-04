@@ -1,30 +1,260 @@
 ﻿@model IEnumerable<TestDto>
 
+@* 
+<style>
+
+    /* Reset */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Segoe UI', sans-serif;
+        background: #f5f8fa;
+        color: #333;
+    }
+
+    .container {
+        width: 90%;
+        max-width: 1200px;
+        margin: auto;
+    }
+
+    /* Header */
+    header {
+        background: #005477;
+        padding: 20px 0;
+        color: white;
+    }
+
+        header h1 {
+            float: left;
+            margin-left: 20px;
+        }
+
+    nav {
+        float: right;
+        margin-right: 20px;
+    }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 25px;
+            font-weight: bold;
+        }
+
+            nav a:hover {
+                text-decoration: underline;
+            }
+
+    header::after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+
+    /* Hero */
+    .hero {
+        display: flex;
+        flex-wrap: wrap;
+        background: #e3f4ff;
+        padding: 40px 20px;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .hero-content {
+        flex: 1;
+        min-width: 300px;
+        text-align: center;
+    }
+
+        .hero-content h2 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+
+    .btn {
+        background: #0077cc;
+        color: white;
+        padding: 12px 25px;
+        text-decoration: none;
+        border-radius: 5px;
+    }
+
+        .btn:hover {
+            background: #005fa3;
+        }
+
+    .hero-image {
+        flex: 1;
+        text-align: center;
+        min-width: 300px;
+    }
+
+        .hero-image img {
+            max-width: 100%;
+            border-radius: 10px;
+        }
+
+    /* Test Categories */
+    .test-categories {
+        text-align: center;
+        padding: 50px 20px;
+        background: #fff;
+    }
+
+        .test-categories h3 {
+            font-size: 2rem;
+            margin-bottom: 30px;
+        }
+
+    .cards {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: center;
+    }
+
+    .card {
+        background: #f0f9ff;
+        border-radius: 8px;
+        width: 220px;
+        padding: 15px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        transition: transform 0.2s ease;
+    }
+
+        .card img {
+            width: 100%;
+            border-radius: 5px;
+        }
+
+        .card h4 {
+            margin-top: 10px;
+            font-size: 1.1rem;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+    /* Contact */
+    .contact {
+        background: #d9f0ff;
+        text-align: center;
+        padding: 30px 20px;
+        font-size: 1.1rem;
+    }
+
+    /* Footer */
+    footer {
+        background: #003d5c;
+        color: white;
+        text-align: center;
+        padding: 15px 0;
+    }
+
+
+</style> *@
+
+
 <form>
-    <div class="container row">
-        @foreach (var test in Model)
-        {
-            <div class="col-12 col-md-6 col-lg-4">
-                <div class="p-0 my-3 border rounded">
-                    <div class="card">
-                        <h3 class="card-title text-white-50 text-center py-2">@test.Name</h3>
-                        <img src="@test.ImageUrl" class="card-img-top">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between py-2">
-                                <span class="text-danger" style="font-size:20px;">@string.Format("{0:c}", test.Price)</span>
-                                <span class="badge bg-warning text-white p-2">@test.CategoryName</span>
-                            </div>
-                            <p class="card-text">@Html.Raw(test.Description)</p>
-                            <div class="row">
-                                <div class="col">
-                                    <a asp-action="TestDetails" asp-route-testId="@test.TestId"
-                                       class="btn btn-success form-control">Details</a>
+
+   @*  <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Pathology Test App</title>
+        <link rel="stylesheet" href="styles.css" />
+    </head>
+    <body> *@
+
+
+
+
+
+        <div class="container row">
+            @foreach (var test in Model)
+            {
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="p-0 my-3 border rounded">
+                        <div class="card">
+                            <h3 class="card-title text-white-50 text-center py-2">@test.Name</h3>
+                            <img src="@test.ImageUrl" class="card-img-top">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between py-2">
+                                    <span class="text-danger" style="font-size:20px;">@string.Format("{0:c}", test.Price)</span>
+                                    <span class="badge bg-warning text-white p-2">@test.CategoryName</span>
+                                </div>
+                                <p class="card-text">@Html.Raw(test.Description)</p>
+                                <div class="row">
+                                    <div class="col">
+                                        <a asp-action="TestDetails" asp-route-testId="@test.TestId"
+                                           class="btn btn-success form-control">Details</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+            }
+        </div>
+
+
+
+        
+
+       @*  <section class="hero">
+            <div class="hero-content">
+                <h2>Your Health, Our Priority</h2>
+                <p>Book pathology tests with home sample collection</p>
+                <a href="#" class="btn">Book a Test</a>
             </div>
-        }
-    </div>
+            <div class="hero-image">
+                <img src="https://www.shutterstock.com/image-photo/doctor-hand-holding-blood-test-260nw-1927857705.jpg" alt="Lab Test" />
+            </div>
+        </section> *@
+
+        @* <section class="test-categories">
+            <h3>Popular Test Categories</h3>
+            <div class="cards">
+                <div class="card">
+                    <img src="https://www.shutterstock.com/image-photo/blood-sample-test-tube-medical-260nw-1865156311.jpg" alt="Blood Test" />
+                    <h4>Blood Tests</h4>
+                </div>
+                <div class="card">
+                    <img src="https://www.google.com/imgres?q=urine%20test&imgurl=https%3A%2F%2Fwalkin-clinic.co.uk%2Fwp-content%2Fuploads%2F2023%2F09%2Furine-test.webp&imgrefurl=https%3A%2F%2Fwalkin-clinic.co.uk%2Furine-tests&docid=1tL36ucXXpCZvM&tbnid=QsIDUD0DJopbGM&vet=12ahUKEwixp9PnooqNAxW41DQHHfZMCesQM3oECB4QAA..i&w=1382&h=921&hcb=2&ved=2ahUKEwixp9PnooqNAxW41DQHHfZMCesQM3oECB4QAA" alt="Urine Test" />
+                    <h4>Urine Tests</h4>
+                </div>
+                <div class="card">
+                    <img src="https://www.shutterstock.com/image-photo/doctor-reviewing-xray-film-260nw-571800763.jpg" alt="Imaging" />
+                    <h4>Imaging & Scans</h4>
+                </div>
+                <div class="card">
+                    <img src="https://www.shutterstock.com/image-photo/laboratory-technician-performing-dna-test-260nw-1766541645.jpg" alt="Genetic Tests" />
+                    <h4>Genetic Tests</h4>
+                </div>
+            </div>
+        </section> *@
+
+        @* <section class="contact">
+            <h3>Contact Us</h3>
+            <p>Email: support@pathologycare.com | Phone: +1-800-123-4567</p>
+        </section>
+
+        <footer>
+            <p>&copy; 2025 PathologyCare. All rights reserved.</p>
+        </footer> *@
+@*     </body> *@
+
+
+   
 </form>

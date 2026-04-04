@@ -4,11 +4,12 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Laboratory.Web.Models
 {
-	public class ParameterDto
-	{
-
+    public class ParameterDto
+    {
         [Key]
         public int Id { get; set; }
+
+        // ================= PATIENT DETAILS =================
         public string? Phone { get; set; }
         public string? Email { get; set; }
         public int? RefNumber { get; set; }
@@ -22,90 +23,149 @@ namespace Laboratory.Web.Models
         public DateOnly? ReportedDate { get; set; }
         public DateOnly? DOB { get; set; }
 
-        //lipid
+
+        // ================= BLOOD SUGAR =================
+        public double? GTT_1stHour { get; set; }
+        public double? GTT_2ndHour { get; set; }
+
+
+        // Blood Sugar Series
+        public double? FBS { get; set; }
+        public double? PostBreakfast { get; set; }
+        public double? PostLunch { get; set; }
+        public double? PostDinner { get; set; }
+
+
+        // ================= LIPID PROFILE =================
         public double? TotalCholesterol { get; set; }
         public double? Triglycerides { get; set; }
         public double? HDL { get; set; }
         public double? LDL { get; set; }
+        public double? VLDL { get; set; }
         public double? CholHDLRatio { get; set; }
         public double? NonHDLChol { get; set; }
-        //LFT
-        public double? ALP { get; set; }
-        public double? GGT { get; set; }
-        public double? LD { get; set; }
-        public double? AST { get; set; }
-        public double? ALT { get; set; }
+
+
+        // ================= ELECTROLYTES =================
+        public double? Sodium { get; set; }
+        public double? Potassium { get; set; }
+
+
+        // ================= CRP =================
+        public double? CReactiveProtein { get; set; }
+
+
+        // ================= CALCIUM =================
+        public double? SerumCalcium { get; set; }
+
+
+        // ================= RENAL FUNCTION (EGFR)=================
+        public double? SerumCreatinine { get; set; }
+        public double? GFR { get; set; }
+
+
+        // ================= LIVER FUNCTION =================
         public double? TotalProtein { get; set; }
         public double? Albumin { get; set; }
         public double? Globulin { get; set; }
-        public double? Sodium { get; set; }
-        public double? Potassium { get; set; }
-        public double? Glucose { get; set; }
-        //FBC
+        public double? SGOT { get; set; }
+        public double? SGPT { get; set; }
+        public double? TotalBilirubin { get; set; }
+        public double? DirectBilirubin { get; set; }
+        public double? IndirectBilirubin { get; set; }
+        public double? AlkalinePhosphatase { get; set; }
+        public double? GGT { get; set; }
+
+
+        // ================= ESR =================
+        public double? ESR { get; set; }
+
+
+        // =================PROTHROMBIN TIME & INR =================
+        public double? ProthrombinTime { get; set; }
+        public double? ControlTime { get; set; }
+        public double? INR { get; set; }
+
+
+        // ================= FULL BLOOD COUNT =================
+        public double? Hemoglobin { get; set; }
+        public double? PCV { get; set; }
+        public double? PlateletCount { get; set; }
         public double? WBC { get; set; }
         public double? Neutrophils { get; set; }
         public double? Lymphocytes { get; set; }
         public double? Eosinophils { get; set; }
+        public double? Monocytes { get; set; }
+        public double? Basophils { get; set; }
         public double? RBC { get; set; }
-        public double? Hb { get; set; }
         public double? MCV { get; set; }
-        public double? HCT { get; set; }
         public double? MCH { get; set; }
-        public double? PlateletCount { get; set; }
+        public double? MCHC { get; set; }
+
+
+        // ================= FBC ADVANCED =================
+        public double? LymphPercent { get; set; }
+        public double? MIDPercent { get; set; }
+        public double? GranPercent { get; set; }
+        public double? LymphAbsolute { get; set; }
+        public double? MIDAbsolute { get; set; }
+        public double? GranAbsolute { get; set; }
+        public double? HCT { get; set; }
+        public double? RDW_CV { get; set; }
+        public double? RDW_SD { get; set; }
+        public double? PLT { get; set; }
         public double? MPV { get; set; }
-        // UFR
-        public string? Color { get; set; }
+        public double? PDW { get; set; }
+        public double? PCT { get; set; }
+
+
+        // ================= HCG =================
+        public bool? IsPregnant { get; set; }
+
+
+        // ================= URINE FULL REPORT =================
+        public string? UrineColor { get; set; }
+        public string? Transparency { get; set; }
+        public string? Mucous { get; set; }
         public double? SpecificGravity { get; set; }
-        public string? Appearance { get; set; }
-        public string? PH { get; set; }
-        public string? Protien { get; set; }
+        public string? Reaction { get; set; }
+        public string? UrineProtein { get; set; }
+        public string? ReducingSubstances { get; set; }
+        public string? KetoneBodies { get; set; }
+        public string? UrineBilirubin { get; set; }
         public string? Urobilinogen { get; set; }
-        public string? Ketones { get; set; }
-        public string? BileSalt { get; set; }
-        public string? Bilirubin { get; set; }
-        public string? Nitrite { get; set; }
         public string? PusCells { get; set; }
-        public string? RedBloodCells { get; set; }
+        public string? RedCells { get; set; }
         public string? EpithelialCells { get; set; }
-        public string? Casts { get; set; }
+        public string? Organisms { get; set; }
         public string? Crystals { get; set; }
-        public string? Bacteria { get; set; }
-
-        public string? RheumatoidFactor { get; set; }
-
-        public double? CReactiveProtein { get; set; }
-
-        public double? Esr1stHour { get; set; }
-
-        public double? SCreatinine { get; set; }
-
-        public double? EstimateGfr { get; set; }
-
-        public double? SgotAST { get; set; }
-
-        public double? SgptALT { get; set; }
-
-        //  BLOOD GLUCOSE
-        public double? RandomBloodSugar { get; set; }
-
-        //  BLOOD GLUCOSE
-        public double? PostPrandialBloodSugar { get; set; }
-
-        // WIDAL(SAT)  Test
-        public double? SCreningSltdeMethod { get; set; }
-        public string? SalmonellaTyphl { get; set; }
-        public string? SalmonellaTyphlH { get; set; }
-        public string? SalmonellaParaTyphlI { get; set; }
+        public string? Casts { get; set; }
+        public string? YeastCells { get; set; }
 
 
-        public double? Haemoglobin { get; set; }
+        //=========Blood Glucose =========
 
-        public string? RhematoidFactor { get; set; }
+        public string? FBG { get; set; }
+        public string? PPBG { get; set; }
 
-        //BLOOD GLUCOSE
-        public double? FastingBloodGlucose { get; set; }
-        public double? BreakFastSample { get; set; }
-        public double? LunchSample { get; set; }
-        public double? DinnerSample { get; set; }
+
+        //=========glucose tolerance =================
+
+        public string? FBSADGW { get; set; }
+        public string? FBS1 { get; set; }
+        public string? FBS2 { get; set; }
+
+
+        //=========HAEMOGLOBIN CONCENTRATION(HGB)=========
+        public string? HGB { get; set; }
+
+
+        //=========PPBS=========
+        public double? PPBS { get; set; }
+
+
+        // =========RBS=========
+        public double? RBS { get; set; }
+
     }
 }

@@ -1,1088 +1,373 @@
-﻿@model ParameterDto 
-
-<style>
-
-    Test Type{
-        margin-left: 100px;
-        margin-top: 50px
-    }
-
-    select {
-        transition: opacity 0.5s ease;
-        color:blue;
-    }
-
-        select.hidden {
-            opacity: 0;
-            pointer-events: none;
-            height: 0;
-        }
-
-
-    .topic-select-container {
-        display: flex;
-        align-items: center; /* Vertically center */
-        gap: 10px; /* Space between topic and select */
-        width: 500px;
-        
-             /*    height: 50px;
-            font-size: 18px;
-            padding: 50px;
-            border-radius: 20px; */ 
-    }
-
-    .topic-title {
-        font-weight: bold;
-        font-size: 20px;
-        /*  height: 100px; */
-        /*   display: inline-block;
-            vertical-align: middle;
-            margin-right: 10px; */
-        white-space: nowrap;
-        align-items: center;
-        margin-block-start: 10px;
-    }
-
-</style>
-
+﻿@model ParameterDto
 @{
-    ViewData["Title"] = "Pathology Test Entry";
-    var testTypes = new List<SelectListItem>
-    {
-   new SelectListItem { Text = "Lipid Profile", Value = "Lipid" },
-        new SelectListItem { Text = "UFR", Value = "UFR" },
-        new SelectListItem { Text = "LFT", Value = "LFT" },
-        new SelectListItem { Text = "FBC", Value = "FBC" },
-        new SelectListItem { Text = "Rheumatoid Factor", Value = "RheumatoidFactor" },
-        new SelectListItem { Text = "C Reactive Protein", Value = "CReactiveProtein" },
-        new SelectListItem { Text = "ESR(westergren)1st hour ", Value = "ESR" },
-        new SelectListItem { Text = "S CREATININE ", Value = "SCREATININE " },
-        new SelectListItem { Text = "S.G.O.T.(A.S.T)", Value = "S.G.O.T.(A.S.T)" },
-        new SelectListItem { Text = "S.G.P.T.(A.L.T)", Value = "S.G.P.T.(A.L.T)" },
-        new SelectListItem { Text = "BLOOD GLUCOSE - Random ", Value = "BloodGlucoseR" },
-        new SelectListItem { Text = "WIDAL(SAT)  Test", Value = "WIDAL(SAT)" },
-        new SelectListItem { Text = "Haemoglobin  ", Value = "Haemoglobin" },
-        new SelectListItem { Text = "Rhematoid Factor  ", Value = "RhematoidFactor" },
-        new SelectListItem { Text = "BLOOD GLUCOSE - Fasting ", Value = "BloodGlucoseF" },
-        new SelectListItem { Text = "BLOOD GLUCOSE - Breakfast ", Value = "BloodGlucoseB" },
-        new SelectListItem { Text = "BLOOD GLUCOSE - Lunch ", Value = "BloodGlucoseL" },
-        new SelectListItem { Text = "BLOOD GLUCOSE - Dinner ", Value = "BloodGlucoseD" },
-    };
+    Layout = null;
 }
 
-<style>
-    body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 0;
-        background-color: #f4f4f4;
-    }
+@functions {
+    public string GetFlag(double? value, double? min, double? max)
+    {
+        if (value == null) return "";
 
-    .report-container {
-        width: 210mm;
-        height: 297mm; /* A4 size */
-        margin: 10mm auto;
-        padding: 20mm;
-        background: #fff;
-        box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-        box-sizing: border-box;
-    }
+        if (min != null && value < min) return "low";
+        if (max != null && value > max) return "high";
 
-    .header {
-        text-align: center;
-        margin-bottom: 20px;
+        return "normal";
     }
+    public string GetRemark(double? value, double? min, double? max)
+    {
+        if (value == null) return "";
 
-        .header h1 {
+        if (min != null && value < min) return "Low";
+        if (max != null && value > max) return "High";
+
+        return "Normal";
+    }
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Laboratory Report</title>
+
+    <style>
+        body {
+            font-family: "Times New Roman";
+            font-size: 14px;
             margin: 0;
-            font-size: 24px;
+        }
+
+        .page {
+            width: 210mm;
+            min-height: 297mm;
+            padding: 20mm;
+            margin: auto;
+        }
+
+        .header {
+            text-align: center;
+            border-bottom: 2px solid black;
+            padding-bottom: 10px;
+        }
+
+        .info-table, .results-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+            .results-table th {
+                border-bottom: 2px solid black;
+                padding: 8px;
+                text-align: left;
+            }
+
+            .results-table td {
+                padding: 8px;
+                border-bottom: 1px solid #ccc;
+            }
+
+        .section-title {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+        .high {
+            color: red;
+            font-weight: bold;
+        }
+
+        .low {
             color: blue;
+            font-weight: bold;
         }
 
-        .header p {
-            margin: 5px 0;
-            font-size: 16px;
-            color: #555;
+        .normal {
+            color: black;
         }
 
-    .details, .results {
-        width: 100%;
-        border-collapse: collapse;
-        margin-bottom: 14px;
-        font-size: 14px;
-    }
+    </style>
+</head>
 
-        .details th, .details td, .results th, .results td {
-            border: 1px solid #ccc;
-            padding: 8px;
-            text-align: left;
-        }
+<body>
+    <div class="page">
 
-        .details th {
-            background-color: #f9f9f9;
-        }
+        <!-- HEADER -->
+    <div class="header">
+        <h1>SITHSETHA LABORATORY</h1>
+        <div>Trincomalee Road, Mihinthalaya</div>
+        <div>Tel: 071 810 1645</div>
+    </div>
 
-        .results th {
-            background-color: #e9ecef;
-        }
-
-    .footer {
-        text-align: center;
-        margin-top: 20px;
-        font-size: 12px;
-        color: #777;
-    }
-</style>
-
-@using Laboratory.Web.Utility
-<form asp-action="GeneratePdf" method="post">
-@* <form method="post"> *@
-    <br />
-   @*  <input asp-for="OrderHeaderId" hidden /> *@
-
-   
-
-  
-
-    <div class="report-container">
-        <div class="header">
-            <h1>SITHSETHA LABORATORY</h1>
-           @*  <p>Diagnostic Lab Name</p> *@
-            <p>Trincomalee Road, Mihinthalaya</p>
-            <p>Contact: 071 810 16 45 | Email: sithsethalabo@gmail.com</p>
-            <hr style="border: none; height: 3px; background-color:black;">
-            <br />
-        </div>
-        <table class="details">
-            <tr>
-                <th>Patient Name</th>
-                <td>@Model.PatientName</td>
-                <th>Lab Number</th>
-                <td>@Model.LabNumber</td>
-            </tr>
-            <tr>
-                <th>Age</th>
-                <td>@Model.Age</td>
-                <th>Ref Number</th>
-                <td>@Model.RefNumber</td>
-            </tr>
-            <tr>
-                <th>Sex</th>
-                <td>@Model.Sex</td>
-                <th>Collected Date</th>
-                <td>@Model.CollectedDate</td>
-            </tr>
-             <tr>
-                <th>Date Of Birth</th>
-                <td>@Model.DOB</td>
-                <th>Reported Date</th>
-                <td>@Model.ReportedDate</td>
-            </tr>
+        <table class="info-table">
+            <tr><td><b>Name</b></td><td>@Model.PatientName</td><td><b>Lab No</b></td><td>@Model.LabNumber</td></tr>
+            <tr><td><b>Age</b></td><td>@Model.Age</td><td><b>Sex</b></td><td>@Model.Sex</td></tr>
+            <tr><td><b>DOB</b></td><td>@Model.DOB</td><td><b>Ref No</b></td><td>@Model.RefNumber</td></tr>
+            <tr><td><b>Test</b></td><td>@Model.TestType</td><td><b>Collected</b></td><td>@Model.CollectedDate</td></tr>
+            <tr><td><b>Received</b></td><td>@Model.ReceivedDate</td><td><b>Reported</b></td><td>@Model.ReportedDate</td></tr>
+            <tr><td><b>Phone</b></td><td>@Model.Phone</td><td><b>Email</b></td><td>@Model.Email</td></tr>
         </table>
 
-        <div class="form-group">
-            @* <div class="col-2">
-                <label class="control-label pt-2" style="font-size:20px;"> Test Type</label>
-            </div> *@
-            
-         @*    <div class="topic-select-container">
-                <div class="topic-title">Test Type : </div>
-                <select id="testType" name="TestType" class="form-control" onchange="showTestFields()">
-                    <option value=""> Test Type </option>
-                    @foreach (var testType in testTypes)
-                    {
-                        <option value="@testType.Value">@testType.Text</option>
-                    }
-                </select>
-            </div> *@
-            
-            <div class="topic-select-container" style="margin-left: 100px; margin-top: 50px">
-                <select id="testType" name="TestType" class="form-control" onchange="showTestFields()">
-                <option value="">-- Select Test Type --</option >
-               
-                
-                @foreach (var testType in testTypes)
+        <table class="results-table">
+            <thead>
+                <tr>
+                    <th>Investigation</th>
+                    <th>Result</th>
+                    <th>Unit</th>
+                    <th>Reference</th>
+                    <th>Remarks</th>
+                </tr>
+            </thead>
+
+
+                @switch (Model.TestType)
                 {
-                    
-                    <option value="@testType.Value">@testType.Text</option>
+
+                    // ================= BLOOD SUGAR =================
+                    case "BS":
+                        <tr><td>FBS</td><td>@Model.FBS</td><td>mg/dL</td><td>70-100</td></tr>
+                        <tr><td>PPBS</td><td>@Model.PPBS</td><td>mg/dL</td><td>&lt;140</td></tr>
+                        <tr><td>RBS</td><td>@Model.RBS</td><td>mg/dL</td><td>80-140</td></tr>
+                        break;
+
+                    // ================= GTT =================
+                    case "GTT":
+                        <tr><td>1 Hour</td><td>@Model.GTT_1stHour</td><td>mg/dL</td><td>&lt;180</td></tr>
+                        <tr><td>2 Hour</td><td>@Model.GTT_2ndHour</td><td>mg/dL</td><td>&lt;140</td></tr>
+                        break;
+
+                    // ================= BSS =================
+                    case "BSS":
+                        <tr><td>FBS</td><td>@Model.FBS</td><td>mg/dL</td><td>70-100</td></tr>
+                        <tr><td>Post Breakfast</td><td>@Model.PostBreakfast</td><td>mg/dL</td><td>&lt;140</td></tr>
+                        <tr><td>Post Lunch</td><td>@Model.PostLunch</td><td>mg/dL</td><td>&lt;140</td></tr>
+                        <tr><td>Post Dinner</td><td>@Model.PostDinner</td><td>mg/dL</td><td>&lt;140</td></tr>
+                        break;
+
+                    // ================= LIPID =================
+                   @*  case "LIPID":
+                        <tr><td>Total Cholesterol</td><td>@Model.TotalCholesterol</td><td>mg/dL</td><td>&lt;200</td></tr>
+                        <tr><td>Triglycerides</td><td>@Model.Triglycerides</td><td>mg/dL</td><td>&lt;150</td></tr>
+                        <tr><td>HDL</td><td>@Model.HDL</td><td>mg/dL</td><td>&gt;40</td></tr>
+                        <tr><td>LDL</td><td>@Model.LDL</td><td>mg/dL</td><td>&lt;130</td></tr>
+                        <tr><td>VLDL</td><td>@Model.VLDL</td><td>mg/dL</td><td>5-40</td></tr>
+                        <tr><td>Chol/HDL Ratio</td><td>@Model.CholHDLRatio</td><td>-</td><td>&lt;5</td></tr>
+                        <tr><td>Non-HDL</td><td>@Model.NonHDLChol</td><td>mg/dL</td><td>&lt;160</td></tr>
+                        break; *@
+
+                    case "LIPID":
+
+                        <tr><td>Total Cholesterol</td><td class="@GetFlag(Model.TotalCholesterol, null, 200)">@Model.TotalCholesterol</td><td>mg/dL</td><td>&lt;200</td><td>@GetRemark(Model.TotalCholesterol, null, 200)</td></tr>
+
+                        <tr><td>Triglycerides</td><td class="@GetFlag(Model.Triglycerides, null, 150)">@Model.Triglycerides</td><td>mg/dL</td><td>&lt;150</td><td>@GetRemark(Model.Triglycerides, null, 150)</td></tr>
+
+                        <tr><td>HDL</td><td class="@(Model.HDL != null && Model.HDL < 40 ? "low" : Model.HDL != null && Model.HDL > 60 ? "high" : "normal")">@Model.HDL</td><td>mg/dL</td><td>40-60</td><td>@(Model.HDL != null && Model.HDL < 40 ? "Low" : Model.HDL != null && Model.HDL > 60 ? "High" : "Normal")</td></tr>
+
+                        <tr><td>LDL</td><td class="@GetFlag(Model.LDL, null, 130)">@Model.LDL</td><td>mg/dL</td><td>&lt;130</td><td>@GetRemark(Model.LDL, null, 130)</td></tr>
+
+                        <tr><td>VLDL</td><td class="@GetFlag(Model.VLDL, 5, 40)">@Model.VLDL</td><td>mg/dL</td><td>5-40</td><td>@GetRemark(Model.VLDL, 5, 40)</td></tr>
+
+                        <tr><td>Chol/HDL Ratio</td><td class="@GetFlag(Model.CholHDLRatio, null, 5)">@Model.CholHDLRatio</td><td>-</td><td>&lt;5</td><td>@GetRemark(Model.CholHDLRatio, null, 5)</td></tr>
+
+                        <tr><td>Non-HDL</td><td class="@GetFlag(Model.NonHDLChol, null, 160)">@Model.NonHDLChol</td><td>mg/dL</td><td>&lt;160</td><td>@GetRemark(Model.NonHDLChol, null, 160)</td></tr>
+
+                        break;
+
+                    // ================= ELECTROLYTES =================
+                    case "ELEC":
+                        <tr><td>Sodium</td><td>@Model.Sodium</td><td>mmol/L</td><td>135-145</td></tr>
+                        <tr><td>Potassium</td><td>@Model.Potassium</td><td>mmol/L</td><td>3.5-5.0</td></tr>
+                        break;
+
+                    // ================= CRP =================
+                    case "CRP":
+                        <tr><td>C Reactive Protein</td><td class="@GetFlag(Model.CReactiveProtein, null, 6.0)">@Model.CReactiveProtein</td><td>mg/L</td><td>&lt;6.0</td><td>@GetRemark(Model.CReactiveProtein, null, 6.0)</td></tr>
+                        break;
+
+                    case "CAL":
+                        <tr><td>Calcium</td><td class="@GetFlag(Model.SerumCalcium, 8.1, 11.0)">@Model.SerumCalcium</td><td>mg/dL</td><td>8.1-11.0</td><td>@GetRemark(Model.SerumCalcium, 8.1, 11.0)</td></tr>
+                        break;
+
+                    // ================= RENAL =================
+                    case "RENAL":
+                        <tr><td>Creatinine</td><td class="@GetFlag(Model.SerumCreatinine, 0.6, 1.3)">@Model.SerumCreatinine</td><td>mg/dL</td><td>0.6-1.3</td><td>@GetRemark(Model.SerumCreatinine, 0.6, 1.3)</td></tr>
+
+                        <tr><td>GFR</td><td class="@GetFlag(Model.GFR, 60, null)">@Model.GFR</td><td>mL/min/1.73 m²</td><td>&ge;60</td><td>@GetRemark(Model.GFR, 60, null)</td></tr>
+                        break;
+
+
+
+                   @*  case "LIVER":
+                        <tr><td>Total Protein</td><td>@Model.TotalProtein</td><td>g/L</td><td>60-81</td></tr>
+                        <tr><td>Albumin</td><td>@Model.Albumin</td><td>g/L</td><td>35-52</td></tr>
+                        <tr><td>Globulin</td><td>@Model.Globulin</td><td>g/L</td><td>25-35</td></tr>
+                        <tr><td>SGOT</td><td>@Model.SGOT</td><td>U/L</td><td>5-45</td></tr>
+                        <tr><td>SGPT</td><td>@Model.SGPT</td><td>U/L</td><td>&lt;=45</td></tr>
+                        <tr><td>Total Bilirubin</td><td>@Model.TotalBilirubin</td><td>mg/dL</td><td>&lt;=1.2</td></tr>
+                        <tr><td>Direct Bilirubin</td><td>@Model.DirectBilirubin</td><td>mg/dL</td><td>-</td></tr>
+                        <tr><td>Indirect Bilirubin</td><td>@Model.IndirectBilirubin</td><td>mg/dL</td><td>-</td></tr>
+                        <tr><td>ALP</td><td>@Model.AlkalinePhosphatase</td><td>U/L</td><td>70-340</td></tr>
+                        <tr><td>GGT</td><td>@Model.GGT</td><td>U/L</td><td>&lt;=60</td></tr>
+                        break; *@
+
+                    // ================= LIVER =================
+                    case "LIVER":
+
+                        <tr><td>Total Protein</td><td class="@GetFlag(Model.TotalProtein, 60, 81)">@Model.TotalProtein</td><td>g/L</td><td>60-81</td><td>@GetRemark(Model.TotalProtein, 60, 81)</td></tr>
+
+                        <tr><td>Albumin</td><td class="@GetFlag(Model.Albumin, 35, 52)">@Model.Albumin</td><td>g/L</td><td>35-52</td><td>@GetRemark(Model.Albumin, 35, 52)</td></tr>
+
+                        <tr><td>Globulin</td><td class="@GetFlag(Model.Globulin, 25, 35)">@Model.Globulin</td><td>g/L</td><td>25-35</td><td>@GetRemark(Model.Globulin, 25, 35)</td></tr>
+
+                        <tr><td>SGOT</td><td class="@GetFlag(Model.SGOT, 5, 45)">@Model.SGOT</td><td>U/L</td><td>5-45</td><td>@GetRemark(Model.SGOT, 5, 45)</td></tr>
+
+                        <tr><td>SGPT</td><td class="@GetFlag(Model.SGPT, null, 45)">@Model.SGPT</td><td>U/L</td><td>&lt;=45</td><td>@GetRemark(Model.SGPT, null, 45)</td></tr>
+
+                        <tr><td>Total Bilirubin</td><td class="@GetFlag(Model.TotalBilirubin, null, 1.2)">@Model.TotalBilirubin</td><td>mg/dL</td><td>&lt;=1.2</td><td>@GetRemark(Model.TotalBilirubin, null, 1.2)</td></tr>
+
+                        <tr><td>Direct Bilirubin</td><td>@Model.DirectBilirubin</td><td>mg/dL</td><td>-</td><td>-</td></tr>
+
+                        <tr><td>Indirect Bilirubin</td><td>@Model.IndirectBilirubin</td><td>mg/dL</td><td>-</td><td>-</td></tr>
+
+                        <tr><td>ALP</td><td class="@GetFlag(Model.AlkalinePhosphatase, 70, 340)">@Model.AlkalinePhosphatase</td><td>U/L</td><td>70-340</td><td>@GetRemark(Model.AlkalinePhosphatase, 70, 340)</td></tr>
+
+                        <tr><td>GGT</td><td class="@GetFlag(Model.GGT, null, 60)">@Model.GGT</td><td>U/L</td><td>&lt;=60</td><td>@GetRemark(Model.GGT, null, 60)</td></tr>
+
+                        break;
+
+                    // ================= ESR =================
+                    case "ESR":
+                        <tr><td>ESR</td><td class="@GetFlag(Model.ESR, 2, 20)">@Model.ESR</td><td>mm/1st hr</td><td>2-20</td><td>@GetRemark(Model.ESR, 2, 20)</td></tr>
+                        break;
+
+                    // ================= PT INR =================
+                    case "PTINR":
+                        <tr><td>Prothrombin Time</td><td class="@GetFlag(Model.ProthrombinTime, 11, 13.5)">@Model.ProthrombinTime</td><td>sec</td><td>11-13.5</td><td>@GetRemark(Model.ProthrombinTime, 11, 13.5)</td></tr>
+
+                        <tr><td>Control</td><td>@Model.ControlTime</td><td>sec</td><td>-</td><td>-</td></tr>
+
+                        <tr><td>INR</td><td class="@GetFlag(Model.INR, 0.8, 1.2)">@Model.INR</td><td>-</td><td>0.8-1.2</td><td>@GetRemark(Model.INR, 0.8, 1.2)</td></tr>
+                        break;
+
+                    // ================= FBC =================
+                    case "FBC":
+                        <tr><td>Hemoglobin</td><td class="@GetFlag(Model.Hemoglobin, 11.5, 16.5)">@Model.Hemoglobin</td><td>g/dL</td><td>11.5-16.5</td><td>@GetRemark(Model.Hemoglobin, 11.5, 16.5)</td></tr>
+
+                        <tr><td>PCV</td><td class="@GetFlag(Model.PCV, 35, 47)">@Model.PCV</td><td>%</td><td>35-47</td><td>@GetRemark(Model.PCV, 35, 47)</td></tr>
+
+                        <tr><td>WBC</td><td class="@GetFlag(Model.WBC, 4, 11)">@Model.WBC</td><td>x10³/µL</td><td>4-11</td><td>@GetRemark(Model.WBC, 4, 11)</td></tr>
+
+                        <tr><td>Platelets</td><td class="@GetFlag(Model.PlateletCount, 150, 450)">@Model.PlateletCount</td><td>x10³/µL</td><td>150-450</td><td>@GetRemark(Model.PlateletCount, 150, 450)</td></tr>
+
+                        <tr><td>Neutrophils</td><td class="@GetFlag(Model.Neutrophils, 20, 75)">@Model.Neutrophils</td><td>%</td><td>20-75</td><td>@GetRemark(Model.Neutrophils, 20, 75)</td></tr>
+
+                        <tr><td>Lymphocytes</td><td class="@GetFlag(Model.Lymphocytes, 15, 40)">@Model.Lymphocytes</td><td>%</td><td>15-40</td><td>@GetRemark(Model.Lymphocytes, 15, 40)</td></tr>
+
+                        <tr><td>Eosinophils</td><td class="@GetFlag(Model.Eosinophils, 1, 6)">@Model.Eosinophils</td><td>%</td><td>1-6</td><td>@GetRemark(Model.Eosinophils, 1, 6)</td></tr>
+
+                        <tr><td>Monocytes</td><td class="@GetFlag(Model.Monocytes, 1, 8)">@Model.Monocytes</td><td>%</td><td>1-8</td><td>@GetRemark(Model.Monocytes, 1, 8)</td></tr>
+
+                        <tr><td>Basophils</td><td class="@GetFlag(Model.Basophils, null, 2)">@Model.Basophils</td><td>%</td><td>&lt;2</td><td>@GetRemark(Model.Basophils, null, 2)</td></tr>
+
+                        <tr><td>RBC</td><td class="@GetFlag(Model.RBC, 3.8, 6.2)">@Model.RBC</td><td>x10⁶/µL</td><td>3.8-6.2</td><td>@GetRemark(Model.RBC, 3.8, 6.2)</td></tr>
+
+                        <tr><td>MCV</td><td class="@GetFlag(Model.MCV, 80, 95)">@Model.MCV</td><td>fL</td><td>80-95</td><td>@GetRemark(Model.MCV, 80, 95)</td></tr>
+
+                        <tr><td>MCH</td><td class="@GetFlag(Model.MCH, 27, 32)">@Model.MCH</td><td>pg</td><td>27-32</td><td>@GetRemark(Model.MCH, 27, 32)</td></tr>
+
+                        <tr><td>MCHC</td><td class="@GetFlag(Model.MCHC, 32, 36)">@Model.MCHC</td><td>g/dL</td><td>32-36</td><td>@GetRemark(Model.MCHC, 32, 36)</td></tr>
+                        break;
+
+                    // ================= FBC ADV =================
+                    case "FBCADV":
+
+                        <tr><td>Lymph %</td><td class="@GetFlag(Model.LymphPercent, 20.5, 51.1)">@Model.LymphPercent</td><td>%</td><td>20.5-51.1</td><td>@GetRemark(Model.LymphPercent, 20.5, 51.1)</td></tr>
+
+                        <tr><td>MID %</td><td class="@GetFlag(Model.MIDPercent, 1.7, 9.3)">@Model.MIDPercent</td><td>%</td><td>1.7-9.3</td><td>@GetRemark(Model.MIDPercent, 1.7, 9.3)</td></tr>
+
+                        <tr><td>Gran %</td><td class="@GetFlag(Model.GranPercent, 42.2, 75.2)">@Model.GranPercent</td><td>%</td><td>42.2-75.2</td><td>@GetRemark(Model.GranPercent, 42.2, 75.2)</td></tr>
+
+                        <tr><td>Lymph Abs</td><td class="@GetFlag(Model.LymphAbsolute, 1.2, 3.4)">@Model.LymphAbsolute</td><td>x10³/µL</td><td>1.2-3.4</td><td>@GetRemark(Model.LymphAbsolute, 1.2, 3.4)</td></tr>
+
+                        <tr><td>MID Abs</td><td class="@GetFlag(Model.MIDAbsolute, 0.1, 0.6)">@Model.MIDAbsolute</td><td>x10³/µL</td><td>0.1-0.6</td><td>@GetRemark(Model.MIDAbsolute, 0.1, 0.6)</td></tr>
+
+                        <tr><td>Gran Abs</td><td class="@GetFlag(Model.GranAbsolute, 1.4, 6.5)">@Model.GranAbsolute</td><td>x10³/µL</td><td>1.4-6.5</td><td>@GetRemark(Model.GranAbsolute, 1.4, 6.5)</td></tr>
+
+                        <tr><td>HCT</td><td class="@GetFlag(Model.HCT, 33, 50)">@Model.HCT</td><td>%</td><td>33-50</td><td>@GetRemark(Model.HCT, 33, 50)</td></tr>
+
+                        <tr><td>RDW-CV</td><td class="@GetFlag(Model.RDW_CV, 13, 43)">@Model.RDW_CV</td><td>%</td><td>13-43</td><td>@GetRemark(Model.RDW_CV, 13, 43)</td></tr>
+
+                        <tr><td>RDW-SD</td><td class="@GetFlag(Model.RDW_SD, 9, 54)">@Model.RDW_SD</td><td>fL</td><td>9-54</td><td>@GetRemark(Model.RDW_SD, 9, 54)</td></tr>
+
+                        <tr><td>PLT</td><td class="@GetFlag(Model.PLT, 150, 450)">@Model.PLT</td><td>x10³/µL</td><td>150-450</td><td>@GetRemark(Model.PLT, 150, 450)</td></tr>
+
+                        <tr><td>MPV</td><td class="@GetFlag(Model.MPV, 7.8, 11)">@Model.MPV</td><td>fL</td><td>7.8-11</td><td>@GetRemark(Model.MPV, 7.8, 11)</td></tr>
+
+                        <tr><td>PDW</td><td class="@GetFlag(Model.PDW, 9, 17)">@Model.PDW</td><td>%</td><td>9-17</td><td>@GetRemark(Model.PDW, 9, 17)</td></tr>
+
+                        <tr><td>PCT</td><td class="@GetFlag(Model.PCT, 0.17, 0.35)">@Model.PCT</td><td>%</td><td>0.17-0.35</td><td>@GetRemark(Model.PCT, 0.17, 0.35)</td></tr>
+
+                        break;
+
+                    // ================= URINE =================
+                    case "URINE":
+
+                        <tr><td>Color</td><td>@Model.UrineColor</td><td>-</td><td>Pale Yellow</td><td>-</td></tr>
+
+                        <tr><td>Transparency</td><td>@Model.Transparency</td><td>-</td><td>Clear / Slightly Turbid</td><td>-</td></tr>
+
+                        <tr><td>Mucous</td><td>@Model.Mucous</td><td>-</td><td>Nil</td><td>-</td></tr>
+
+                        <tr><td>Specific Gravity</td><td class="@GetFlag(Model.SpecificGravity, 1.005, 1.030)">@Model.SpecificGravity</td><td>-</td><td>1.005 – 1.030</td><td>@GetRemark(Model.SpecificGravity, 1.005, 1.030)</td></tr>
+
+                        <tr><td>Reaction (pH)</td><td>@Model.Reaction</td><td>-</td><td>Acidic (pH 4.5 – 8)</td><td>-</td></tr>
+
+                        <tr><td>Protein</td><td>@Model.UrineProtein</td><td>-</td><td>Negative / Trace</td><td>-</td></tr>
+
+                        <tr><td>Reducing Substances</td><td>@Model.ReducingSubstances</td><td>-</td><td>Negative</td><td>-</td></tr>
+
+                        <tr><td>Ketones</td><td>@Model.KetoneBodies</td><td>-</td><td>Negative</td><td>-</td></tr>
+
+                        <tr><td>Bilirubin</td><td>@Model.UrineBilirubin</td><td>-</td><td>Negative</td><td>-</td></tr>
+
+                        <tr><td>Urobilinogen</td><td>@Model.Urobilinogen</td><td>-</td><td>Normal (0.2–1.0 EU/dL)</td><td>-</td></tr>
+
+                        <tr><td>Pus Cells</td><td class="@GetFlag(string.IsNullOrEmpty(Model.PusCells) ? (double?)null : Convert.ToDouble(Model.PusCells), 0, 5)">@Model.PusCells</td><td>/HPF</td><td>0-5</td><td>@GetRemark(string.IsNullOrEmpty(Model.PusCells) ? (double?)null : Convert.ToDouble(Model.PusCells), 0, 5)</td></tr>
+
+                        <tr><td>Red Cells</td><td class="@GetFlag(string.IsNullOrEmpty(Model.RedCells) ? (double?)null : Convert.ToDouble(Model.RedCells), 0, 2)">@Model.RedCells</td><td>/HPF</td><td>0-2</td><td>@GetRemark(string.IsNullOrEmpty(Model.RedCells) ? (double?)null : Convert.ToDouble(Model.RedCells), 0, 2)</td></tr>
+
+                        <tr><td>Epithelial Cells</td><td>@Model.EpithelialCells</td><td>/HPF</td><td>Few</td><td>-</td></tr>
+
+                        <tr><td>Organisms</td><td>@Model.Organisms</td><td>-</td><td>Nil / Few</td><td>-</td></tr>
+
+                        <tr><td>Crystals</td><td>@Model.Crystals</td><td>-</td><td>Nil</td><td>-</td></tr>
+
+                        <tr><td>Casts</td><td>@Model.Casts</td><td>-</td><td>Nil</td><td>-</td></tr>
+
+                        <tr><td>Yeast Cells</td><td>@Model.YeastCells</td><td>-</td><td>Nil</td><td>-</td></tr>
+
+                        break;
+
+                    // ================= HCG =================
+                    case "HCG":
+                        <tr><td>Pregnancy Test (HCG)</td><td>@(Model.IsPregnant == true ? "Positive" : "Negative")</td><td>-</td><td>Negative</td><td>@(Model.IsPregnant == true ? "Positive" : "Normal")</td></tr>
+                        break;
+
                 }
-                     
-            </select>
-            </div>
-            <p id="result"></p>
-           @*  <br /> *@
-            <div id="dynamicFields">
-                <!-- Dynamic fields will appear here -->
+
+            </tbody>
+        </table>
+
+        <!-- FOOTER -->
+        @* <div class="footer">
+            <div>
+                <div class="signature-line"></div>
+                Medical Laboratory Technologist
             </div>
 
-        </div>
-       @*  <div class="col-5 offset-2">
-            <button type="submit">Generate PDF</button>
-            <a asp-action="GeneratePdf" class="btn-primary btn form-control ">Download</a>
+            
         </div> *@
-        
-        <div class="footer">
-            <p>This is a computer-generated report and does not require a signature.</p>
-        </div>
-        @* <button type="submit" class="btn btn-primary">Submit</button> *@
+
     </div>
-    
-
-  @*   <button type="submit">Generate PDF</button>
-    <button type="submit" class="btn btn-primary">Submit</button> *@
-
-   @*  <div class="container">
-        <div class="card">
-            <div class="card-header bg-dark text-light ml-0">
-                <div class="container row">
-                    <div class="col-12 d-none d-md-block col-md-6 pb-1 text-warning h3">
-                        Order Summary
-                    </div>
-                    <div class="col-12 col-md-4 offset-md-2 text-right mt-2">
-                        <a asp-action="OrderIndex" class="btn btn-warning form-control btn-sm">Back to Orders</a>
-                        <button type="submit">Generate PDF</button>
-                    </div>
-                </div>
-            </div>
-            <div class="card-body">
-                <div class="container rounded p-2">
-                    <div class="row">
-                        <div class="col-12 col-lg-6 pb-4">
-                            <div class="row my-1">
-                                <div class="col-3">Patient Name</div>
-                                <div class="col-9">
-                                    <input asp-for="PatientName" readonly class="form-control" />
-                                </div>
-                            </div>
-
-                            <div class="row my-1">
-                                <div class="col-3">Phone</div>
-                                <div class="col-9">
-                                    <input asp-for="Phone" readonly class="form-control" />
-                                </div>
-                            </div>
-
-                            <div class="row my-1">
-                                <div class="col-3">Email</div>
-                                <div class="col-9">
-                                    <input asp-for="Email" readonly class="form-control" />
-                                </div>
-                            </div>
-
-                            <div class="row my-1">
-                                <div class="col-3">TotalCholesterol</div>
-                                <div class="col-9">
-                                    <input asp-for="TotalCholesterol" readonly class="form-control" />
-                                </div>
-                            </div>
-
-                             <div class="row my-1">
-                                <div class="col-3">LabNumber</div>
-                                <div class="col-9">
-                                    <input asp-for="LabNumber" readonly class="form-control" />
-                                </div>
-                            </div> *@
-
-                           @*  <div class="row my-1">
-                                <div class="col-3">Order Date</div>
-                                <div class="col-9">
-                                    <input value="@Model.OrderTime.ToShortDateString()" readonly class="form-control" />
-                                </div>
-                            </div> *@
-
-                           @*  @if (User.IsInRole(SD.RoleAdmin))
-                            {
-                                <div class="row my-1">
-                                    <div class="col-3">Session ID</div>
-                                    <div class="col-9">
-                                        <input asp-for="StripeSessionId" readonly class="form-control" />
-                                    </div>
-                                </div>
-                                <div class="row my-1">
-                                    <div class="col-3">Payment Intent ID</div>
-                                    <div class="col-9">
-                                        <input asp-for="PaymentIntentId" readonly class="form-control" />
-                                    </div>
-                                </div>
-                            } *@
-                           @*  <div class="row my-1">
-                                <div class="col-3">Order Status</div>
-                                <div class="col-9">
-                                    <input asp-for="Status" readonly class="form-control" />
-                                </div>
-                            </div> *@
-
-                        </div>
-                       @*  <div class="col-12 col-lg-5 offset-lg-1">
-                            <h4 class="d-flex justify-content-between align-items-center mb-3">
-                                <span class="text-warning">Order Summary</span>
-                            </h4>
-                            <label class="bg-info text-dark text-center form-control my-2">Order Status - @Model.Status</label>
-
-                            <ul class="list-group mb-3">
-                                @foreach (var detail in Model.OrderDetails)
-                                {
-                                    <li class="list-group-item d-flex justify-content-between p-2">
-                                        <div class="row container">
-                                            <div class="col-8">
-
-                                                <h6 class="my-0 text-white-50">@detail.TesttName</h6>
-                                                <small class="text-muted">Price : @detail.Price.ToString("c")</small><br />
-                                                <small class="text-muted">Quantity : @detail.Count</small>
-                                            </div>
-                                            <div class="col-4 text-end">
-                                                <p class="text-success">@((detail.Count * detail.Price).ToString("c"))</p>
-                                                <a asp-action="Result" asp-controller="Cart" class="btn btn-success form-control">Edit </a>
-                                            </div>
-                                        </div>
-                                    </li>
-                                }
-                                <li class="list-group-item bg-primary">
-                                    <div class="row container">
-                                        <div class="col-6">
-                                            <h5 class="text-white">TOTAL </h5>
-                                        </div>
-                                        <div class="col-6 text-end">
-                                            <h5 class="text-white">@Model.OrderTotal.ToString("c")</h5>
-                                        </div>
-                                    </div>
-                                </li>
-                            </ul>
-                            <div class="form-group">
-                                <label asp-for="TotalCholesterol" class="control-label"></label>
-                                <input asp-for="TotalCholesterol" class="form-control" />
-                                <span asp-validation-for="TotalCholesterol" class="text-danger"></span>
-                            </div>
-
-                           
-                            @if (User.IsInRole(SD.RoleAdmin))
-                            {
-                                @if (Model.Status == SD.Status_Approved)
-                                {
-                                    <button asp-action="OrderReadyForPickup" asp-route-orderId="@Model.OrderHeaderId" type="submit" class="btn btn-success form-control my-1">Ready for Pickup</button>
-                                }
-                                @if (Model.Status == SD.Status_ReadyForPickup)
-                                {
-                                    <button asp-action="CompleteOrder" asp-route-orderId="@Model.OrderHeaderId" type="submit" class="btn btn-success form-control my-1">Complete Order</button>
-                                }
-
-                                if (Model.Status == SD.Status_Approved || Model.Status == SD.Status_ReadyForPickup)
-                                {
-                                    <button asp-action="CancelOrder" asp-route-orderId="@Model.OrderHeaderId" type="submit" class="btn btn-danger form-control my-1">Cancel Order</button>
-                                }
-                            }
-                            
-                        </div> *@
-                @*         <button type="submit">Generate PDF</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <button type="submit">Generate PDF</button> *@
-    @* <a asp-action="GeneratePdf" class="btn-primary btn form-control ">Download</a> *@
-</form>
-
-@section Scripts {
-    <script>
-
-        
-                  const select = document.getElementById("testType");
-        const result = document.getElementById("result");
-
-        select.addEventListener("change", function () {
-            if (select.value) {
-                result.textContent = "Test Type :           " + select.value;
-                select.style.display = "none"; // 👈 Hides the select box
-            }
-        });
-    
-
-
-
-
-        function showTestFields() {
-            const testType = document.getElementById("testType").value;
-            const dynamicFields = document.getElementById("dynamicFields");
-            dynamicFields.innerHTML = ""; // Clear previous fields
-
-            if (testType === "Lipid") {
-                dynamicFields.innerHTML = `
-
-                                       <table class="results">
-                    <thead>
-                        <tr>
-                            <th>Test</th>
-                            <th>Result (mg/dL)</th>
-                            <th>Reference Range (mg/dL)</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Total Cholesterol</td>
-                            <td>@Model.TotalCholesterol</td>
-                            <td>125-200</td>
-                        </tr>
-                        <tr>
-                            <td>HDL Cholesterol</td>
-                            <td>@Model.HDL</td>
-                            <td>40-60</td>
-                        </tr>
-                        <tr>
-                            <td>LDL Cholesterol</td>
-                            <td>@Model.LDL</td>
-                            <td>100-129</td>
-                        </tr>
-                        <tr>
-                            <td>Triglycerides</td>
-                            <td>@Model.Triglycerides</td>
-                            <td>50-150</td>
-                        </tr>
-                        <tr>
-                            <td>VLDL</td>
-                            <td>30</td>
-                            <td>5-40</td>
-                        </tr>
-                    </tbody>
-                </table>
-                                        `;
-            } else if (testType === "FBC") {
-                dynamicFields.innerHTML = `
-
-                                              <table class="results">
-                            <thead>
-                                
-                                    <th>Test</th>
-                                    <th>Result (mg/dL)</th>
-                                    <th>Reference Range (mg/dL)</th>
-                                
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>WBC</td>
-                                            <td>@Model.WBC</td>
-                                    <td>4.0-10.0</td>
-                                </tr>
-                                <tr>
-                                    <td>Neutrophils</td>
-                                            <td>@Model.Neutrophils</td>
-                                    <td>40-80</td>
-                                </tr>
-                                <tr>
-                                    <td>Lymphocytes</td>
-                                            <td>@Model.Lymphocytes</td>
-                                    <td>20-40</td>
-                                </tr>
-                                <tr>
-                                    <td>Eosinophils</td>
-                                            <td>@Model.Eosinophils</td>
-                                    <td>1-6</td>
-                                </tr>
-                                <tr>
-                                    <td>RBC</td>
-                                                    <td>@Model.RBC</td>
-                                    <td>3.8-4.8</td>
-                                </tr>
-                                         <tr>
-                                            <td>HB</td>
-                                                            <td>@Model.RBC</td>
-                                            <td>3.8-4.8</td>
-                                        </tr>
-
-                                                 <tr>
-                                            <td>HCT</td>
-                                                            <td>@Model.Hb</td>
-                                            <td>3.8-4.8</td>
-                                        </tr>
-
-                                                 <tr>
-                                            <td>MCV</td>
-                                                            <td>@Model.HCT</td>
-                                            <td>3.8-4.8</td>
-                                        </tr>
-                                                 <tr>
-                                            <td>MCH</td>
-                                                            <td>@Model.MCV</td>
-                                            <td>3.8-4.8</td>
-                                        </tr>
-                                                 <tr>
-                                            <td>Platelet Count</td>
-                                                            <td>@Model.MCH</td>
-                                            <td>3.8-4.8</td>
-                                        </tr>
-                                                 <tr>
-                                                    <td>Platelet Count</td>
-                                                                    <td>@Model.PlateletCount</td>
-                                                    <td>3.8-4.8</td>
-                                                </tr>
-                                                 <tr>
-                                                    <td>Platelet Count</td>
-                                                                    <td>@Model.MPV</td>
-                                                    <td>3.8-4.8</td>
-                                                </tr>
-                            </tbody>
-                        </table>
-
-                                        `;
-            } else if (testType === "LFT") {
-                dynamicFields.innerHTML = `
-                                                     <table class="results">
-                            <thead>
-                                <tr>
-                                    <th>Test</th>
-                                    <th>Result </th>
-                                    <th>Units </th>
-                                    <th>Reference Range </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                            <td>ALP </td>
-                                            <td>@Model.ALP </td>
-                                            <td>U/L </td>
-                                            <td>35-110</td>
-                                </tr>
-                                <tr>
-                                            <td>GGT  </td>
-                                            <td>@Model.GGT  </td>
-                                            <td>U/L </td>
-                                            <td>5-50</td>
-                                </tr>
-                                <tr>
-                                            <td>LD   </td>
-                                            <td>@Model.LD   </td>
-                                            <td>U/L </td>
-                                            <td>120-250</td>
-                                </tr>
-                                <tr>
-                                            <td>AST    </td>
-                                            <td>@Model.AST    </td>
-                                            <td>U/L </td>
-                                            <td>10-40</td>
-                                </tr>
-                                <tr>
-                                            <td>ALT     </td>
-                                            <td>@Model.ALT     </td>
-                                            <td>U/L </td>
-                                            <td>5-40</td>
-                                </tr>
-                                <tr>
-                                            <td>TotalProtein      </td>
-                                            <td>@Model.TotalProtein      </td>
-                                            <td>U/L </td>
-                                            <td>68-85</td>
-                                </tr>
-                                <tr>
-                                            <td>Albumin       </td>
-                                            <td>@Model.Albumin       </td>
-                                            <td>U/L </td>
-                                            <td>39-50</td>
-                                </tr>
-
-                                <tr>
-                                            <td>Globulin        </td>
-                                            <td>@Model.Globulin        </td>
-                                            <td>U/L </td>
-                                            <td>23-39</td>
-                                </tr>
-                            </tbody>
-                        </table>
-
-
-                                        `;
-            } else if (testType === "UFR") {
-                dynamicFields.innerHTML = `
-                                                             <table class="results">
-                                    <thead>
-                                        <tr>
-                                            <th>Test</th>
-                                            <th>Result </th>
-                                            <th>Units </th>
-                                            
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                                            <td>Color  </td>
-                                                            <td>@Model.Color  </td>
-                                                            <td></td>
-                                                            
-                                                   
-                                        </tr>
-                                        <tr>
-                                                            <td>SpecificGravity   </td>
-                                                            <td>@Model.SpecificGravity   </td>
-                                                            <td></td>
-                                                           
-                                                   
-                                        </tr>
-                                        <tr>
-                                                            <td>Appearance    </td>
-                                                            <td>@Model.Appearance    </td>
-                                                            <td></td>
-                                                           
-                                                   
-                                        </tr>
-                                        <tr>
-                                                            <td>PH     </td>
-                                                            <td>@Model.PH     </td>
-                                                            <td></td>
-                                                           
-                                                   
-
-                                        </tr>
-                                        <tr>
-                                                            <td>Protien      </td>
-                                                            <td>@Model.Protien      </td>
-                                                            
-                                                            
-                                                            <td>mg/dL </td>
-                                                           
-                                                   
-                                        </tr>
-                                        <tr>
-                                                            <td>Urobilinogen       </td>
-                                                            <td>@Model.Urobilinogen       </td>
-                                                            
-                                                            <td>mg/dL </td>
-                                                            
-                                                   
-                                        </tr>
-                                        <tr>
-                                                            <td>Ketones        </td>
-                                                            <td>@Model.Ketones        </td>
-                                                            <td>   </td>
-                                                           
-                                                   
-                                                    
-                                        </tr>
-
-                                        <tr>
-                                                            <td>BileSalt         </td>
-                                                            <td>@Model.BileSalt         </td>
-                                                            <td>         </td>
-                                                           
-                                                   
-                                                   
-                                        </tr>
-
-                                                                                        <tr>
-                                                                            <td>Bilirubin          </td>
-                                                                            <td>@Model.Bilirubin          </td>
-                                                                            <td>          </td>
-                                                                           
-                                                           
-                                                </tr>
-
-                                                                                        <tr>
-                                                                            <td>Nitrite          </td>
-                                                                            <td>@Model.Nitrite          </td>
-                                                                            <td>          </td>
-                                                                           
-                                                           
-                                                </tr>
-
-                                                                                                <tr>
-                                                                            <td>PusCells          </td>
-                                                                            <td>@Model.PusCells          </td>
-                                                                            
-                                                            <td>/HPF </td>
-                                                           
-                                                           
-                                                </tr>
-
-                                                                                        <tr>
-                                                                            <td>RedBloodCells          </td>
-                                                                            <td>@Model.RedBloodCells          </td>
-                                                                            
-                                                            <td>/HPF </td>
-                                                           
-                                                            
-                                                </tr>
-
-                                                                                    <tr>
-                                                                            <td>EpithelialCells          </td>
-                                                                            <td>@Model.EpithelialCells          </td>
-                                                                            
-                                                            <td>/LPF </td>
-                                                           
-                                                            
-                                                </tr>
-
-                                                                                <tr>
-                                                                            <td>Casts          </td>
-                                                                            <td>@Model.Casts          </td>
-                                                                            
-                                                            <td>/LPF </td>
-                                                           
-                                                            
-                                                </tr>
-
-                                                                                    <tr>
-                                                                            <td>Crystals          </td>
-                                                                            <td>@Model.Crystals          </td>
-                                                                            
-                                                            <td>/HPF </td>
-                                                           
-                                                           
-                                                </tr>
-
-                                                 <tr>
-                                                                                            <td>Bacteria           </td>
-                                                                                            <td>@Model.Bacteria           </td>
-                                                                    <td>U/L </td>
-                                                                    
-                                                        </tr>
-
-                                    </tbody>
-                                        </table> 
-
-
-                                                `;
-            } else if (testType === "RheumatoidFactor") {
-                dynamicFields.innerHTML = `
-                                                             <table class="results">
-                                    <thead>
-                                        <tr>
-                                            <th>Test</th>
-                                            <th>Result </th>
-                                            <th>Units </th>
-                                            <th>Reference Range </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                                            <td>RheumatoidFactor </td>
-                                                            <td>@Model.RheumatoidFactor </td>
-                                                    <td>U/L </td>
-                                                    <td>35-110</td>
-                                        </tr>
-                                       
-                                    </tbody>
-                                </table>
-
-
-                                                        `;
-
-            } else if (testType === "CReactiveProtein") {
-                dynamicFields.innerHTML = `
-                                                                     <table class="results">
-                                            <thead>
-                                                <tr>
-                                                    <th>Test</th>
-                                                    <th>Result </th>
-                                                    <th>Units </th>
-                                                    <th>Reference Range </th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                                            <td>CReactiveProtein  </td>
-                                                                            <td>@Model.CReactiveProtein  </td>
-                                                            <td>U/L </td>
-                                                            <td>35-110</td>
-                                                </tr>
-
-                                            </tbody>
-                                        </table>
-
-
-                                                                `;
-            } else if (testType === "ESR") {
-                dynamicFields.innerHTML = `
-                                                                             <table class="results">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>Test</th>
-                                                            <th>Result </th>
-                                                            <th>Units </th>
-                                                            <th>Reference Range </th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr>
-                                                                                            <td>Esr1stHour   </td>
-                                                                                            <td>@Model.Esr1stHour   </td>
-                                                                    <td>U/L </td>
-                                                                    <td>35-110</td>
-                                                        </tr>
-
-                                                    </tbody>
-                                                </table>
-
-
-                                                                        `;
-            } else if (testType === "SCREATININE") {
-                dynamicFields.innerHTML = `
-                                                                             <table class="results">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>Test</th>
-                                                            <th>Result </th>
-                                                            <th>Units </th>
-                                                            <th>Reference Range </th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr>
-                                                                                            <td>SCreatinine   </td>
-                                                                                            <td>@Model.SCreatinine   </td>
-                                                                    <td>U/L </td>
-                                                                    <td>35-110</td>
-                                                        </tr>
-
-                                                    </tbody>
-                                                </table>
-
-
-                                                                        `;
-            } else if (testType === "") {
-                dynamicFields.innerHTML = `
-                                                                             <table class="results">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>Test</th>
-                                                            <th>Result </th>
-                                                            <th>Units </th>
-                                                            <th>Reference Range </th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr>
-                                                                                            <td>EstimateGfr   </td>
-                                                                                            <td>@Model.EstimateGfr   </td>
-                                                                    <td>U/L </td>
-                                                                    <td>35-110</td>
-                                                        </tr>
-
-                                                    </tbody>
-                                                </table>
-
-
-                                                                        `;
-            } else if (testType === "S.G.O.T.(A.S.T)") {
-                dynamicFields.innerHTML = `
-                                                                             <table class="results">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>Test</th>
-                                                            <th>Result </th>
-                                                            <th>Units </th>
-                                                            <th>Reference Range </th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr>
-                                                                                            <td>SgotAST   </td>
-                                                                                            <td>@Model.SgotAST   </td>
-                                                                    <td>U/L </td>
-                                                                    <td>35-110</td>
-                                                        </tr>
-
-                                                    </tbody>
-                                                </table>
-
-
-                                                                        `;
-            } else if (testType === "S.G.P.T.(A.L.T)") {
-                dynamicFields.innerHTML = `
-                                                                                     <table class="results">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th>Test</th>
-                                                                    <th>Result </th>
-                                                                    <th>Units </th>
-                                                                    <th>Reference Range </th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                <tr>
-                                                                                                            <td>SgptALT    </td>
-                                                                                                            <td>@Model.SgptALT    </td>
-                                                                            <td>U/L </td>
-                                                                            <td>35-110</td>
-                                                                </tr>
-
-                                                            </tbody>
-                                                        </table>
-
-
-                                                                                `;
-            } else if (testType === "BloodGlucoseR") {
-                dynamicFields.innerHTML = `
-                                                                                     <table class="results">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th>Test</th>
-                                                                    <th>Result </th>
-                                                                    <th>Units </th>
-                                                                    <th>Reference Range </th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                <tr>
-                                                                                                            <td>RandomBloodSugar    </td>
-                                                                                                            <td>@Model.RandomBloodSugar    </td>
-                                                                            <td>U/L </td>
-                                                                            <td>35-110</td>
-                                                                </tr>
-
-                                                            </tbody>
-                                                        </table>
-
-
-                                                                                `;
-            } else if (testType === "WIDAL(SAT)") {
-                dynamicFields.innerHTML = `
-                                                                                     <table class="results">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th>Test</th>
-                                                                    <th>Result </th>
-                                                                    <th>Units </th>
-                                                                    <th>Reference Range </th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                <tr>
-                                                                                                                    <td>SalmonellaTyphl     </td>
-                                                                                                                    <td>@Model.SalmonellaTyphl     </td>
-                                                                            <td>U/L </td>
-                                                                            <td>35-110</td>
-                                                                </tr>
-                                                                        <tr>
-                                                                                                                            <td>SalmonellaTyphlH     </td>
-                                                                                                                            <td>@Model.SalmonellaTyphlH     </td>
-                                                                                    <td>U/L </td>
-                                                                                    <td>35-110</td>
-                                                                        </tr>
-                                                                <tr>
-                                                                                                                                    <td>SalmonellaParaTyphlI      </td>
-                                                                                                                                    <td>@Model.SalmonellaParaTyphlI      </td>
-                                                                                    <td>U/L </td>
-                                                                                    <td>35-110</td>
-                                                                        </tr>
-
-                                                            </tbody>
-                                                        </table>
-
-
-                                                                                `;
-            } else if (testType === "Haemoglobin") {
-                dynamicFields.innerHTML = `
-                                                                                     <table class="results">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th>Test</th>
-                                                                    <th>Result </th>
-                                                                    <th>Units </th>
-                                                                    <th>Reference Range </th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                <tr>
-                                                                                                            <td>Haemoglobin    </td>
-                                                                                                            <td>@Model.Haemoglobin    </td>
-                                                                            <td>U/L </td>
-                                                                            <td>35-110</td>
-                                                                </tr>
-
-                                                            </tbody>
-                                                        </table>
-
-
-                                                                                `;
-            } else if (testType === "BloodGlucoseF") {
-                dynamicFields.innerHTML = `
-                                                                                             <table class="results">
-                                                                    <thead>
-                                                                        <tr>
-                                                                            <th>Test</th>
-                                                                            <th>Result </th>
-                                                                            <th>Units </th>
-                                                                            <th>Reference Range </th>
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody>
-                                                                        <tr>
-                                                                                                                            <td>BloodGlucose     </td>
-                                                                                                                                <td>@Model.FastingBloodGlucose     </td>
-                                                                                    <td>U/L </td>
-                                                                                    <td>35-110</td>
-                                                                        </tr>
-                                                                                 <tr>
-                                                                                                                                            <td>BreakFastSample      </td>
-                                                                                                                                            <td>@Model.BreakFastSample      </td>
-                                                                                            <td>U/L </td>
-                                                                                            <td>35-110</td>
-                                                                                </tr>
-                                                                            <tr>
-                                                                                                                                                            <td>LunchSample       </td>
-                                                                                                                                                            <td>@Model.LunchSample       </td>
-                                                                                                    <td>U/L </td>
-                                                                                                    <td>35-110</td>
-                                                                                        </tr>
-                                                                                 <tr>
-                                                                                                                                                                            <td>DinnerSample        </td>
-                                                                                                                                                                            <td>@Model.DinnerSample        </td>
-                                                                                                            <td>U/L </td>
-                                                                                                            <td>35-110</td>
-                                                                                                </tr>
-
-                                                                    </tbody>
-                                                                </table>
-
-
-                                                                                        `;
-            } else if (testType === "") {
-                dynamicFields.innerHTML = `
-                                                                                             <table class="results">
-                                                                    <thead>
-                                                                        <tr>
-                                                                            <th>Test</th>
-                                                                            <th>Result </th>
-                                                                            <th>Units </th>
-                                                                            <th>Reference Range </th>
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody>
-                                                                        <tr>
-                                                                                                                    <td>Haemoglobin    </td>
-                                                                                                                    <td>@Model.Haemoglobin    </td>
-                                                                                    <td>U/L </td>
-                                                                                    <td>35-110</td>
-                                                                        </tr>
-
-                                                                    </tbody>
-                                                                </table>
-
-
-                                                                                        `;
-            } else if (testType === "") {
-                dynamicFields.innerHTML = `
-                                                                                             <table class="results">
-                                                                    <thead>
-                                                                        <tr>
-                                                                            <th>Test</th>
-                                                                            <th>Result </th>
-                                                                            <th>Units </th>
-                                                                            <th>Reference Range </th>
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody>
-                                                                        <tr>
-                                                                                                                    <td>Haemoglobin    </td>
-                                                                                                                    <td>@Model.Haemoglobin    </td>
-                                                                                    <td>U/L </td>
-                                                                                    <td>35-110</td>
-                                                                        </tr>
-
-                                                                    </tbody>
-                                                                </table>
-
-
-                                                                                        `;
-            }
-        }
-    </script>
-}
+</body>
+</html>
