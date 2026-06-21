@@ -17,6 +17,7 @@ Cloud-native deployment architecture
 The system follows a microservices architecture that enables independent deployment, scalability, and maintainability.
 
 🏗 Architecture
+
 Client Browser
        │
        ▼
