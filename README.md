@@ -436,10 +436,8 @@ in Visual Studio and start the solution.
 # 👨‍💻 Author
 
 **Prabath Kumarasinghe**
-
-* MSc Artificial Intelligence
 * Azure AI Engineer
-* ASP.NET Core Developer
+
 
 ---
 
