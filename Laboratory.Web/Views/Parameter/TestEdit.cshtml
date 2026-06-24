@@ -1,29 +1,81 @@
 ﻿@model ParameterDto
 
 <style>
-    .form-container {
-        display: flex;
-        gap: 30px;
+    /* Pathology-style compact form */
+    .pathology-card {
+        border: 1px solid #ccc;
+        padding: 16px;
+        border-radius: 6px;
+        background: #fff;
+        font-family: "Segoe UI", Arial, sans-serif;
+        font-size: 13px;
+        color: #222;
     }
 
-    .form-column {
+    .pathology-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 12px;
+    }
+
+    .pathology-header h2 {
+        margin: 0;
+        font-size: 16px;
+        letter-spacing: 0.5px;
+    }
+
+    .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px 24px;
+    }
+
+    .field-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 6px 0;
+        border-bottom: 0px solid transparent;
+    }
+
+    .field-label {
+        width: 140px;
+        font-weight: 600;
+        color: #333;
+        white-space: nowrap;
+    }
+
+    .field-input {
         flex: 1;
     }
 
-    .form-group {
-        margin-bottom: 15px;
-    }
-
-    label {
-        display: block;
-        margin-bottom: 5px;
-        white-space: nowrap;
-        font-weight: bold;
-    }
-
-    input, select {
+    .compact-input, .compact-select {
         width: 100%;
-        padding: 8px;
+        padding: 6px 8px;
+        border: 1px solid #cfcfcf;
+        border-radius: 3px;
+        font-size: 13px;
+    }
+
+    .test-type {
+        margin-top: 12px;
+        padding: 10px;
+        border: 1px solid #bbbbbb;
+        border-radius: 4px;
+        background: linear-gradient(#fff,#fafafa);
+    }
+
+    .submit-row {
+        text-align: center;
+        margin-top: 14px;
+    }
+
+    @@media (max-width: 768px) {
+        .form-grid {
+            grid-template-columns: 1fr;
+        }
+        .field-label { width: 120px; }
     }
 </style>
 
@@ -57,103 +109,126 @@
 
 <form method="post">
 
-    <!-- HEADER -->
-    <div class="card-header bg-secondary text-white text-center py-3">
-        <h2>Patient Details</h2>
-    </div>
+    <div class="pathology-card">
+        <div class="pathology-header">
+            <h2>Pathology - Patient Details</h2>
+            <div style="text-align:right; font-size:12px; color:#555;">Specimen: ____________<br/>Priority: ______</div>
+        </div>
 
-    <div class="border mt-4 p-4 rounded">
-        <div class="container">
-
-            <div class="form-container">
-
-                <!-- LEFT COLUMN -->
-                <div class="form-column">
-
-                    <div class="form-group">
-                        <label>Name</label>
-                        <input asp-for="PatientName" class="form-control" />
+        <div class="form-grid">
+            <div>
+                <div class="field-row">
+                    <div class="field-label">Name</div>
+                    <div class="field-input">
+                        <input asp-for="PatientName" class="compact-input" />
                     </div>
+                </div>
 
-                    <div class="form-group">
-                        <label>Age</label>
-                        <input asp-for="Age" id="age" class="form-control" readonly />
+                <div class="field-row">
+                    <div class="field-label">Date of Birth</div>
+                    <div class="field-input">
+                        <input asp-for="DOB" type="date" id="dob" class="compact-input" max='@DateTime.Now.ToString("yyyy-MM-dd")' />
                     </div>
+                </div>
 
-                    <div class="form-group">
-                        <label>Sex</label>
-                        <select asp-for="Sex" class="form-control">
-                            <option value="">-- Select --</option>
+                <div class="field-row">
+                    <div class="field-label">Age</div>
+                    <div class="field-input">
+                        <input asp-for="Age" id="age" class="compact-input" readonly />
+                    </div>
+                </div>
+
+                <div class="field-row">
+                    <div class="field-label">Sex</div>
+                    <div class="field-input">
+                        <select asp-for="Sex" class="compact-select">
+                            <option value="">--</option>
                             <option>Male</option>
                             <option>Female</option>
                         </select>
                     </div>
-
-                    <div class="form-group">
-                        <label>Ref Number</label>
-                        <input asp-for="RefNumber" class="form-control" />
-                    </div>
-
-                    <div class="form-group">
-                        <label>Lab Number</label>
-                        <input asp-for="LabNumber" class="form-control" />
-                    </div>
-
-                    <div class="form-group">
-                        <label>Date of Birth</label>
-                        <input asp-for="DOB" type="date" id="dob"
-                               class="form-control"
-                               max="@DateTime.Now.ToString("yyyy-MM-dd")" />
-                    </div>
-
                 </div>
 
-                <!-- RIGHT COLUMN -->
-                <div class="form-column">
-
-                    <div class="form-group">
-                        <label>Collected Date</label>
-                        <input asp-for="CollectedDate" type="date" class="form-control" />
+                <div class="field-row">
+                    <div class="field-label">Phone</div>
+                    <div class="field-input">
+                        <input asp-for="Phone" class="compact-input" />
                     </div>
-                    <div class="form-group">
-                        <label>Collected Date</label>
-                        <input asp-for="ReceivedDate" type="date" class="form-control" />
-                    </div>
-                    <div class="form-group">
-                        <label>Reported Date</label>
-                        <input asp-for="ReportedDate" type="date" class="form-control" />
-                    </div>
-
-                    <div class="form-group">
-                        <label>Test Type</label>
-                        <select asp-for="TestType" class="form-control">
-                            <option value="">-- Select Test --</option>
-                            @foreach (var t in testTypes)
-                            {
-                                <option value="@t.Value">@t.Text</option>
-                            }
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Phone</label>
-                        <input asp-for="Phone" class="form-control" />
-                    </div>
-
-                    <div class="form-group">
-                        <label>Email</label>
-                        <input asp-for="Email" class="form-control" />
-                    </div>
-
                 </div>
 
+                <div class="field-row">
+                    <div class="field-label">Email</div>
+                    <div class="field-input">
+                        <input asp-for="Email" class="compact-input" />
+                    </div>
+                </div>
+
+                <div class="field-row">
+                    <div class="field-label">Ref No.</div>
+                    <div class="field-input">
+                        <input asp-for="RefNumber" class="compact-input" />
+                    </div>
+                </div>
+
+                <div class="field-row">
+                    <div class="field-label">Lab No.</div>
+                    <div class="field-input">
+                        <input asp-for="LabNumber" class="compact-input" />
+                    </div>
+                </div>
             </div>
 
-            <!-- SUBMIT -->
-            <div class="text-center mt-4">
-                <button type="submit" class="btn btn-primary px-5">Save</button>
-            </div>
+            <div>
+                <div class="field-row">
+                    <div class="field-label">Collected</div>
+                    <div class="field-input">
+                        <input asp-for="CollectedDate" type="date" class="compact-input" />
+                    </div>
+                </div>
 
+                <div class="field-row">
+                    <div class="field-label">Received</div>
+                    <div class="field-input">
+                        <input asp-for="ReceivedDate" type="date" class="compact-input" />
+                    </div>
+                </div>
+
+                <div class="field-row">
+                    <div class="field-label">Reported</div>
+                    <div class="field-input">
+                        <input asp-for="ReportedDate" type="date" class="compact-input" />
+                    </div>
+                </div>
+
+                <div class="field-row" style="padding-top:18px;">
+                    <div class="field-label">Physician</div>
+                    <div class="field-input">
+                        <input type="text" class="compact-input" placeholder="Referring Physician" />
+                    </div>
+                </div>
+
+                <div class="field-row" style="padding-top:6px;">
+                    <div class="field-label">Notes</div>
+                    <div class="field-input">
+                        <input type="text" class="compact-input" placeholder="Short notes" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="test-type">
+            <label style="font-weight:700; display:block; margin-bottom:6px;">Test Type</label>
+            <select asp-for="TestType" class="compact-select" style="width:100%">
+                <option value="">-- Select Test --</option>
+                @foreach (var t in testTypes)
+                {
+                    <option value="@t.Value">@t.Text</option>
+                }
+            </select>
+        </div>
+
+        <div class="submit-row">
+            <button type="submit" class="btn btn-primary px-4">Save</button>
         </div>
     </div>
 

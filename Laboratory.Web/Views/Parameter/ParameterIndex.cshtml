@@ -1,61 +1,62 @@
 ﻿@model IEnumerable<ParameterDto>
 
-<div class="card shadow border-0 mt-4">
-	<div class="card-header bg-secondary bg-gradient ml-0 py-3">
-		<div class="row">
-			<div class="col-12 text-center">
-				<h1 class="text-white">Patient List</h1>
-			</div>
-		</div>
+@functions {
+	string FormatDate(object value) {
+		if (value == null) return "";
+		if (value is DateTime dt) return dt.ToString("yyyy-MM-dd");
+		return value.ToString();
+	}
+}
+
+@{
+	// prepare pagination and sort by CollectedDate descending (latest first)
+	var allItems = (Model ?? Enumerable.Empty<ParameterDto>()).OrderByDescending(m => m.CollectedDate).ToList();
+	int pageSize = 10;
+	int page = 1;
+	var qPage = Context.Request.Query["page"].FirstOrDefault();
+	if (!string.IsNullOrEmpty(qPage) && int.TryParse(qPage, out var p)) page = Math.Max(1, p);
+	int totalItems = allItems.Count();
+	int totalPages = totalItems == 0 ? 1 : (int)Math.Ceiling(totalItems / (double)pageSize);
+	var items = allItems.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+	string statusQuery = Context.Request.Query["status"].ToString();
+	string PageUrl(int targetPage) {
+		var path = Context.Request.Path;
+		if (!string.IsNullOrEmpty(statusQuery)) return path + $"?status={statusQuery}&page={targetPage}";
+		return path + $"?page={targetPage}";
+	}
+}
+
+@await Html.PartialAsync("_PathologyFormStyles")
+
+<div class="pathology-card mt-4">
+	<div class="pathology-header">
+		<h2 style="margin:0;">Patient List</h2>
+		<div></div>
 	</div>
-	<div class="card-body p-4">
-		<div class="row pb-3">
-			<div class="col-6">
-			</div>
-			<div class="col-6 text-end">
-				<a asp-action="TestEdit" class="btn btn-outline-primary"><i class="bi bi-plus-square"></i> Create New Test</a>
-			</div>
-			<div class="col-6 text-end">
-				<a asp-action="Lipid" class="btn btn-outline-warning mt-2 btn-sm">Edit</a>
-			</div>
-			<div class="col-6 text-end">
-				<a asp-action="OrderUpdate" asp-controller="Cart" class="btn btn-outline-warning mt-2 btn-sm">Cart</a>
-			</div>
-			<div class="col-6 text-end">
-				<a asp-action="Report" class="btn btn-outline-warning mt-2 btn-sm">check</a>
-			</div>
-			<div class="col-6 text-end">
-				<a asp-action="Result" asp-controller="Cart" class="btn btn-outline-warning mt-2 btn-sm">result</a>
-			</div>
+
+	<div class="p-3">
+		<div class="mb-3 text-end">
+			<a asp-action="TestEdit" class="btn btn-outline-primary"><i class="bi bi-plus-square"></i> Create New Test</a>
 		</div>
-		<table class="table">
+
+		<table class="table table-bordered table-striped table-compact">
 			<thead>
 				<tr>
-					<th>
-						Name
-					</th>
-					<th>
-						Ref Number
-					</th>
-					<th>
-						Lab Number
-					</th>
+					<th>Name</th>
+					<th>Collected Date</th>
+					<th>Ref Number</th>
+					<th>Lab Number</th>
 					<th></th>
 				</tr>
 			</thead>
 			<tbody>
-				@foreach (var item in Model)
+				@foreach (var item in items)
 				{
 					<tr>
-						<td>
-							@item.PatientName
-						</td>
-						<td>
-							@item.RefNumber
-						</td>
-						<td>
-							@item.LabNumber
-						</td>
+						<td>@item.PatientName</td>
+						<td>@FormatDate((object)item.CollectedDate)</td>
+						<td>@item.RefNumber</td>
+						<td>@item.LabNumber</td>
 						<td>
 							<a class="btn btn-success" asp-action="ResultUpdate" asp-route-testId="@item.Id">
 								<i class="bi bi-pencil-square"></i>
@@ -69,6 +70,18 @@
 			</tbody>
 		</table>
 
+		<div class="d-flex justify-content-between align-items-center mt-2">
+			<div class="small">Showing @(((page-1)*pageSize)+1) - @Math.Min(page*pageSize, totalItems) of @totalItems</div>
+			<nav>
+				<ul class="pagination mb-0">
+					<li class="page-item @(page == 1 ? "disabled" : "")"><a class="page-link" href="@PageUrl(page-1)">Previous</a></li>
+					@for (int i = 1; i <= totalPages; i++)
+					{
+						<li class="page-item @(i == page ? "active" : "")"><a class="page-link" href="@PageUrl(i)">@i</a></li>
+					}
+					<li class="page-item @(page == totalPages ? "disabled" : "")"><a class="page-link" href="@PageUrl(page+1)">Next</a></li>
+				</ul>
+			</nav>
+		</div>
 	</div>
-
 </div>

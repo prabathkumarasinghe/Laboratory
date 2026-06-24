@@ -1,7 +1,9 @@
 ﻿@model ParameterDto
 
+@await Html.PartialAsync("_PathologyFormStyles")
+
 @{
-    ViewData["Title"] = "Pathology Test Entry";
+    ViewData["Title"] = "Pathology Result Update";
 
     var testTypes = new List<SelectListItem>
     {
@@ -29,77 +31,133 @@
 }
 
 <form asp-action="ResultUpdate">
-    <div class="container border p-4 rounded">
+    <div class="pathology-card">
+        <div class="pathology-header">
+            <h2>Pathology - Result Update</h2>
+            <div style="text-align:right; font-size:12px; color:#555;">Specimen: ______ &nbsp; Priority: _____</div>
+        </div>
 
-        <h2 class="text-center text-primary">Pathology Test Entry</h2>
+        <input type="hidden" asp-for="Id" />
 
-        <input hidden asp-for="Id" />
+        <div class="form-grid">
+            <div>
+                <div class="field-row">
+                    <div class="field-label">Name</div>
+                    <div class="field-input"><input asp-for="PatientName" class="compact-input" /></div>
+                </div>
 
-        <!-- Patient Info -->
-        <div class="row">
-            <div class="col-md-6">
-                <input asp-for="PatientName" class="form-control mb-2" placeholder="Name" />
-                <input asp-for="Age" class="form-control mb-2" placeholder="Age" />
-                <input asp-for="Sex" class="form-control mb-2" placeholder="Sex" />
-                <input asp-for="RefNumber" class="form-control mb-2" placeholder="Ref No" />
-                <input asp-for="LabNumber" class="form-control mb-2" placeholder="Lab No" />
-                <select asp-for="TestType" id="testType" class="form-control mb-2" onchange="showTestFields()">
+                <div class="field-row">
+                    <div class="field-label">Date of Birth</div>
+                    <div class="field-input"><input asp-for="DOB" type="date" id="dob" class="compact-input" /></div>
+                </div>
+
+                <div class="field-row">
+                    <div class="field-label">Age</div>
+                    <div class="field-input"><input asp-for="Age" id="age" class="compact-input" readonly /></div>
+                </div>
+
+                <div class="field-row">
+                    <div class="field-label">Sex</div>
+                    <div class="field-input"><select asp-for="Sex" class="compact-select"><option value="">--</option><option>Male</option><option>Female</option></select></div>
+                </div>
+
+                <div class="field-row">
+                    <div class="field-label">Phone</div>
+                    <div class="field-input"><input asp-for="Phone" class="compact-input" /></div>
+                </div>
+
+                <div class="field-row">
+                    <div class="field-label">Email</div>
+                    <div class="field-input"><input asp-for="Email" class="compact-input" /></div>
+                </div>
+
+                <div class="field-row">
+                    <div class="field-label">Ref No.</div>
+                    <div class="field-input"><input asp-for="RefNumber" class="compact-input" /></div>
+                </div>
+
+                <div class="field-row">
+                    <div class="field-label">Lab No.</div>
+                    <div class="field-input"><input asp-for="LabNumber" class="compact-input" /></div>
+                </div>
+            </div>
+
+            <div>
+                <div class="field-row">
+                    <div class="field-label">Collected</div>
+                    <div class="field-input"><input asp-for="CollectedDate" type="date" class="compact-input" /></div>
+                </div>
+
+                <div class="field-row">
+                    <div class="field-label">Received</div>
+                    <div class="field-input"><input asp-for="ReceivedDate" type="date" class="compact-input" /></div>
+                </div>
+
+                <div class="field-row">
+                    <div class="field-label">Reported</div>
+                    <div class="field-input"><input asp-for="ReportedDate" type="date" class="compact-input" /></div>
+                </div>
+
+                <div class="field-row">
+                    <div class="field-label">Physician</div>
+                    <div class="field-input"><input type="text" name="Physician" class="compact-input" placeholder="Referring Physician" /></div>
+                </div>
+
+                <div class="field-row">
+                    <div class="field-label">Notes</div>
+                    <div class="field-input"><input type="text" name="Notes" class="compact-input" placeholder="Short notes" /></div>
+                </div>
+            </div>
+        </div>
+
+        @{ var panelText = testTypes.FirstOrDefault(x => x.Value == Model.TestType)?.Text ?? Model.TestType ?? "Pathology"; }
+        <!-- Unchangeable panel detail (read-only) -->
+        <div class="test-panel" style="margin-top:12px;">
+            <label style="font-weight:700; display:block; margin-bottom:6px;">Panel</label>
+            <input type="text" id="testPanel" class="compact-input" value="@panelText" readonly />
+        </div>
+
+        <div class="test-type">
+            <label style="font-weight:700; display:block; margin-bottom:6px;">Test Type</label>
+            <div style="display:flex; gap:8px; align-items:center;">
+                <select id="testType" name="TestType" class="compact-select" onchange="showTestFields()">
                     <option value="">-- Select Test --</option>
                     @foreach (var t in testTypes)
                     {
                         <option value="@t.Value">@t.Text</option>
                     }
                 </select>
-
-
-
-            </div>
-
-            <div class="col-md-6">
-                <input asp-for="CollectedDate" type="date" class="form-control mb-2" />
-                <input asp-for="ReportedDate" type="date" class="form-control mb-2" />
-                <input asp-for="ReceivedDate" type="date" class="form-control mb-2" />
-                <input asp-for="DOB" type="date" class="form-control mb-2" />
-
-                <input asp-for="Phone" class="form-control mb-2" placeholder="Phone" />
-                <input asp-for="Email" class="form-control mb-2" placeholder="Email" />
-
-                <select id="testType" name="TestType" class="form-control mb-2" onchange="showTestFields()">
-                    <option value="" selected>-- Select Test --</option>
-                    @foreach (var t in testTypes)
-                    {
-                        <option value="@t.Value">@t.Text</option>
-                    }
-                </select>
-
-               
             </div>
         </div>
 
-        <!-- Dynamic Fields -->
         <div id="dynamicFields"></div>
 
-        <!-- Buttons -->
-        <div class="row mt-3">
-            <div class="col-md-6">
-                <a asp-action="ParameterIndex" class="btn btn-primary w-100">Back</a>
-            </div>
-            <div class="col-md-6">
-                <input type="submit" value="Save" class="btn btn-success w-100" />
-            </div>
+        <div class="submit-row">
+            <a asp-action="ParameterIndex" class="btn btn-secondary me-2">Back</a>
+            <input type="submit" value="Save" class="btn btn-success" />
         </div>
-
     </div>
 </form>
 
 @section Scripts {
     <script>
+        // Age calc
+        var dobEl = document.getElementById('dob');
+        if (dobEl) {
+            dobEl.addEventListener('change', function () {
+                if (!this.value) return;
+                var dob = new Date(this.value);
+                var today = new Date();
+                var age = today.getFullYear() - dob.getFullYear();
+                var m = today.getMonth() - dob.getMonth();
+                if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) age--;
+                var ageEl = document.getElementById('age'); if (ageEl) ageEl.value = age;
+            });
+        }
+
 
         function input(name, label) {
-            return `<div class="col-md-3 mb-2">
-                <label>${label}</label>
-                <input name="${name}" class="form-control"/>
-            </div>`;
+            return `<div class="col-md-3 mb-2"><label>${label}</label><input name="${name}" class="form-control"/></div>`;
         }
 
         function section(title, fields) {
@@ -110,204 +168,64 @@
         }
 
         function showTestFields() {
+            var sel = document.getElementById('testType');
+            if (!sel) return;
+            // update panel display to the selected test text
+            var panelEl = document.getElementById('testPanel');
+            if (panelEl) panelEl.value = sel.options[sel.selectedIndex] ? sel.options[sel.selectedIndex].text : panelEl.value;
 
-            let t = document.getElementById("testType").value;
-            let html = "";
+            var t = sel.value; var html = '';
 
             switch (t) {
-
-                case "BS":
-                    html += section("Blood Sugar", [
-                        { name: "FBS", label: "FBS" },
-                        { name: "PPBS", label: "PPBS" },
-                        { name: "RBS", label: "RBS" }
-                    ]);
-                    break;
-
-                case "GTT":
-                    html += section("GTT", [
-                        { name: "GTT_1stHour", label: "1st Hour" },
-                        { name: "GTT_2ndHour", label: "2nd Hour" }
-                    ]);
-                    break;
-
-                case "BSS":
-                    html += section("Blood Sugar Series", [
-                        { name: "FBS", label: "FBS" },
-                        { name: "PostBreakfast", label: "Post Breakfast" },
-                        { name: "PostLunch", label: "Post Lunch" },
-                        { name: "PostDinner", label: "Post Dinner" }
-                    ]);
-                    break;
-
-                case "LIPID":
-                    html += section("Lipid Profile", [
-                        { name: "TotalCholesterol", label: "Total Cholesterol" },
-                        { name: "Triglycerides", label: "Triglycerides" },
-                        { name: "HDL", label: "HDL" },
-                        { name: "LDL", label: "LDL" },
-                        { name: "VLDL", label: "VLDL" },
-                        { name: "CholHDLRatio", label: "Chol/HDL Ratio" },
-                        { name: "NonHDLChol", label: "Non-HDL" }
-                    ]);
-                    break;
-
-                case "ELEC":
-                    html += section("Electrolytes", [
-                        { name: "Sodium", label: "Sodium" },
-                        { name: "Potassium", label: "Potassium" }
-                    ]);
-                    break;
-
-                case "CRP":
-                    html += section("CRP", [
-                        { name: "CReactiveProtein", label: "CRP" }
-                    ]);
-                    break;
-
-                case "CAL":
-                    html += section("Calcium", [
-                        { name: "SerumCalcium", label: "Calcium" }
-                    ]);
-                    break;
-
-                case "RENAL":
-                    html += section("Renal Function", [
-                        { name: "SerumCreatinine", label: "Creatinine" },
-                        { name: "GFR", label: "GFR" }
-                    ]);
-                    break;
-
-                case "LIVER":
-                    html += section("Liver Function", [
-                        { name: "TotalProtein", label: "Total Protein" },
-                        { name: "Albumin", label: "Albumin" },
-                        { name: "Globulin", label: "Globulin" },
-                        { name: "SGOT", label: "SGOT" },
-                        { name: "SGPT", label: "SGPT" },
-                        { name: "TotalBilirubin", label: "Total Bilirubin" },
-                        { name: "DirectBilirubin", label: "Direct Bilirubin" },
-                        { name: "IndirectBilirubin", label: "Indirect Bilirubin" },
-                        { name: "AlkalinePhosphatase", label: "ALP" },
-                        { name: "GGT", label: "GGT" }
-                    ]);
-                    break;
-
-                case "ESR":
-                    html += section("ESR", [
-                        { name: "ESR", label: "ESR" }
-                    ]);
-                    break;
-
-                case "PTINR":
-                    html += section("PT / INR", [
-                        { name: "ProthrombinTime", label: "PT" },
-                        { name: "ControlTime", label: "Control" },
-                        { name: "INR", label: "INR" }
-                    ]);
-                    break;
-
-                case "FBC":
-                    html += section("Full Blood Count", [
-                        { name: "Hemoglobin", label: "Hemoglobin" },
-                        { name: "PCV", label: "PCV" },
-                        { name: "PlateletCount", label: "Platelets" },
-                        { name: "WBC", label: "WBC" },
-                        { name: "Neutrophils", label: "Neutrophils" },
-                        { name: "Lymphocytes", label: "Lymphocytes" },
-                        { name: "Eosinophils", label: "Eosinophils" },
-                        { name: "Monocytes", label: "Monocytes" },
-                        { name: "Basophils", label: "Basophils" },
-                        { name: "RBC", label: "RBC" },
-                        { name: "MCV", label: "MCV" },
-                        { name: "MCH", label: "MCH" },
-                        { name: "MCHC", label: "MCHC" }
-                    ]);
-                    break;
-
-                case "FBCADV":
-                    html += section("FBC Advanced", [
-                        { name: "LymphPercent", label: "Lymph %" },
-                        { name: "MIDPercent", label: "MID %" },
-                        { name: "GranPercent", label: "Gran %" },
-                        { name: "LymphAbsolute", label: "Lymph Abs" },
-                        { name: "MIDAbsolute", label: "MID Abs" },
-                        { name: "GranAbsolute", label: "Gran Abs" },
-                        { name: "HCT", label: "HCT" },
-                        { name: "RDW_CV", label: "RDW-CV" },
-                        { name: "RDW_SD", label: "RDW-SD" },
-                        { name: "PLT", label: "PLT" },
-                        { name: "MPV", label: "MPV" },
-                        { name: "PDW", label: "PDW" },
-                        { name: "PCT", label: "PCT" }
-                    ]);
-                    break;
-
-                case "HCG":
-                    html = `<div class="form-check mt-3">
-                        <input type="checkbox" name="IsPregnant" class="form-check-input"/>
-                        <label>Pregnant</label>
-                    </div>`;
-                    break;
-
-                case "URINE":
-                    html += section("Urine Report", [
-                        { name: "UrineColor", label: "Color" },
-                        { name: "Transparency", label: "Transparency" },
-                        { name: "Mucous", label: "Mucous" },
-                        { name: "SpecificGravity", label: "Specific Gravity" },
-                        { name: "Reaction", label: "Reaction" },
-                        { name: "UrineProtein", label: "Protein" },
-                        { name: "ReducingSubstances", label: "Reducing Substances" },
-                        { name: "KetoneBodies", label: "Ketones" },
-                        { name: "UrineBilirubin", label: "Bilirubin" },
-                        { name: "Urobilinogen", label: "Urobilinogen" },
-                        { name: "PusCells", label: "Pus Cells" },
-                        { name: "RedCells", label: "Red Cells" },
-                        { name: "EpithelialCells", label: "Epithelial" },
-                        { name: "Organisms", label: "Organisms" },
-                        { name: "Crystals", label: "Crystals" },
-                        { name: "Casts", label: "Casts" },
-                        { name: "YeastCells", label: "Yeast" }
-                    ]);
-                    break;
-
-                case "GLUCOSE":
-                    html += section("Blood Glucose", [
-                        { name: "FBG", label: "FBG" },
-                        { name: "PPBG", label: "PPBG" }
-                    ]);
-                    break;
-
-                case "GTT_EXT":
-                    html += section("GTT Extended", [
-                        { name: "FBSADGW", label: "FBS ADGW" },
-                        { name: "FBS1", label: "FBS1" },
-                        { name: "FBS2", label: "FBS2" }
-                    ]);
-                    break;
-
-                case "HGB":
-                    html += section("HGB", [
-                        { name: "HGB", label: "HGB" }
-                    ]);
-                    break;
-
-                case "PPBS":
-                    html += section("PPBS", [
-                        { name: "PPBS", label: "PPBS" }
-                    ]);
-                    break;
-
-                case "RBS":
-                    html += section("RBS", [
-                        { name: "RBS", label: "RBS" }
-                    ]);
-                    break;
+                case 'BS': html += section('Blood Sugar', [{ name: 'FBS', label: 'FBS' },{ name: 'PPBS', label: 'PPBS' },{ name: 'RBS', label: 'RBS' }]); break;
+                case 'GTT': html += section('GTT', [{ name: 'GTT_1stHour', label: '1st Hour' },{ name: 'GTT_2ndHour', label: '2nd Hour' }]); break;
+                case 'BSS': html += section('Blood Sugar Series', [{ name: 'FBS', label: 'FBS' },{ name: 'PostBreakfast', label: 'Post Breakfast' },{ name: 'PostLunch', label: 'Post Lunch' },{ name: 'PostDinner', label: 'Post Dinner' }]); break;
+                case 'LIPID': html += section('Lipid Profile', [{ name: 'TotalCholesterol', label: 'Total Cholesterol' },{ name: 'Triglycerides', label: 'Triglycerides' },{ name: 'HDL', label: 'HDL' },{ name: 'LDL', label: 'LDL' },{ name: 'VLDL', label: 'VLDL' },{ name: 'CholHDLRatio', label: 'Chol/HDL Ratio' },{ name: 'NonHDLChol', label: 'Non-HDL' }]); break;
+                case 'ELEC': html += section('Electrolytes', [{ name: 'Sodium', label: 'Sodium' },{ name: 'Potassium', label: 'Potassium' }]); break;
+                case 'CRP': html += section('CRP', [{ name: 'CReactiveProtein', label: 'CRP' }]); break;
+                case 'CAL': html += section('Calcium', [{ name: 'SerumCalcium', label: 'Calcium' }]); break;
+                case 'RENAL': html += section('Renal Function', [{ name: 'SerumCreatinine', label: 'Creatinine' },{ name: 'GFR', label: 'GFR' }]); break;
+                case 'LIVER': html += section('Liver Function', [{ name: 'TotalProtein', label: 'Total Protein' },{ name: 'Albumin', label: 'Albumin' },{ name: 'Globulin', label: 'Globulin' },{ name: 'SGOT', label: 'SGOT' },{ name: 'SGPT', label: 'SGPT' },{ name: 'TotalBilirubin', label: 'Total Bilirubin' },{ name: 'DirectBilirubin', label: 'Direct Bilirubin' },{ name: 'IndirectBilirubin', label: 'Indirect Bilirubin' },{ name: 'AlkalinePhosphatase', label: 'ALP' },{ name: 'GGT', label: 'GGT' }]); break;
+                case 'ESR': html += section('ESR', [{ name: 'ESR', label: 'ESR' }]); break;
+                case 'PTINR': html += section('PT / INR', [{ name: 'ProthrombinTime', label: 'PT' },{ name: 'ControlTime', label: 'Control' },{ name: 'INR', label: 'INR' }]); break;
+                case 'FBC': html += section('Full Blood Count', [{ name: 'Hemoglobin', label: 'Hemoglobin' },{ name: 'PCV', label: 'PCV' },{ name: 'PlateletCount', label: 'Platelets' },{ name: 'WBC', label: 'WBC' },{ name: 'Neutrophils', label: 'Neutrophils' },{ name: 'Lymphocytes', label: 'Lymphocytes' },{ name: 'Eosinophils', label: 'Eosinophils' },{ name: 'Monocytes', label: 'Monocytes' },{ name: 'Basophils', label: 'Basophils' },{ name: 'RBC', label: 'RBC' },{ name: 'MCV', label: 'MCV' },{ name: 'MCH', label: 'MCH' },{ name: 'MCHC', label: 'MCHC' }]); break;
+                case 'FBCADV': html += section('FBC Advanced', [{ name: 'LymphPercent', label: 'Lymph %' },{ name: 'MIDPercent', label: 'MID %' },{ name: 'GranPercent', label: 'Gran %' },{ name: 'LymphAbsolute', label: 'Lymph Abs' },{ name: 'MIDAbsolute', label: 'MID Abs' },{ name: 'GranAbsolute', label: 'Gran Abs' },{ name: 'HCT', label: 'HCT' },{ name: 'RDW_CV', label: 'RDW-CV' },{ name: 'RDW_SD', label: 'RDW-SD' },{ name: 'PLT', label: 'PLT' },{ name: 'MPV', label: 'MPV' },{ name: 'PDW', label: 'PDW' },{ name: 'PCT', label: 'PCT' }]); break;
+                case 'HCG': html = `<div class="form-check mt-3"><input type="checkbox" name="IsPregnant" class="form-check-input"/><label>Pregnant</label></div>`; break;
+                case 'URINE': html += section('Urine Report', [{ name: 'UrineColor', label: 'Color' },{ name: 'Transparency', label: 'Transparency' },{ name: 'Mucous', label: 'Mucous' },{ name: 'SpecificGravity', label: 'Specific Gravity' },{ name: 'Reaction', label: 'Reaction' },{ name: 'UrineProtein', label: 'Protein' },{ name: 'ReducingSubstances', label: 'Reducing Substances' },{ name: 'KetoneBodies', label: 'Ketones' },{ name: 'UrineBilirubin', label: 'Bilirubin' },{ name: 'Urobilinogen', label: 'Urobilinogen' },{ name: 'PusCells', label: 'Pus Cells' },{ name: 'RedCells', label: 'Red Cells' },{ name: 'EpithelialCells', label: 'Epithelial' },{ name: 'Organisms', label: 'Organisms' },{ name: 'Crystals', label: 'Crystals' },{ name: 'Casts', label: 'Casts' },{ name: 'YeastCells', label: 'Yeast' }]); break;
+                case 'GLUCOSE': html += section('Blood Glucose', [{ name: 'FBG', label: 'FBG' },{ name: 'PPBG', label: 'PPBG' }]); break;
+                case 'GTT_EXT': html += section('GTT Extended', [{ name: 'FBSADGW', label: 'FBS ADGW' },{ name: 'FBS1', label: 'FBS1' },{ name: 'FBS2', label: 'FBS2' }]); break;
+                case 'HGB': html += section('HGB', [{ name: 'HGB', label: 'HGB' }]); break;
+                case 'PPBS': html += section('PPBS', [{ name: 'PPBS', label: 'PPBS' }]); break;
+                case 'RBS': html += section('RBS', [{ name: 'RBS', label: 'RBS' }]); break;
             }
 
-            document.getElementById("dynamicFields").innerHTML = html;
+            var dyn = document.getElementById('dynamicFields'); if (dyn) dyn.innerHTML = html;
         }
-        
+
+        // Serialize server test types for client-side use
+        var serverTestTypes = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(testTypes.Select(t => new { t.Value, t.Text })));
+        var panelsAllowed = { "Pathology": serverTestTypes.map(function(x){ return x.Value; }) };
+
+        function populateTestOptions(panelName) {
+            var sel = document.getElementById('testType');
+            if (!sel) return;
+            sel.innerHTML = '<option value="">-- Select Test --</option>';
+            var allowed = panelsAllowed[panelName] || [];
+            serverTestTypes.forEach(function(t){
+                if (allowed.length === 0 || allowed.indexOf(t.Value) !== -1) {
+                    var opt = document.createElement('option');
+                    opt.value = t.Value;
+                    opt.text = t.Text;
+                    sel.appendChild(opt);
+                }
+            });
+            sel.value = '';
+        }
+
+        document.addEventListener('DOMContentLoaded', function(){
+            var panelEl = document.getElementById('testPanel');
+            var panelName = panelEl ? panelEl.value : 'Pathology';
+            populateTestOptions(panelName);
+        });
     </script>
 }
