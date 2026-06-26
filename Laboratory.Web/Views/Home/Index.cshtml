@@ -1,260 +1,347 @@
-﻿@model IEnumerable<TestDto>
+@{
+    ViewData["Title"] = "Dashboard";
+}
 
-@* 
-<style>
+<div class="container-fluid">
 
-    /* Reset */
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
-
-    body {
-        font-family: 'Segoe UI', sans-serif;
-        background: #f5f8fa;
-        color: #333;
-    }
-
-    .container {
-        width: 90%;
-        max-width: 1200px;
-        margin: auto;
-    }
-
-    /* Header */
-    header {
-        background: #005477;
-        padding: 20px 0;
-        color: white;
-    }
-
-        header h1 {
-            float: left;
-            margin-left: 20px;
-        }
-
-    nav {
-        float: right;
-        margin-right: 20px;
-    }
-
-        nav a {
-            color: white;
-            text-decoration: none;
-            margin-left: 25px;
-            font-weight: bold;
-        }
-
-            nav a:hover {
-                text-decoration: underline;
-            }
-
-    header::after {
-        content: "";
-        display: table;
-        clear: both;
-    }
-
-    /* Hero */
-    .hero {
-        display: flex;
-        flex-wrap: wrap;
-        background: #e3f4ff;
-        padding: 40px 20px;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .hero-content {
-        flex: 1;
-        min-width: 300px;
-        text-align: center;
-    }
-
-        .hero-content h2 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-        }
-
-        .hero-content p {
-            font-size: 1.2rem;
-            margin-bottom: 20px;
-        }
-
-    .btn {
-        background: #0077cc;
-        color: white;
-        padding: 12px 25px;
-        text-decoration: none;
-        border-radius: 5px;
-    }
-
-        .btn:hover {
-            background: #005fa3;
-        }
-
-    .hero-image {
-        flex: 1;
-        text-align: center;
-        min-width: 300px;
-    }
-
-        .hero-image img {
-            max-width: 100%;
-            border-radius: 10px;
-        }
-
-    /* Test Categories */
-    .test-categories {
-        text-align: center;
-        padding: 50px 20px;
-        background: #fff;
-    }
-
-        .test-categories h3 {
-            font-size: 2rem;
-            margin-bottom: 30px;
-        }
-
-    .cards {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 20px;
-        justify-content: center;
-    }
-
-    .card {
-        background: #f0f9ff;
-        border-radius: 8px;
-        width: 220px;
-        padding: 15px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        transition: transform 0.2s ease;
-    }
-
-        .card img {
-            width: 100%;
-            border-radius: 5px;
-        }
-
-        .card h4 {
-            margin-top: 10px;
-            font-size: 1.1rem;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-        }
-
-    /* Contact */
-    .contact {
-        background: #d9f0ff;
-        text-align: center;
-        padding: 30px 20px;
-        font-size: 1.1rem;
-    }
-
-    /* Footer */
-    footer {
-        background: #003d5c;
-        color: white;
-        text-align: center;
-        padding: 15px 0;
-    }
-
-
-</style> *@
-
-
-<form>
-
-   @*  <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Pathology Test App</title>
-        <link rel="stylesheet" href="styles.css" />
-    </head>
-    <body> *@
-
-
-
-
-
-        <div class="container row">
-            @foreach (var test in Model)
-            {
-                <div class="col-12 col-md-6 col-lg-4">
-                    <div class="p-0 my-3 border rounded">
-                        <div class="card">
-                            <h3 class="card-title text-white-50 text-center py-2">@test.Name</h3>
-                            <img src="@test.ImageUrl" class="card-img-top">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between py-2">
-                                    <span class="text-danger" style="font-size:20px;">@string.Format("{0:c}", test.Price)</span>
-                                    <span class="badge bg-warning text-white p-2">@test.CategoryName</span>
-                                </div>
-                                <p class="card-text">@Html.Raw(test.Description)</p>
-                                <div class="row">
-                                    <div class="col">
-                                        <a asp-action="TestDetails" asp-route-testId="@test.TestId"
-                                           class="btn btn-success form-control">Details</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            }
+    <!-- Page Header -->
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h2 class="fw-bold text-primary">
+                <i class="bi bi-hospital"></i>
+                Laboratory Management Dashboard
+            </h2>
+            <p class="text-muted">
+                Welcome to <strong>SITHSETHA Laboratory Management System</strong>
+            </p>
         </div>
 
+        <div class="col-md-4 text-end">
+            <h5 class="text-secondary">@DateTime.Now.ToString("dddd")</h5>
+            <h6>@DateTime.Now.ToString("dd MMMM yyyy")</h6>
+        </div>
+    </div>
 
+    <!-- Summary Cards -->
+    <div class="row g-4 mb-4">
 
-        
-
-       @*  <section class="hero">
-            <div class="hero-content">
-                <h2>Your Health, Our Priority</h2>
-                <p>Book pathology tests with home sample collection</p>
-                <a href="#" class="btn">Book a Test</a>
-            </div>
-            <div class="hero-image">
-                <img src="https://www.shutterstock.com/image-photo/doctor-hand-holding-blood-test-260nw-1927857705.jpg" alt="Lab Test" />
-            </div>
-        </section> *@
-
-        @* <section class="test-categories">
-            <h3>Popular Test Categories</h3>
-            <div class="cards">
-                <div class="card">
-                    <img src="https://www.shutterstock.com/image-photo/blood-sample-test-tube-medical-260nw-1865156311.jpg" alt="Blood Test" />
-                    <h4>Blood Tests</h4>
-                </div>
-                <div class="card">
-                    <img src="https://www.google.com/imgres?q=urine%20test&imgurl=https%3A%2F%2Fwalkin-clinic.co.uk%2Fwp-content%2Fuploads%2F2023%2F09%2Furine-test.webp&imgrefurl=https%3A%2F%2Fwalkin-clinic.co.uk%2Furine-tests&docid=1tL36ucXXpCZvM&tbnid=QsIDUD0DJopbGM&vet=12ahUKEwixp9PnooqNAxW41DQHHfZMCesQM3oECB4QAA..i&w=1382&h=921&hcb=2&ved=2ahUKEwixp9PnooqNAxW41DQHHfZMCesQM3oECB4QAA" alt="Urine Test" />
-                    <h4>Urine Tests</h4>
-                </div>
-                <div class="card">
-                    <img src="https://www.shutterstock.com/image-photo/doctor-reviewing-xray-film-260nw-571800763.jpg" alt="Imaging" />
-                    <h4>Imaging & Scans</h4>
-                </div>
-                <div class="card">
-                    <img src="https://www.shutterstock.com/image-photo/laboratory-technician-performing-dna-test-260nw-1766541645.jpg" alt="Genetic Tests" />
-                    <h4>Genetic Tests</h4>
+        <div class="col-lg-3 col-md-6">
+            <div class="card shadow border-primary">
+                <div class="card-body text-center">
+                    <i class="bi bi-people-fill display-5 text-primary"></i>
+                    <h6 class="mt-3">Patients Today</h6>
+                    <h2 class="fw-bold text-primary">52</h2>
                 </div>
             </div>
-        </section> *@
+        </div>
 
-        @* <section class="contact">
-            <h3>Contact Us</h3>
-            <p>Email: support@pathologycare.com | Phone: +1-800-123-4567</p>
-        </section>
+        <div class="col-lg-3 col-md-6">
+            <div class="card shadow border-success">
+                <div class="card-body text-center">
+                    <i class="bi bi-file-earmark-medical display-5 text-success"></i>
+                    <h6 class="mt-3">Tests Ordered</h6>
+                    <h2 class="fw-bold text-success">87</h2>
+                </div>
+            </div>
+        </div>
 
-        <footer>
-            <p>&copy; 2025 PathologyCare. All rights reserved.</p>
-        </footer> *@
-@*     </body> *@
+        <div class="col-lg-3 col-md-6">
+            <div class="card shadow border-warning">
+                <div class="card-body text-center">
+                    <i class="bi bi-hourglass-split display-5 text-warning"></i>
+                    <h6 class="mt-3">Pending Results</h6>
+                    <h2 class="fw-bold text-warning">18</h2>
+                </div>
+            </div>
+        </div>
 
+        <div class="col-lg-3 col-md-6">
+            <div class="card shadow border-danger">
+                <div class="card-body text-center">
+                    <i class="bi bi-check-circle-fill display-5 text-danger"></i>
+                    <h6 class="mt-3">Completed Reports</h6>
+                    <h2 class="fw-bold text-danger">69</h2>
+                </div>
+            </div>
+        </div>
 
-   
-</form>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="card shadow mb-4">
+        <div class="card-header bg-primary text-white">
+            <i class="bi bi-lightning-charge-fill"></i>
+            Quick Actions
+        </div>
+
+        <div class="card-body">
+
+            <div class="row g-3">
+
+                <div class="col-md-3">
+                    <a asp-controller="Parameter"
+                       asp-action="TestEdit"
+                       class="btn btn-outline-primary w-100">
+
+                        <i class="bi bi-person-plus-fill"></i><br />
+                        Register Patient
+
+                    </a>
+                </div>
+
+               
+
+                <div class="col-md-3">
+                    <a asp-controller="Parameter"
+                       asp-action="ParameterIndex"
+                       class="btn btn-outline-success w-100">
+
+                        <i class="bi bi-clipboard2-pulse-fill"></i><br />
+                        Enter Result
+
+                    </a>
+                </div>
+                 <div class="col-md-3">
+                    <a asp-controller="Parameter"
+                       asp-action="TestResult"
+                       class="btn btn-outline-warning w-100">
+
+                        <i class="bi bi-search"></i><br />
+                        Search Result
+
+                    </a>
+                </div>
+
+                <div class="col-md-3">
+                    <a asp-controller="Parameter"
+                       asp-action="TestResult"
+                       class="btn btn-outline-danger w-100">
+
+                        <i class="bi bi-printer-fill"></i><br />
+                        Print Report
+
+                    </a>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="row">
+
+        <!-- Recent Patients -->
+
+        <div class="col-lg-8 mb-4">
+
+            <div class="card shadow">
+
+                <div class="card-header bg-success text-white">
+                    <i class="bi bi-person-lines-fill"></i>
+                    Recent Patients
+                </div>
+
+                <div class="card-body">
+
+                    <table class="table table-hover table-striped">
+
+                        <thead class="table-light">
+
+                            <tr>
+
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Age</th>
+                                <th>Gender</th>
+                                <th>Test</th>
+                                <th>Status</th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            <tr>
+                                <td>P001</td>
+                                <td>John Silva</td>
+                                <td>45</td>
+                                <td>Male</td>
+                                <td>Full Blood Count</td>
+                                <td><span class="badge bg-success">Completed</span></td>
+                            </tr>
+
+                            <tr>
+                                <td>P002</td>
+                                <td>Nimali Perera</td>
+                                <td>34</td>
+                                <td>Female</td>
+                                <td>Lipid Profile</td>
+                                <td><span class="badge bg-warning">Pending</span></td>
+                            </tr>
+
+                            <tr>
+                                <td>P003</td>
+                                <td>Kasun Fernando</td>
+                                <td>52</td>
+                                <td>Male</td>
+                                <td>Liver Function Test</td>
+                                <td><span class="badge bg-info">Processing</span></td>
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Pending Results -->
+
+        <div class="col-lg-4 mb-4">
+
+            <div class="card shadow">
+
+                <div class="card-header bg-warning">
+                    <i class="bi bi-hourglass"></i>
+                    Pending Results
+                </div>
+
+                <div class="card-body">
+
+                    <table class="table">
+
+                        <tr>
+                            <th>Patient</th>
+                            <th>Priority</th>
+                        </tr>
+
+                        <tr>
+                            <td>John Silva</td>
+                            <td><span class="badge bg-danger">High</span></td>
+                        </tr>
+
+                        <tr>
+                            <td>Amal Perera</td>
+                            <td><span class="badge bg-warning">Medium</span></td>
+                        </tr>
+
+                        <tr>
+                            <td>Nimal Jayasinghe</td>
+                            <td><span class="badge bg-success">Low</span></td>
+                        </tr>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Bottom Section -->
+
+    <div class="row">
+
+        <!-- Today's Statistics -->
+
+        <div class="col-lg-6 mb-4">
+
+            <div class="card shadow">
+
+                <div class="card-header bg-secondary text-white">
+                    <i class="bi bi-bar-chart-fill"></i>
+                    Today's Statistics
+                </div>
+
+                <div class="card-body">
+
+                    <table class="table table-bordered">
+
+                        <tr>
+                            <th>Blood Tests</th>
+                            <td>34</td>
+                        </tr>
+
+                        <tr>
+                            <th>Urine Tests</th>
+                            <td>12</td>
+                        </tr>
+
+                        <tr>
+                            <th>Completed</th>
+                            <td>69</td>
+                        </tr>
+
+                        <tr>
+                            <th>Pending</th>
+                            <td>18</td>
+                        </tr>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Laboratory Information -->
+
+        <div class="col-lg-6 mb-4">
+
+            <div class="card shadow">
+
+                <div class="card-header bg-info text-white">
+                    <i class="bi bi-building"></i>
+                    Laboratory Information
+                </div>
+
+                <div class="card-body">
+
+                    <table class="table">
+
+                        <tr>
+                            <th>Laboratory</th>
+                            <td>SITHSETHA Laboratory</td>
+                        </tr>
+
+                        <tr>
+                            <th>Working Hours</th>
+                            <td>8.00 AM - 5.00 PM</td>
+                        </tr>
+
+                        <tr>
+                            <th>Staff on Duty</th>
+                            <td>5</td>
+                        </tr>
+
+                        <tr>
+                            <th>Date</th>
+                            <td>@DateTime.Now.ToString("dd MMM yyyy")</td>
+                        </tr>
+
+                        <tr>
+                            <th>Status</th>
+                            <td>
+                                <span class="badge bg-success">Open</span>
+                            </td>
+                        </tr>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

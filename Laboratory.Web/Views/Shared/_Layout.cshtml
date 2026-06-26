@@ -1,102 +1,333 @@
-﻿<!DOCTYPE html>
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Laboratory.Web</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+    <title>@ViewData["Title"] - SITHSETHA Laboratory</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    <!-- DataTables -->
     <link rel="stylesheet" href="//cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css" />
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+
+    <!-- Site -->
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Laboratory.Web.styles.css" asp-append-version="true" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <style>
+
+            body {
+                background: #f4f8fb;
+                padding-top: 75px;
+            }
+
+            /*========================
+                        NAVBAR
+                    ========================*/
+
+            .navbar {
+                background: linear-gradient(90deg,#0d6efd,#0b5ed7);
+                box-shadow: 0 3px 10px rgba(0,0,0,.15);
+            }
+
+            .navbar-brand {
+                font-size: 22px;
+                font-weight: 700;
+                color: #fff !important;
+            }
+
+                .navbar-brand i {
+                    color: #ffc107;
+                }
+
+            .nav-link {
+                color: white !important;
+                margin-right: 8px;
+                font-weight: 500;
+                transition: .3s;
+            }
+
+                .nav-link:hover {
+                    color: #ffd54f !important;
+                }
+
+                .nav-link i {
+                    margin-right: 5px;
+                }
+
+            .navbar-toggler {
+                border: none;
+            }
+
+            /*========================
+                        MAIN
+                    ========================*/
+
+            main {
+                min-height: calc(100vh - 180px);
+            }
+
+            /*========================
+                        FOOTER
+                    ========================*/
+
+            footer {
+                background: white;
+                padding: 15px 0;
+                border-top: 1px solid #dee2e6;
+            }
+
+            @@media(max-width:768px) {
+
+                body {
+                    padding-top: 70px;
+                }
+
+                .navbar-collapse {
+                    background: #0b5ed7;
+                    padding: 15px;
+                    border-radius: 10px;
+                    margin-top: 10px;
+                }
+            }
+
+    </style>
+
 </head>
+
 <body>
+
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm  bg-white border-bottom box-shadow mb-3">
+
+        <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Laboratory.Web</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+
+                <a class="navbar-brand"
+                   asp-controller="Home"
+                   asp-action="Index">
+
+                    <i class="bi bi-hospital-fill"></i>
+
+                    SITHSETHA 
+
+                </a>
+
+                <button class="navbar-toggler"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#navbarMenu">
+
                     <span class="navbar-toggler-icon"></span>
+
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+
+                <div class="collapse navbar-collapse"
+                     id="navbarMenu">
+
+                    <ul class="navbar-nav me-auto">
+
                         <li class="nav-item">
-                            <a class="nav-link " asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link " asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Patient Management
+
+                            <a class="nav-link"
+                               asp-controller="Home"
+                               asp-action="Index">
+
+                                <i class="bi bi-speedometer2"></i>
+
+                                Dashboard
+
                             </a>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" asp-controller="Cart" asp-action="CartEdit">CartEdit</a></li>
-                                <li><a class="dropdown-item" asp-controller="Test" asp-action="TestIndex">Test</a></li>
-                                <li><a class="dropdown-item" asp-controller="TestOrder" asp-action="TestOrderIndex">TestOrderIndex</a></li>
-                                <li><a class="dropdown-item" asp-controller="TestParameter" asp-action="ParameterIndex">ParameterIndex</a></li>
-                                <li><a class="dropdown-item" asp-controller="Parameter" asp-action="ParameterIndex">Parameter</a></li>
-
-                                <li><hr class="dropdown-divider"></li>
-
-                            </ul>
 
                         </li>
+
                         <li class="nav-item">
-                            <a class="nav-link " asp-area="" asp-controller="Order" asp-action="OrderIndex">
-                                Manage Order
+
+                            <a class="nav-link"
+                               asp-controller="Parameter"
+                               asp-action="TestEdit">
+
+                                <i class="bi bi-person-plus-fill"></i>
+
+                                Patient 
+
                             </a>
+
+                        </li>
+
+                        <li class="nav-item">
+
+                            <a class="nav-link"
+                               asp-controller="Parameter"
+                               asp-action="ParameterIndex">
+
+                                <i class="bi bi-clipboard2-pulse-fill"></i>
+
+                                 Results
+
+                            </a>
+
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link " asp-area="" asp-controller="Parameter" asp-action="TestResult">
-                                Manage Result
+
+                            <a class="nav-link"
+                               asp-controller="Parameter"
+                               asp-action="TestResult">
+
+                                <i class="bi bi-clipboard2-pulse-fill"></i>
+
+                                Reports
+
                             </a>
+
                         </li>
-                         <li class="nav-item">
-                            <a class="nav-link " asp-area="" asp-controller="Cart" asp-action="CartIndex">
-                                &nbsp; <i class="bi bi-cart"></i>&nbsp;
+
+                    
+
+                        <li class="nav-item">
+
+                            <a class="nav-link"
+                               asp-controller="Home"
+                               asp-action="Privacy">
+
+                                <i class="bi bi-info-circle-fill"></i>
+
+                                About
+
                             </a>
+
                         </li>
+
                     </ul>
+
                     <ul class="navbar-nav">
-                        @if (!User.Identity.IsAuthenticated)
+
+                        @if (User.Identity.IsAuthenticated)
                         {
+
                             <li class="nav-item">
-                                <a class="nav-link " asp-controller="Auth" asp-action="Login">Login</a>
+
+                                <a class="nav-link"
+                                   href="#">
+
+                                    <i class="bi bi-bell-fill"></i>
+
+                                </a>
+
                             </li>
+
                             <li class="nav-item">
-                                <a class="nav-link " asp-controller="Auth" asp-action="Register">Register</a>
+
+                                <span class="nav-link">
+
+                                    <i class="bi bi-person-circle"></i>
+
+                                    Hello,
+                                    <strong>@User.Identity.Name</strong>
+
+                                </span>
+
                             </li>
+
+                            <li class="nav-item">
+
+                                <a class="nav-link"
+                                   asp-controller="Auth"
+                                   asp-action="Logout">
+
+                                    <i class="bi bi-box-arrow-right"></i>
+
+                                    Logout
+
+                                </a>
+
+                            </li>
+
                         }
                         else
                         {
+
                             <li class="nav-item">
-                                <a class="nav-link " href="#">Hello @User.Identity.Name</a>
+
+                                <a class="nav-link"
+                                   asp-controller="Auth"
+                                   asp-action="Login">
+
+                                    <i class="bi bi-box-arrow-in-right"></i>
+
+                                    Login
+
+                                </a>
+
                             </li>
+
                             <li class="nav-item">
-                                <a class="nav-link " asp-controller="Auth" asp-action="Logout">Logout</a>
+
+                                <a class="nav-link"
+                                   asp-controller="Auth"
+                                   asp-action="Register">
+
+                                    <i class="bi bi-person-plus"></i>
+
+                                    Register
+
+                                </a>
+
                             </li>
+
                         }
+
                     </ul>
+
                 </div>
+
             </div>
+
         </nav>
+
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
+
+    <div class="container-fluid px-4">
+
+        <main role="main" class="py-3">
+
             @RenderBody()
+
         </main>
+
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2024 - Laboratory.Web - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <footer>
+
+        <div class="container text-center">
+
+            © @DateTime.Now.Year
+
+            <strong>SITHSETHA Laboratory Management System</strong>
+
+            | Developed with ASP.NET Core MVC
+
         </div>
+
     </footer>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
     <script src="//cdn.datatables.net/2.1.8/js/dataTables.min.js"></script>
+
     <script src="~/js/site.js" asp-append-version="true"></script>
+
     @await RenderSectionAsync("Scripts", required: false)
+
 </body>
+
 </html>
+

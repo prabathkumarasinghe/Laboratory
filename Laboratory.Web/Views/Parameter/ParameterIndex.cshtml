@@ -43,9 +43,10 @@
 			<thead>
 				<tr>
 					<th>Name</th>
+					<th>DOB</th>
 					<th>Collected Date</th>
 					<th>Ref Number</th>
-					<th>Lab Number</th>
+					
 					<th></th>
 				</tr>
 			</thead>
@@ -54,9 +55,10 @@
 				{
 					<tr>
 						<td>@item.PatientName</td>
+						<td>@item.DOB</td>
 						<td>@FormatDate((object)item.CollectedDate)</td>
 						<td>@item.RefNumber</td>
-						<td>@item.LabNumber</td>
+						
 						<td>
 							<a class="btn btn-success" asp-action="ResultUpdate" asp-route-testId="@item.Id">
 								<i class="bi bi-pencil-square"></i>

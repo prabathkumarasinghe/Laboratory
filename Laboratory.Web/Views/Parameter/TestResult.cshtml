@@ -30,22 +30,25 @@
 <div class="pathology-card mt-4">
 	<div class="pathology-header">
 		<h2 style="margin:0;">Order List</h2>
-		<div style="display:flex; gap:8px; align-items:center;">
+		@* <div style="display:flex; gap:8px; align-items:center;">
 			<a style="text-decoration:none" asp-controller="Order" asp-action="OrderIndex" asp-route-status="approved"><span class="badge @approved" style="background:#6c757d;color:#fff;">Approved</span></a>
 			<a style="text-decoration:none" asp-controller="Order" asp-action="OrderIndex" asp-route-status="readyforpickup"><span class="badge @readyforpickup" style="background:#6c757d;color:#fff;">Ready for Pickup</span></a>
 			<a style="text-decoration:none" asp-controller="Order" asp-action="OrderIndex" asp-route-status="cancelled"><span class="badge @cancelled" style="background:#6c757d;color:#fff;">Cancelled</span></a>
 			<a style="text-decoration:none" asp-controller="Order" asp-action="OrderIndex" asp-route-status="all"><span class="badge @all" style="background:#6c757d;color:#fff;">All</span></a>
-		</div>
+		</div> *@
 	</div>
 	<div class="p-3">
 		<table id="tblData" class="table table-bordered table-striped pt-3" style="width:100%">
 			<thead>
 				<tr>
 					<th>ID</th>
-					<th>Email</th>
+					@* <th>Email</th> *@
+					
+					<th>DOB</th>
 					<th>Name</th>
 					<th>Phone</th>
-					@* <th>Status</th> *@
+					@* <th>Ref Number</th> *@
+					
 					@* <th>Total</th> *@
 					<th></th>
 				</tr>
