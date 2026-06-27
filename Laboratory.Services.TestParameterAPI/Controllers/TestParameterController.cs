@@ -137,6 +137,34 @@ namespace Laboratory.Services.ParameterAPI.Controllers
         //    return _response;
 
         //}
+        [HttpDelete]
+        [Route("{id:int}")]
+        public ResponseDto Delete(int id)
+        {
+            try
+            {
+                Parameter obj = _db.parameters.FirstOrDefault(u => u.Id == id);
+
+                if (obj == null)
+                {
+                    _response.IsSuccess = false;
+                    _response.Message = "Parameter not found.";
+                    return _response;
+                }
+
+                _db.parameters.Remove(obj);
+                _db.SaveChanges();
+
+                _response.Result = _mapper.Map<ParameterDto>(obj);
+            }
+            catch (Exception e)
+            {
+                _response.IsSuccess = false;
+                _response.Message = e.Message;
+            }
+
+            return _response;
+        }
     }
 }
 

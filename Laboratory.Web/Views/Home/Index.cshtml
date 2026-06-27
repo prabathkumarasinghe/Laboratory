@@ -1,3 +1,4 @@
+@model Laboratory.Web.Models.DashboardViewModel
 @{
     ViewData["Title"] = "Dashboard";
 }
@@ -30,7 +31,7 @@
                 <div class="card-body text-center">
                     <i class="bi bi-people-fill display-5 text-primary"></i>
                     <h6 class="mt-3">Patients Today</h6>
-                    <h2 class="fw-bold text-primary">52</h2>
+                    <h2 class="fw-bold text-primary">@Model.PatientsToday</h2>
                 </div>
             </div>
         </div>
@@ -40,7 +41,7 @@
                 <div class="card-body text-center">
                     <i class="bi bi-file-earmark-medical display-5 text-success"></i>
                     <h6 class="mt-3">Tests Ordered</h6>
-                    <h2 class="fw-bold text-success">87</h2>
+                    <h2 class="fw-bold text-success">@Model.TestsToday</h2>
                 </div>
             </div>
         </div>
@@ -50,7 +51,7 @@
                 <div class="card-body text-center">
                     <i class="bi bi-hourglass-split display-5 text-warning"></i>
                     <h6 class="mt-3">Pending Results</h6>
-                    <h2 class="fw-bold text-warning">18</h2>
+                    <h2 class="fw-bold text-warning">@Model.PendingResults</h2>
                 </div>
             </div>
         </div>
@@ -60,7 +61,7 @@
                 <div class="card-body text-center">
                     <i class="bi bi-check-circle-fill display-5 text-danger"></i>
                     <h6 class="mt-3">Completed Reports</h6>
-                    <h2 class="fw-bold text-danger">69</h2>
+                    <h2 class="fw-bold text-danger">@Model.CompletedReports</h2>
                 </div>
             </div>
         </div>
@@ -129,13 +130,13 @@
 
     </div>
 
-    <div class="row">
+    <!-- Recent Patients & Today's Summary -->
+    <div class="row mb-4">
 
         <!-- Recent Patients -->
+        <div class="col-lg-8">
 
-        <div class="col-lg-8 mb-4">
-
-            <div class="card shadow">
+            <div class="card shadow h-100">
 
                 <div class="card-header bg-success text-white">
                     <i class="bi bi-person-lines-fill"></i>
@@ -144,51 +145,67 @@
 
                 <div class="card-body">
 
-                    <table class="table table-hover table-striped">
+                    <table class="table table-hover table-striped align-middle">
 
                         <thead class="table-light">
 
                             <tr>
-
                                 <th>ID</th>
-                                <th>Name</th>
+                                <th>Patient Name</th>
                                 <th>Age</th>
                                 <th>Gender</th>
                                 <th>Test</th>
                                 <th>Status</th>
-
                             </tr>
 
                         </thead>
 
                         <tbody>
 
-                            <tr>
-                                <td>P001</td>
-                                <td>John Silva</td>
-                                <td>45</td>
-                                <td>Male</td>
-                                <td>Full Blood Count</td>
-                                <td><span class="badge bg-success">Completed</span></td>
-                            </tr>
+                            @if (Model.RecentPatients != null && Model.RecentPatients.Any())
+                            {
+                                @foreach (var item in Model.RecentPatients)
+                                {
+                                    <tr>
 
-                            <tr>
-                                <td>P002</td>
-                                <td>Nimali Perera</td>
-                                <td>34</td>
-                                <td>Female</td>
-                                <td>Lipid Profile</td>
-                                <td><span class="badge bg-warning">Pending</span></td>
-                            </tr>
+                                        <td>@item.RefNumber</td>
 
-                            <tr>
-                                <td>P003</td>
-                                <td>Kasun Fernando</td>
-                                <td>52</td>
-                                <td>Male</td>
-                                <td>Liver Function Test</td>
-                                <td><span class="badge bg-info">Processing</span></td>
-                            </tr>
+                                        <td>@item.PatientName</td>
+
+                                        <td>@item.Age</td>
+
+                                        <td>@item.Sex</td>
+
+                                        <td>@item.TestType</td>
+
+                                        <td>
+
+                                            @if (item.ReportedDate == null)
+                                            {
+                                                <span class="badge bg-warning text-dark">
+                                                    Pending
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-success">
+                                                    Completed
+                                                </span>
+                                            }
+
+                                        </td>
+
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="6" class="text-center text-muted">
+                                        No recent patients found.
+                                    </td>
+                                </tr>
+                            }
 
                         </tbody>
 
@@ -200,39 +217,67 @@
 
         </div>
 
-        <!-- Pending Results -->
+        <!-- Today's Summary -->
+        <div class="col-lg-4">
 
-        <div class="col-lg-4 mb-4">
+            <div class="card shadow h-100">
 
-            <div class="card shadow">
-
-                <div class="card-header bg-warning">
-                    <i class="bi bi-hourglass"></i>
-                    Pending Results
+                <div class="card-header bg-primary text-white">
+                    <i class="bi bi-clipboard-data"></i>
+                    Today's Summary
                 </div>
 
                 <div class="card-body">
 
-                    <table class="table">
+                    <table class="table table-sm table-borderless mb-0">
 
                         <tr>
-                            <th>Patient</th>
-                            <th>Priority</th>
+                            <th>Patients Today</th>
+                            <td class="text-end fw-bold">
+                                @Model.PatientsToday
+                            </td>
                         </tr>
 
                         <tr>
-                            <td>John Silva</td>
-                            <td><span class="badge bg-danger">High</span></td>
+                            <th>Tests Today</th>
+                            <td class="text-end fw-bold">
+                                @Model.TestsToday
+                            </td>
                         </tr>
 
                         <tr>
-                            <td>Amal Perera</td>
-                            <td><span class="badge bg-warning">Medium</span></td>
+                            <th>Pending Results</th>
+                            <td class="text-end">
+                                <span class="badge bg-warning text-dark">
+                                    @Model.PendingResults
+                                </span>
+                            </td>
                         </tr>
 
                         <tr>
-                            <td>Nimal Jayasinghe</td>
-                            <td><span class="badge bg-success">Low</span></td>
+                            <th>Completed Reports</th>
+                            <td class="text-end">
+                                <span class="badge bg-success">
+                                    @Model.CompletedReports
+                                </span>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th>Completion Rate</th>
+                            <td class="text-end">
+
+                                @{
+                                    int rate = Model.TestsToday > 0
+                                        ? (Model.CompletedReports * 100) / Model.TestsToday
+                                        : 0;
+                                }
+
+                                <span class="badge bg-info">
+                                    @rate%
+                                </span>
+
+                            </td>
                         </tr>
 
                     </table>
@@ -244,6 +289,8 @@
         </div>
 
     </div>
+
+      
 
     <!-- Bottom Section -->
 
@@ -262,27 +309,134 @@
 
                 <div class="card-body">
 
-                    <table class="table table-bordered">
+                  
+                    <table class="table table-bordered table-striped">
 
-                        <tr>
-                            <th>Blood Tests</th>
-                            <td>34</td>
-                        </tr>
+                        <thead class="table-primary">
+                            <tr>
+                                <th>Test Type</th>
+                                <th class="text-center">Today's Count</th>
+                            </tr>
+                        </thead>
 
-                        <tr>
-                            <th>Urine Tests</th>
-                            <td>12</td>
-                        </tr>
+                        <tbody>
 
-                        <tr>
-                            <th>Completed</th>
-                            <td>69</td>
-                        </tr>
+                            <tr>
+                                <td>Blood Sugar</td>
+                                <td class="text-center">@Model.BloodSugarTests</td>
+                            </tr>
 
-                        <tr>
-                            <th>Pending</th>
-                            <td>18</td>
-                        </tr>
+                            <tr>
+                                <td>GTT</td>
+                                <td class="text-center">@Model.GTTTests</td>
+                            </tr>
+
+                            <tr>
+                                <td>Blood Sugar Series</td>
+                                <td class="text-center">@Model.BloodSugarSeriesTests</td>
+                            </tr>
+
+                            <tr>
+                                <td>Lipid Profile</td>
+                                <td class="text-center">@Model.LipidProfileTests</td>
+                            </tr>
+
+                            <tr>
+                                <td>Electrolytes</td>
+                                <td class="text-center">@Model.ElectrolyteTests</td>
+                            </tr>
+
+                            <tr>
+                                <td>CRP</td>
+                                <td class="text-center">@Model.CRPTests</td>
+                            </tr>
+
+                            <tr>
+                                <td>Calcium</td>
+                                <td class="text-center">@Model.CalciumTests</td>
+                            </tr>
+
+                            <tr>
+                                <td>Renal Function</td>
+                                <td class="text-center">@Model.RenalFunctionTests</td>
+                            </tr>
+
+                            <tr>
+                                <td>Liver Function</td>
+                                <td class="text-center">@Model.LiverFunctionTests</td>
+                            </tr>
+
+                            <tr>
+                                <td>ESR</td>
+                                <td class="text-center">@Model.ESRTests</td>
+                            </tr>
+
+                            <tr>
+                                <td>PT / INR</td>
+                                <td class="text-center">@Model.PTINRTests</td>
+                            </tr>
+
+                            <tr>
+                                <td>Full Blood Count</td>
+                                <td class="text-center">@Model.FullBloodCountTests</td>
+                            </tr>
+
+                            <tr>
+                                <td>FBC Advanced</td>
+                                <td class="text-center">@Model.FBCAdvancedTests</td>
+                            </tr>
+
+                            <tr>
+                                <td>HCG</td>
+                                <td class="text-center">@Model.HCGTests</td>
+                            </tr>
+
+                            <tr>
+                                <td>Urine Report</td>
+                                <td class="text-center">@Model.UrineReportTests</td>
+                            </tr>
+
+                            <tr>
+                                <td>Blood Glucose</td>
+                                <td class="text-center">@Model.GlucoseTests</td>
+                            </tr>
+
+                            <tr>
+                                <td>GTT Extended</td>
+                                <td class="text-center">@Model.GTTExtendedTests</td>
+                            </tr>
+
+                            <tr>
+                                <td>HGB</td>
+                                <td class="text-center">@Model.HGBTests</td>
+                            </tr>
+
+                            <tr>
+                                <td>PPBS</td>
+                                <td class="text-center">@Model.PPBSTests</td>
+                            </tr>
+
+                            <tr>
+                                <td>RBS</td>
+                                <td class="text-center">@Model.RBSTests</td>
+                            </tr>
+
+                        </tbody>
+
+                        <tfoot class="table-light">
+                            <tr>
+                                <th>Total Tests Today</th>
+                                <th class="text-center">@Model.TestsToday</th>
+                            </tr>
+                            <tr>
+                                <th>Completed Reports</th>
+                                <th class="text-center text-success">@Model.CompletedReports</th>
+                            </tr>
+                            <tr>
+                                <th>Pending Results</th>
+                                <th class="text-center text-warning">@Model.PendingResults</th>
+                            </tr>
+                        </tfoot>
 
                     </table>
 
@@ -339,6 +493,9 @@
                 </div>
 
             </div>
+               
+
+                </div>
 
         </div>
 

@@ -103,30 +103,72 @@ namespace Laboratory.Web.Controllers
             _tokenProvider.ClearToken();
             return RedirectToAction("Index", "Home");
         }
+        //private async Task SignInUser(LoginResponseDto model)
+        //{
+        //    var handler = new JwtSecurityTokenHandler();
+
+        //    var jwt = handler.ReadJwtToken(model.Token);
+
+        //    var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
+        //    identity.AddClaim(new Claim(JwtRegisteredClaimNames.Email,
+        //        jwt.Claims.FirstOrDefault(u => u.Type == JwtRegisteredClaimNames.Email).Value));
+        //    identity.AddClaim(new Claim(JwtRegisteredClaimNames.Sub,
+        //        jwt.Claims.FirstOrDefault(u => u.Type == JwtRegisteredClaimNames.Sub).Value));
+        //    identity.AddClaim(new Claim(JwtRegisteredClaimNames.Name,
+        //        jwt.Claims.FirstOrDefault(u => u.Type == JwtRegisteredClaimNames.Name).Value));
+
+
+        //    identity.AddClaim(new Claim(ClaimTypes.Name,
+        //        jwt.Claims.FirstOrDefault(u => u.Type == JwtRegisteredClaimNames.Email).Value));
+        //    identity.AddClaim(new Claim(ClaimTypes.Role,
+        //        jwt.Claims.FirstOrDefault(u => u.Type == "role").Value));
+
+
+
+        //    var principal = new ClaimsPrincipal(identity);
+        //    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+        //}
         private async Task SignInUser(LoginResponseDto model)
         {
+            if (model == null || string.IsNullOrWhiteSpace(model.Token))
+            {
+                throw new Exception("Login token is missing.");
+            }
+
             var handler = new JwtSecurityTokenHandler();
 
             var jwt = handler.ReadJwtToken(model.Token);
 
-            var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
-            identity.AddClaim(new Claim(JwtRegisteredClaimNames.Email,
-                jwt.Claims.FirstOrDefault(u => u.Type == JwtRegisteredClaimNames.Email).Value));
-            identity.AddClaim(new Claim(JwtRegisteredClaimNames.Sub,
-                jwt.Claims.FirstOrDefault(u => u.Type == JwtRegisteredClaimNames.Sub).Value));
-            identity.AddClaim(new Claim(JwtRegisteredClaimNames.Name,
-                jwt.Claims.FirstOrDefault(u => u.Type == JwtRegisteredClaimNames.Name).Value));
+            var identity = new ClaimsIdentity(
+                CookieAuthenticationDefaults.AuthenticationScheme);
 
+            // Copy every claim from the JWT
+            foreach (var claim in jwt.Claims)
+            {
+                identity.AddClaim(claim);
+            }
 
-            identity.AddClaim(new Claim(ClaimTypes.Name,
-                jwt.Claims.FirstOrDefault(u => u.Type == JwtRegisteredClaimNames.Email).Value));
-            identity.AddClaim(new Claim(ClaimTypes.Role,
-                jwt.Claims.FirstOrDefault(u => u.Type == "role").Value));
+            // Ensure ClaimTypes.Name exists for User.Identity.Name
+            var email = jwt.Claims.FirstOrDefault(c =>
+                            c.Type == JwtRegisteredClaimNames.Email)?.Value;
 
+            var name = jwt.Claims.FirstOrDefault(c =>
+                            c.Type == JwtRegisteredClaimNames.Name)?.Value;
 
+            if (!string.IsNullOrEmpty(email))
+            {
+                identity.AddClaim(new Claim(ClaimTypes.Name, email));
+            }
+            else if (!string.IsNullOrEmpty(name))
+            {
+                identity.AddClaim(new Claim(ClaimTypes.Name, name));
+            }
 
             var principal = new ClaimsPrincipal(identity);
-            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+
+            await HttpContext.SignInAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme,
+                principal);
         }
     }
 }

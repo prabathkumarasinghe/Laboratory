@@ -112,12 +112,12 @@
 
         @{ var panelText = testTypes.FirstOrDefault(x => x.Value == Model.TestType)?.Text ?? Model.TestType ?? "Pathology"; }
         <!-- Unchangeable panel detail (read-only) -->
-        <div class="test-panel" style="margin-top:12px;">
+        @* <div class="test-panel" style="margin-top:12px;">
             <label style="font-weight:700; display:block; margin-bottom:6px;">Panel</label>
             <input type="text" id="testPanel" class="compact-input" value="@panelText" readonly />
-        </div>
+        </div> *@
 
-        <div class="test-type">
+       @*  <div class="test-type">
             <label style="font-weight:700; display:block; margin-bottom:6px;">Test Type</label>
             <div style="display:flex; gap:8px; align-items:center;">
                 <select id="testType" name="TestType" class="compact-select" onchange="showTestFields()">
@@ -128,6 +128,19 @@
                     }
                 </select>
             </div>
+        </div> *@
+
+        <div class="test-type">
+
+            <label style="font-weight:700; display:block; margin-bottom:6px;">
+                Test Type
+            </label>
+
+            <input asp-for="TestType"
+                   id="testType"
+                   class="compact-input"
+                   readonly />
+
         </div>
 
         <div id="dynamicFields"></div>
@@ -168,13 +181,21 @@
         }
 
         function showTestFields() {
-            var sel = document.getElementById('testType');
-            if (!sel) return;
-            // update panel display to the selected test text
-            var panelEl = document.getElementById('testPanel');
-            if (panelEl) panelEl.value = sel.options[sel.selectedIndex] ? sel.options[sel.selectedIndex].text : panelEl.value;
+            // var sel = document.getElementById('testType');
+            // if (!sel) return;
+            // // update panel display to the selected test text
+            // var panelEl = document.getElementById('testPanel');
+            // if (panelEl) panelEl.value = sel.options[sel.selectedIndex] ? sel.options[sel.selectedIndex].text : panelEl.value;
 
-            var t = sel.value; var html = '';
+            // var t = sel.value; var html = '';
+
+        var testInput = document.getElementById("testType");
+
+        if (!testInput) return;
+
+        var t = testInput.value;
+
+        var html = "";
 
             switch (t) {
                 case 'BS': html += section('Blood Sugar', [{ name: 'FBS', label: 'FBS' },{ name: 'PPBS', label: 'PPBS' },{ name: 'RBS', label: 'RBS' }]); break;
@@ -206,26 +227,33 @@
         var serverTestTypes = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(testTypes.Select(t => new { t.Value, t.Text })));
         var panelsAllowed = { "Pathology": serverTestTypes.map(function(x){ return x.Value; }) };
 
-        function populateTestOptions(panelName) {
-            var sel = document.getElementById('testType');
-            if (!sel) return;
-            sel.innerHTML = '<option value="">-- Select Test --</option>';
-            var allowed = panelsAllowed[panelName] || [];
-            serverTestTypes.forEach(function(t){
-                if (allowed.length === 0 || allowed.indexOf(t.Value) !== -1) {
-                    var opt = document.createElement('option');
-                    opt.value = t.Value;
-                    opt.text = t.Text;
-                    sel.appendChild(opt);
-                }
-            });
-            sel.value = '';
-        }
+        // function populateTestOptions(panelName) {
+        //     var sel = document.getElementById('testType');
+        //     if (!sel) return;
+        //     sel.innerHTML = '<option value="">-- Select Test --</option>';
+        //     var allowed = panelsAllowed[panelName] || [];
+        //     serverTestTypes.forEach(function(t){
+        //         if (allowed.length === 0 || allowed.indexOf(t.Value) !== -1) {
+        //             var opt = document.createElement('option');
+        //             opt.value = t.Value;
+        //             opt.text = t.Text;
+        //             sel.appendChild(opt);
+        //         }
+        //     });
+        //     sel.value = '';
+        // }
 
-        document.addEventListener('DOMContentLoaded', function(){
-            var panelEl = document.getElementById('testPanel');
-            var panelName = panelEl ? panelEl.value : 'Pathology';
-            populateTestOptions(panelName);
+        // document.addEventListener('DOMContentLoaded', function(){
+        //     var panelEl = document.getElementById('testPanel');
+        //     var panelName = panelEl ? panelEl.value : 'Pathology';
+        //     populateTestOptions(panelName);
+        // });
+
+            document.addEventListener('DOMContentLoaded', function () {
+
+            showTestFields();
+
         });
+
     </script>
 }

@@ -77,6 +77,22 @@
         }
         .field-label { width: 120px; }
     }
+
+    .form-check {
+        border: 1px solid #ddd;
+        padding: 8px;
+        border-radius: 6px;
+        margin-bottom: 8px;
+        background: #fafafa;
+    }
+
+        .form-check:hover {
+            background: #eef6ff;
+        }
+
+    .form-check-input {
+        margin-top: 5px;
+    }
 </style>
 
 @{
@@ -216,7 +232,7 @@
             </div>
         </div>
 
-        <div class="test-type">
+      @*   <div class="test-type">
             <label style="font-weight:700; display:block; margin-bottom:6px;">Test Type</label>
             <select asp-for="TestType" class="compact-select" style="width:100%">
                 <option value="">-- Select Test --</option>
@@ -225,6 +241,44 @@
                     <option value="@t.Value">@t.Text</option>
                 }
             </select>
+        </div> *@
+
+        <div class="test-type">
+
+            <label style="font-weight:700; display:block; margin-bottom:10px;">
+                Select Laboratory Tests
+            </label>
+
+            <div class="row">
+
+                @foreach (var t in testTypes)
+                {
+                    <div class="col-md-4 mb-2">
+
+                        <div class="form-check">
+
+                            <input class="form-check-input"
+                                   type="checkbox"
+                                   name="SelectedTests"
+                                   value="@t.Value"
+                                   id="@t.Value"
+                            @(Model.SelectedTests != null &&
+                                                              Model.SelectedTests.Contains(t.Value)
+                                                              ? "checked" : "") />
+
+                            <label class="form-check-label" for="@t.Value">
+
+                                @t.Text
+
+                            </label>
+
+                        </div>
+
+                    </div>
+                }
+
+            </div>
+
         </div>
 
         <div class="submit-row">

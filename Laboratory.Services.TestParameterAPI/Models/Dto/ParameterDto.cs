@@ -14,7 +14,10 @@ namespace Laboratory.Services.TestParameterAPI.Models.Dto
         public int? RefNumber { get; set; }
         public int? LabNumber { get; set; }
         public int? Age { get; set; }
+
         public string? PatientName { get; set; }
+        public List<string> SelectedTests { get; set; } = new();
+
         public string? TestType { get; set; }
         public string? Sex { get; set; }
         public DateOnly? CollectedDate { get; set; }

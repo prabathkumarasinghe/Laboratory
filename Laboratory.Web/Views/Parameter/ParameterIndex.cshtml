@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ParameterDto>
+﻿@* @model IEnumerable<ParameterDto>
 
 @functions {
 	string FormatDate(object value) {
@@ -87,3 +87,308 @@
 		</div>
 	</div>
 </div>
+ *@
+
+@model IEnumerable<ParameterDto>
+
+@functions {
+    string FormatDate(object value)
+    {
+        if (value == null) return "";
+
+        if (value is DateTime dt)
+        {
+            return dt.ToString("dd/MM/yyyy");
+        }
+
+        return value.ToString();
+    }
+}
+
+@{
+    ViewData["Title"] = "Patient Test List";
+
+    var allItems = (Model ?? Enumerable.Empty<ParameterDto>())
+        .OrderByDescending(x => x.CollectedDate)
+        .ToList();
+
+    int pageSize = 10;
+    int page = 1;
+
+    var qPage = Context.Request.Query["page"].FirstOrDefault();
+
+    if (!string.IsNullOrEmpty(qPage) && int.TryParse(qPage, out var p))
+    {
+        page = Math.Max(1, p);
+    }
+
+    int totalItems = allItems.Count;
+    int totalPages = totalItems == 0 ? 1 :
+        (int)Math.Ceiling(totalItems / (double)pageSize);
+
+    var items = allItems
+        .Skip((page - 1) * pageSize)
+        .Take(pageSize)
+        .ToList();
+
+    string PageUrl(int targetPage)
+    {
+        return $"{Context.Request.Path}?page={targetPage}";
+    }
+}
+
+@await Html.PartialAsync("_PathologyFormStyles")
+
+<div class="pathology-card mt-4">
+
+    <div class="pathology-header">
+
+        <h2 style="margin:0;">
+            Laboratory Test Management
+        </h2>
+
+    </div>
+
+    <div class="p-3">
+
+        <div class="row mb-3">
+
+            <div class="col-md-6">
+
+                <input type="text"
+                       id="searchPatient"
+                       class="form-control"
+                       placeholder="Search patient..." />
+
+            </div>
+
+            <div class="col-md-6 text-end">
+
+                <a asp-action="TestEdit"
+                   class="btn btn-primary">
+
+                    <i class="bi bi-person-plus-fill"></i>
+
+                    Register Patient
+
+                </a>
+
+            </div>
+
+        </div>
+
+        <table class="table table-bordered table-hover"
+               id="patientTable">
+
+            <thead class="table-primary">
+
+                <tr>
+
+                    <th>Patient Name</th>
+
+                    <th>Test Type</th>
+
+                    <th>Collected Date</th>
+
+                    <th>Reference No</th>
+
+                    <th>Status</th>
+
+                    <th width="280">Actions</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                @foreach (var item in items)
+                {
+                    <tr>
+
+                        <td>
+
+                            <strong>@item.PatientName</strong>
+
+                        </td>
+
+                        <td>
+
+                            <span class="badge bg-primary">
+
+                                @item.TestType
+
+                            </span>
+
+                        </td>
+
+                        <td>
+
+                            @FormatDate(item.CollectedDate)
+
+                        </td>
+
+                        <td>
+
+                            @item.RefNumber
+
+                        </td>
+
+                        <td>
+
+                            @if (item.ReportedDate == null)
+                            {
+                                <span class="badge bg-warning text-dark">
+
+                                    Pending
+
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-success">
+
+                                    Completed
+
+                                </span>
+                            }
+
+                        </td>
+
+                        <td>
+
+                            <a asp-action="ResultUpdate"
+                               asp-route-testId="@item.Id"
+                               class="btn btn-sm btn-primary">
+
+                                <i class="bi bi-pencil-square"></i>
+
+                                Enter Result
+
+                            </a>
+
+                          @*   <a asp-action="FinalResult"
+                               asp-route-testId="@item.Id"
+                               class="btn btn-sm btn-success">
+
+                                <i class="bi bi-file-earmark-medical"></i>
+
+                                Report
+
+                            </a> *@
+
+                            <a asp-action="ResultDelete"
+                               asp-route-testId="@item.Id"
+                               class="btn btn-sm btn-danger">
+
+                                <i class="bi bi-trash"></i>
+
+                            </a>
+
+                        </td>
+
+                    </tr>
+                }
+
+            </tbody>
+
+        </table>
+
+        <div class="d-flex justify-content-between align-items-center mt-3">
+
+            <div>
+
+                Showing
+
+                @(((page - 1) * pageSize) + 1)
+
+                -
+
+                @Math.Min(page * pageSize, totalItems)
+
+                of
+
+                @totalItems
+
+                records
+
+            </div>
+
+            <nav>
+
+                <ul class="pagination mb-0">
+
+                    <li class="page-item @(page == 1 ? "disabled" : "")">
+
+                        <a class="page-link"
+                           href="@PageUrl(page - 1)">
+
+                            Previous
+
+                        </a>
+
+                    </li>
+
+                    @for (int i = 1; i <= totalPages; i++)
+                    {
+                        <li class="page-item @(i == page ? "active" : "")">
+
+                            <a class="page-link"
+                               href="@PageUrl(i)">
+
+                                @i
+
+                            </a>
+
+                        </li>
+                    }
+
+                    <li class="page-item @(page == totalPages ? "disabled" : "")">
+
+                        <a class="page-link"
+                           href="@PageUrl(page + 1)">
+
+                            Next
+
+                        </a>
+
+                    </li>
+
+                </ul>
+
+            </nav>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts {
+
+    <script>
+
+        document.getElementById("searchPatient")
+        .addEventListener("keyup", function () {
+
+            var value = this.value.toLowerCase();
+
+            var rows = document.querySelectorAll("#patientTable tbody tr");
+
+            rows.forEach(function (row) {
+
+                var patient =
+                    row.cells[0].innerText.toLowerCase();
+
+                if (patient.indexOf(value) > -1)
+                    row.style.display = "";
+                else
+                    row.style.display = "none";
+
+            });
+
+        });
+
+    </script>
+
+}

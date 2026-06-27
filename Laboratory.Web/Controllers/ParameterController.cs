@@ -2,6 +2,7 @@
 using Laboratory.Web.Service;
 using Laboratory.Web.Service.IService;
 using Laboratory.Web.Utility;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.IdentityModel.Tokens.Jwt;
@@ -20,12 +21,12 @@ namespace Laboratory.Web.Controllers
 			_viewRenderHelper = viewRenderHelper;
 			_pdfService = pdfService;
 		}
-
+        [Authorize]
         public IActionResult TestResult()
         {
             return View();
         }
-
+        [Authorize]
         public async Task<IActionResult> FinalResult(int Id)
         {
             ParameterDto parameterDto = new ParameterDto();
@@ -77,7 +78,7 @@ namespace Laboratory.Web.Controllers
 			}
 			return Json(new { data = list });
         }
-
+        [Authorize]
         public async Task<IActionResult> ParameterIndex()
 		{
 			List<ParameterDto>? list = new();
@@ -91,32 +92,106 @@ namespace Laboratory.Web.Controllers
 
 			return View(list);
 		}
+        //      [Authorize]
+        //      public async Task<IActionResult> TestEdit()
+        //{
+        //	return View();
+        //}
 
-		public async Task<IActionResult> TestEdit()
-		{
-			return View();
-		}
+        //[HttpPost]
+        //public async Task<IActionResult> TestEdit(ParameterDto model)
+        //{
+        //	if (ModelState.IsValid)
+        //	{
+        //		ResponseDto? response = await _testParameterService.CreateTestParameterAsync(model);
 
-		[HttpPost]
-		public async Task<IActionResult> TestEdit(ParameterDto model)
-		{
-			if (ModelState.IsValid)
-			{
-				ResponseDto? response = await _testParameterService.CreateTestParameterAsync(model);
+        //		if (response != null && response.IsSuccess)
+        //		{
+        //			TempData["success"] = "Test created successfully";
+        //			return RedirectToAction(nameof(ParameterIndex));
+        //		}
+        //		else
+        //		{
+        //			TempData["error"] = response?.Message;
+        //		}
+        //	}
+        //	return View(model);
+        //}
 
-				if (response != null && response.IsSuccess)
-				{
-					TempData["success"] = "Test created successfully";
-					return RedirectToAction(nameof(ParameterIndex));
-				}
-				else
-				{
-					TempData["error"] = response?.Message;
-				}
-			}
-			return View(model);
-		}
-		public async Task<IActionResult> TestDelete(int testId)
+        [Authorize]
+        public IActionResult TestEdit()
+        {
+            ParameterDto model = new ParameterDto();
+
+            model.SelectedTests = new List<string>();
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> TestEdit(ParameterDto model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            // Make sure at least one test is selected
+            if (model.SelectedTests == null || !model.SelectedTests.Any())
+            {
+                ModelState.AddModelError("", "Please select at least one laboratory test.");
+                return View(model);
+            }
+
+            bool allSuccess = true;
+
+            foreach (var test in model.SelectedTests)
+            {
+                ParameterDto dto = new ParameterDto
+                {
+                    // Patient Information
+                    PatientName = model.PatientName,
+                    Age = model.Age,
+                    DOB = model.DOB,
+                    Sex = model.Sex,
+                    Phone = model.Phone,
+                    Email = model.Email,
+                    
+
+                    // Laboratory Information
+                    RefNumber = model.RefNumber,
+                    LabNumber = model.LabNumber,
+                    CollectedDate = model.CollectedDate,
+                    ReceivedDate = model.ReceivedDate,
+                    ReportedDate = model.ReportedDate,
+
+                    // Selected Test
+                    TestType = test
+                };
+
+                ResponseDto? response =
+                    await _testParameterService.CreateTestParameterAsync(dto);
+
+                if (response == null || !response.IsSuccess)
+                {
+                    allSuccess = false;
+                }
+            }
+
+            if (allSuccess)
+            {
+                TempData["success"] = "Patient and selected laboratory tests saved successfully.";
+                return RedirectToAction(nameof(ParameterIndex));
+            }
+
+            TempData["error"] = "Some laboratory tests could not be saved.";
+
+            return View(model);
+        }
+
+
+        [Authorize]
+        public async Task<IActionResult> TestDelete(int testId)
 		{
 			ResponseDto? response = await _testParameterService.GetTestParameterByIdAsync(testId);
 
@@ -141,8 +216,8 @@ namespace Laboratory.Web.Controllers
 
 			return View(testDto);
 		}
-
-		public async Task<IActionResult> ResultUpdate(int testId)
+        //[Authorize]
+        public async Task<IActionResult> ResultUpdate(int testId)
 		{
 			ResponseDto? response = await _testParameterService.GetTestParameterByIdAsync(testId);
 
@@ -183,5 +258,35 @@ namespace Laboratory.Web.Controllers
             return File(pdfBytes, "application/pdf", "GeneratedDocument.pdf");
         }
 
+        [HttpGet]
+        public async Task<IActionResult> ResultDelete(int testId)
+        {
+            ResponseDto? response = await _testParameterService.GetTestParameterByIdAsync(testId);
+
+            if (response != null && response.IsSuccess)
+            {
+                ParameterDto? model = JsonConvert.DeserializeObject<ParameterDto>(
+                    Convert.ToString(response.Result));
+
+                return View(model);
+            }
+
+            return NotFound();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ResultDelete(ParameterDto parameterDto)
+        {
+            ResponseDto? response = await _testParameterService.DeleteTestParameterAsync(parameterDto.Id);
+
+            if (response != null && response.IsSuccess)
+            {
+                TempData["success"] = "Result deleted successfully.";
+                return RedirectToAction(nameof(ParameterIndex));
+            }
+
+            TempData["error"] = response?.Message;
+            return View(parameterDto);
+        }
     }
 }
