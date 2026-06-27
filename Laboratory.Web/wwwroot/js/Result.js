@@ -27,13 +27,14 @@ function loadDataTable(status) {
         "columns": [
             { data: 'id', "width": "5%" },
             // { data: 'email', "width": "25%" },
+            { data: 'labNumber', "width": "15%" },
             { data: 'patientName', "width": "15%" },
-            { data: 'dob', "width": "15%" },
+            // { data: 'dob', "width": "15%" },
             
             // { data: 'patientName', "width": "15%" },
             
             { data: 'phone', "width": "15%" },
-            { data: 'refNumber', "width": "15%" },
+            // { data: 'refNumber', "width": "15%" },
             
             
             {
